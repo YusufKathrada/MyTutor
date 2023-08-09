@@ -8,7 +8,6 @@ import { Storage } from '@ionic/storage-angular';
 export class UserData {
   favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
-  HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
 
   constructor(
     public storage: Storage
@@ -45,9 +44,21 @@ export class UserData {
 
   logout(): Promise<any> {
     return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
-      return this.storage.remove('username');
+      return this.storage.remove('username').then(() => {
+        return this.storage.remove('role');
+      });
     }).then(() => {
       window.dispatchEvent(new CustomEvent('user:logout'));
+    });
+  }
+
+  setRole(role: string): Promise<any> {
+    return this.storage.set('role', role);
+  }
+
+  getRole(): Promise<string> {
+    return this.storage.get('role').then((value) => {
+      return value;
     });
   }
 
@@ -64,12 +75,6 @@ export class UserData {
   isLoggedIn(): Promise<boolean> {
     return this.storage.get(this.HAS_LOGGED_IN).then((value) => {
       return value === true;
-    });
-  }
-
-  checkHasSeenTutorial(): Promise<string> {
-    return this.storage.get(this.HAS_SEEN_TUTORIAL).then((value) => {
-      return value;
     });
   }
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../../../services/supabase.service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 import { UserData } from '../../providers/user-data';
 
@@ -23,7 +23,8 @@ export class LoginPage {
     private supabase: SupabaseService,
     private loadingCtrl: LoadingController,
     public userData: UserData,
-    public router: Router
+    public router: Router,
+    public toastCtrl: ToastController,
   ) { }
 
   async onLogin(form: NgForm) {
@@ -46,6 +47,9 @@ export class LoginPage {
 
         if (error) throw error;
 
+        const role = data.user.user_metadata.userrole;
+        this.userData.setRole(role);
+
         this.userData.login(this.login.username);
         this.router.navigateByUrl('/app/tabs/schedule');
         await loading.dismiss();
@@ -53,7 +57,15 @@ export class LoginPage {
     }
     catch (error) {
       console.log("error", error);
-      //alert(error.error_description || error.message || error);
+
+      const toast = await this.toastCtrl.create({
+        message: error.message,
+        duration: 3000,
+        position: 'bottom',
+        color: 'danger',
+      });
+      toast.present();
+
       await this.loadingCtrl.dismiss();
     }
   }
