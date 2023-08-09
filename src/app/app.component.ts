@@ -91,6 +91,8 @@ export class AppComponent implements OnInit {
   }
 
   checkLoginStatus() {
+    console.log("loggedIn", this.loggedIn);
+
     return this.userData.isLoggedIn().then(loggedIn => {
       return this.updateLoggedInStatus(loggedIn);
     });
@@ -118,7 +120,7 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.userData.logout().then(() => {
-      return this.router.navigateByUrl('/app/tabs/schedule');
+      return this.router.navigateByUrl('/login');
     });
   }
 
