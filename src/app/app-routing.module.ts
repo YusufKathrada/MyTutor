@@ -5,7 +5,7 @@ import { checkTutorialGuard } from './providers/check-tutorial.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/schedule',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {

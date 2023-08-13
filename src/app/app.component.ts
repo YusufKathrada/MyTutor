@@ -10,6 +10,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Storage } from '@ionic/storage-angular';
 
 import { UserData } from './providers/user-data';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: 'app-root',
@@ -51,6 +52,7 @@ export class AppComponent implements OnInit {
     private userData: UserData,
     private swUpdate: SwUpdate,
     private toastCtrl: ToastController,
+    private supabase: SupabaseService
   ) {
     this.initializeApp();
   }
@@ -91,6 +93,8 @@ export class AppComponent implements OnInit {
   }
 
   checkLoginStatus() {
+    console.log("loggedIn", this.loggedIn);
+
     return this.userData.isLoggedIn().then(loggedIn => {
       return this.updateLoggedInStatus(loggedIn);
     });
@@ -116,9 +120,22 @@ export class AppComponent implements OnInit {
     });
   }
 
-  logout() {
+  async logout() {
+    const { error } = await this.supabase.signOut();
+
+    if (error) {
+      console.log("error", error);
+      const toast = await this.toastCtrl.create({
+        message: error.message,
+        duration: 3000,
+        position: 'bottom'
+      });
+      toast.present();
+      return;
+    }
+
     this.userData.logout().then(() => {
-      return this.router.navigateByUrl('/app/tabs/schedule');
+      return this.router.navigateByUrl('/login');
     });
   }
 
