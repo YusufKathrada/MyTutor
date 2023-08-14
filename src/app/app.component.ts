@@ -19,6 +19,31 @@ import { SupabaseService } from '../services/supabase.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
+
+  adminPages = [
+    {
+      title: 'Upload timeslots',
+      url: '/app/tabs/upload-times',
+      icon: 'cloud-upload'
+    },
+  ];
+
+  tutorPages = [
+    {
+      title: 'Select timeslot',
+      url: '/app/tabs/select-times',
+      icon: 'calendar'
+    },
+  ];
+
+  studentPages = [
+    {
+      title: 'Apply to be a tutor',
+      url: '/app/tabs/apply-for-tutor',
+      icon: 'person-add'
+    },
+  ];
+
   appPages = [
     {
       title: 'Schedule',
@@ -105,6 +130,18 @@ export class AppComponent implements OnInit {
         SplashScreen.hide();
       }
     });
+  }
+
+  async setMenu(){
+    if(await this.userData.getRole() == "admin"){
+      this.appPages = this.adminPages;
+    }
+    else if(await this.userData.getRole() == "tutor"){
+      this.appPages = this.tutorPages;
+    }
+    else if(await this.userData.getRole() == "student"){
+      this.appPages = this.studentPages;
+    }
   }
 
   checkLoginStatus() {
