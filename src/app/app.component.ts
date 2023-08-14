@@ -39,6 +39,11 @@ export class AppComponent implements OnInit {
       title: 'About',
       url: '/app/tabs/about',
       icon: 'information-circle'
+    },
+    {
+      title: 'Upload timeslots',
+      url: '/app/tabs/upload-times',
+      icon: 'cloud-upload'
     }
   ];
   loggedIn = false;

@@ -58,6 +58,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'upload-times',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../upload-times/upload-times.module').then(m => m.UploadTimesPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'
