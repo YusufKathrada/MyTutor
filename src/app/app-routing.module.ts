@@ -31,7 +31,19 @@ const routes: Routes = [
   {
     path: 'schedule',
     loadChildren: () => import('./pages/schedule/schedule.module').then(m => m.ScheduleModule)
+  },  {
+    path: 'upload-times',
+    loadChildren: () => import('./pages/upload-times/upload-times.module').then( m => m.UploadTimesPageModule)
+  },
+  {
+    path: 'select-times',
+    loadChildren: () => import('./pages/select-times/select-times.module').then( m => m.SelectTimesPageModule)
+  },
+  {
+    path: 'apply-for-tutor',
+    loadChildren: () => import('./pages/apply-for-tutor/apply-for-tutor.module').then( m => m.ApplyForTutorPageModule)
   }
+
 ];
 
 @NgModule({

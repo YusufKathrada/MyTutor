@@ -39,7 +39,22 @@ export class AppComponent implements OnInit {
       title: 'About',
       url: '/app/tabs/about',
       icon: 'information-circle'
-    }
+    },
+    {
+      title: 'Upload timeslots',
+      url: '/app/tabs/upload-times',
+      icon: 'cloud-upload'
+    },
+    {
+      title: 'Select timeslot',
+      url: '/app/tabs/select-times',
+      icon: 'calendar'
+    },
+    {
+      title: 'Apply to be a tutor',
+      url: '/app/tabs/apply-for-tutor',
+      icon: 'person-add'
+    },
   ];
   loggedIn = false;
   dark = false;
@@ -108,10 +123,6 @@ export class AppComponent implements OnInit {
 
   listenForLoginEvents() {
     window.addEventListener('user:login', () => {
-      this.updateLoggedInStatus(true);
-    });
-
-    window.addEventListener('user:signup', () => {
       this.updateLoggedInStatus(true);
     });
 

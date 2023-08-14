@@ -41,8 +41,8 @@ export class SupabaseService {
     return this.supabase.auth.onAuthStateChange(callback)
   }
 
-  signInWithPassword(email: string, password: string) {
-    return this.supabase.auth.signInWithPassword({ email, password })
+  async signInWithPassword(email: string, password: string) {
+    return await this.supabase.auth.signInWithPassword({ email, password })
   }
 
   signOut() {
@@ -64,5 +64,17 @@ export class SupabaseService {
 
   uploadAvatar(filePath: string, file: File) {
     return this.supabase.storage.from('avatars').upload(filePath, file)
+  }
+
+  async signUp(user: any){
+    return await this.supabase.auth.signUp({
+        email: user.username,
+        password: user.password,
+        options: {
+          data: {
+            userrole: user.role,
+          }
+        }
+      });
   }
 }

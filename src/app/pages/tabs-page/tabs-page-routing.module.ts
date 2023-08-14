@@ -58,6 +58,33 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'upload-times',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../upload-times/upload-times.module').then(m => m.UploadTimesPageModule)
+          }
+        ]
+      },
+      {
+        path: 'select-times',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../select-times/select-times.module').then(m => m.SelectTimesPageModule)
+          }
+        ]
+      },
+      {
+        path: 'apply-for-tutor',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../apply-for-tutor/apply-for-tutor.module').then(m => m.ApplyForTutorPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'
