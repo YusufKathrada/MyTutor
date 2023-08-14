@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'select-times',
     loadChildren: () => import('./pages/select-times/select-times.module').then( m => m.SelectTimesPageModule)
+  },
+  {
+    path: 'apply-for-tutor',
+    loadChildren: () => import('./pages/apply-for-tutor/apply-for-tutor.module').then( m => m.ApplyForTutorPageModule)
   }
 
 ];

@@ -50,6 +50,11 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/select-times',
       icon: 'calendar'
     },
+    {
+      title: 'Apply to be a tutor',
+      url: '/app/tabs/apply-for-tutor',
+      icon: 'person-add'
+    },
   ];
   loggedIn = false;
   dark = false;
