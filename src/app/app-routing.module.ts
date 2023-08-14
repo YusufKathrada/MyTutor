@@ -34,6 +34,10 @@ const routes: Routes = [
   },  {
     path: 'upload-times',
     loadChildren: () => import('./pages/upload-times/upload-times.module').then( m => m.UploadTimesPageModule)
+  },
+  {
+    path: 'select-times',
+    loadChildren: () => import('./pages/select-times/select-times.module').then( m => m.SelectTimesPageModule)
   }
 
 ];

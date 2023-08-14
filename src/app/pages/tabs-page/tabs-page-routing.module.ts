@@ -67,6 +67,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'select-times',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../select-times/select-times.module').then(m => m.SelectTimesPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'

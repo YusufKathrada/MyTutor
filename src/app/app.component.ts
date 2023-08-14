@@ -44,7 +44,12 @@ export class AppComponent implements OnInit {
       title: 'Upload timeslots',
       url: '/app/tabs/upload-times',
       icon: 'cloud-upload'
-    }
+    },
+    {
+      title: 'Select timeslot',
+      url: '/app/tabs/select-times',
+      icon: 'calendar'
+    },
   ];
   loggedIn = false;
   dark = false;
