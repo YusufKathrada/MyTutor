@@ -10,6 +10,7 @@ import { Tutor } from '../../providers/tutor';
 import { Student } from '../../providers/student';
 
 import { UserOptions } from '../../interfaces/user-options';
+import { AppComponent } from '../../app.component';
 
 
 
@@ -31,6 +32,7 @@ export class LoginPage {
     public student: Student,
     public router: Router,
     public toastCtrl: ToastController,
+    public appComponent: AppComponent,
   ) { }
 
   async onLogin(form: NgForm) {
@@ -70,6 +72,8 @@ export class LoginPage {
         };
 
         this.userData.login(this.login.username);
+        // TODO: implement role based access to menu when ready
+        // await this.appComponent.setMenu();
         this.router.navigateByUrl('/app/tabs/schedule');
         await loading.dismiss();
       }
