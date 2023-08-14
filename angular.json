@@ -208,7 +208,8 @@
     "schematicCollections": [
       "@cypress/schematic",
       "@angular-eslint/schematics",
-      "@schematics/angular"
+      "@schematics/angular",
+      "@ionic/angular-toolkit"
     ],
     "analytics": false
   },
