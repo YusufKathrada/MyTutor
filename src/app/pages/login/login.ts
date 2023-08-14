@@ -5,6 +5,9 @@ import { SupabaseService } from '../../../services/supabase.service';
 import { LoadingController, ToastController } from '@ionic/angular';
 
 import { UserData } from '../../providers/user-data';
+import { Admin } from '../../providers/admin';
+import { Tutor } from '../../providers/tutor';
+import { Student } from '../../providers/student';
 
 import { UserOptions } from '../../interfaces/user-options';
 
@@ -23,6 +26,9 @@ export class LoginPage {
     private supabase: SupabaseService,
     private loadingCtrl: LoadingController,
     public userData: UserData,
+    public admin: Admin,
+    public tutor: Tutor,
+    public student: Student,
     public router: Router,
     public toastCtrl: ToastController,
   ) { }
@@ -48,7 +54,20 @@ export class LoginPage {
         if (error) throw error;
 
         const role = data.user.user_metadata.userrole;
-        this.userData.setRole(role);
+
+        switch (role) {
+          case 'admin':
+            await this.admin.setRole('admin');
+            break;
+          case 'tutor':
+            await this.tutor.setRole('tutor');
+            break;
+          case 'student':
+            await this.student.setRole('student');
+            break;
+          default:
+            break;
+        };
 
         this.userData.login(this.login.username);
         this.router.navigateByUrl('/app/tabs/schedule');

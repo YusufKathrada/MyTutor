@@ -52,14 +52,13 @@ export class UserData {
     });
   }
 
-  setRole(role: string): Promise<any> {
-    return this.storage.set('role', role);
+  async setRole(role: string) {
+    await this.storage.set('role', role);
   }
 
-  getRole(): Promise<string> {
-    return this.storage.get('role').then((value) => {
-      return value;
-    });
+  async getRole(): Promise<string> {
+    const value = await this.storage.get('role');
+    return value;
   }
 
   setUsername(username: string): Promise<any> {
