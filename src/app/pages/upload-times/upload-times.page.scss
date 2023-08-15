@@ -1,0 +1,19 @@
+ion-input.custom {
+  border-radius: 25px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  min-height: 30px;
+
+  font-size: small;
+
+  --padding-start: 15px;
+
+  --highlight-color-focused: none;
+  --highlight-color-valid: none;
+  --highlight-color-invalid: none;
+}
+
+.submit-button {
+  font-size: 10px;
+  height: 28px;
+  margin-right: 10px;
+}
