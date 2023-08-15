@@ -205,12 +205,7 @@
     }
   },
   "cli": {
-    "schematicCollections": [
-      "@cypress/schematic",
-      "@angular-eslint/schematics",
-      "@schematics/angular",
-      "@ionic/angular-toolkit"
-    ],
+    "schematicCollections": ["@ionic/angular-toolkit"],
     "analytics": false
   },
   "schematics": {
@@ -219,12 +214,7 @@
     },
     "@ionic/angular-toolkit:page": {
       "styleext": "scss"
-    },
-    "@angular-eslint/schematics:application": {
-      "setParserOptionsProject": true
-    },
-    "@angular-eslint/schematics:library": {
-      "setParserOptionsProject": true
     }
   }
+
 }

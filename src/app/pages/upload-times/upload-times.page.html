@@ -1,9 +1,125 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>upload-times</ion-title>
+    <ion-title>Upload Time Slots</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <ion-row>
+
+      <ion-col size="2" style="padding-left: 8px; font-weight: bold;">
+        Course
+      </ion-col>
+
+      <ion-col size="2" style="padding-left: 28px; padding-top: 0px;">
+        <ion-input
+          aria-label="Course"
+          placeholder="Course"
+          class="custom"
+          (ionChange)="setCourse($event)"
+          [(ngModel)]="course"
+        ></ion-input>
+      </ion-col>
+
+      <ion-col size="8"></ion-col>
+    </ion-row>
+
+    <br><br>
+
+    <!-- Headings -->
+    <ion-row style="text-align: center; font-weight: bold;">
+      <ion-col>
+        Tutorial Number
+      </ion-col>
+
+      <ion-col>
+        Day
+      </ion-col>
+
+      <ion-col>
+        Start Time
+      </ion-col>
+
+      <ion-col>
+        End Time
+      </ion-col>
+
+      <ion-col>
+        Tutors Needed
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Inputs -->
+  <ion-grid style="padding-top: 0px;">
+    <form [formGroup]="eventForm">
+      <div formArrayName="sessions">
+        <ion-row *ngFor="let sessionCtrl of sessions.controls; let i = index" [formGroupName]="i">
+          <ion-col>
+            <ion-input
+              aria-label="Tutorial Number"
+              placeholder="Tutorial Number"
+              class="custom"
+              formControlName="tutorialNumber"
+              required="true"
+            ></ion-input>
+          </ion-col>
+
+          <ion-col>
+            <ion-input
+              aria-label="Day"
+              placeholder="Day"
+              class="custom"
+              formControlName="day"
+            ></ion-input>
+          </ion-col>
+
+          <ion-col>
+            <ion-input
+              aria-label="Start Time"
+              placeholder="Start Time"
+              class="custom"
+              formControlName="startTime"
+            ></ion-input>
+          </ion-col>
+
+          <ion-col>
+            <ion-input
+              aria-label="End Time"
+              placeholder="End TIme"
+              class="custom"
+              formControlName="endTime"
+            ></ion-input>
+          </ion-col>
+
+          <ion-col>
+            <ion-input
+              aria-label="Tutors Needed"
+              placeholder="Tutors Needed"
+              class="custom"
+              formControlName="tutorsNeeded"
+            ></ion-input>
+          </ion-col>
+        </ion-row>
+      </div>
+    </form>
+  </ion-grid>
+
+  <div style="display: flex; justify-content: space-between; font-size:10px">
+    <div>
+      <ion-button fill="clear" (click)="addItem()" style="font-size: 10px;">
+        Add an event
+        <ion-icon slot="end" name="add-outline"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" (click)="removeLastSession()" style="font-size: 10px;">
+        Remove last event
+        <ion-icon slot="end" name="remove-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <ion-button class="submit-button" (click)="validate()">Submit</ion-button>
+  </div>
 
 </ion-content>
