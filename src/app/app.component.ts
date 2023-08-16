@@ -121,6 +121,8 @@ export class AppComponent implements OnInit {
         .then(() => this.swUpdate.activateUpdate())
         .then(() => window.location.reload());
     });
+
+    this.setMenu();
   }
 
   initializeApp() {
