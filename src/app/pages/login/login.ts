@@ -72,9 +72,8 @@ export class LoginPage {
         };
 
         this.userData.login(this.login.username);
-        // TODO: implement role based access to menu when ready
-        // await this.appComponent.setMenu();
-        this.router.navigateByUrl('/app/tabs/schedule');
+        await this.appComponent.setMenu();
+        this.router.navigateByUrl('/account');
         await loading.dismiss();
       }
     }
