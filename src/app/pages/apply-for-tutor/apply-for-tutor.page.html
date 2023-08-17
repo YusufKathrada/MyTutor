@@ -1,9 +1,59 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <ion-header>
   <ion-toolbar>
-    <ion-title>apply-for-tutor</ion-title>
+    <ion-title>
+      Tutor Sign Up
+      <img src="assets/img/UCT_image.png" alt="UCT Image" width="30" height="30" style="vertical-align: middle;">
+      </ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> 
 
 <ion-content>
-
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <img src="assets/img/UCT_image.png" alt="UCT Image" width="30" height="30" style="vertical-align: middle;">
+        Apply to Become a Tutor:</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
+        <ion-list>
+          <ion-item>
+            <ion-label>Name:</ion-label>
+            <ion-input type="text" [(ngModel)]="tutor.name" name="name" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Surname:</ion-label>
+            <ion-input type="text" [(ngModel)]="tutor.surname" name="surname" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Student Number:</ion-label>
+            <ion-input type="text" [(ngModel)]="tutor.studentNumber" name="studentNumber" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Degree of Study:</ion-label>
+            <ion-input type="text" [(ngModel)]="tutor.degreeOfStudy" name="degreeOfStudy" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Year of Study:</ion-label>
+            <ion-input type="number" [(ngModel)]="tutor.yearOfStudy" name="yearOfStudy" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Course Code to Tutor:</ion-label>
+            <ion-input type="text" [(ngModel)]="tutor.desiredCourse" name="desiredCourse" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Mark For Course:</ion-label>
+            <ion-input type="number" [(ngModel)]="tutor.previousMark" name="previousMark" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Upload Transcript:</ion-label>
+            <ion-input type="file" (change)="onFileChange($event)" required></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" type="submit">Sign Up</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+
