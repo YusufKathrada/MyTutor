@@ -42,6 +42,10 @@ const routes: Routes = [
   {
     path: 'apply-for-tutor',
     loadChildren: () => import('./pages/apply-for-tutor/apply-for-tutor.module').then( m => m.ApplyForTutorPageModule)
+  },
+  {
+    path: 'admin-allocate-tutors',
+    loadChildren: () => import('./pages/admin-allocate-tutors/admin-allocate-tutors.module').then( m => m.AdminAllocateTutorsPageModule)
   }
 
 ];

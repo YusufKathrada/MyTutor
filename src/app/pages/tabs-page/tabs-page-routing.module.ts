@@ -85,6 +85,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'admin-allocate-tutors',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../admin-allocate-tutors/admin-allocate-tutors.module').then(m => m.AdminAllocateTutorsPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'
