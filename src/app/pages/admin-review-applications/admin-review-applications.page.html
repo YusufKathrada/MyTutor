@@ -40,7 +40,7 @@
   </ion-grid>
 
   <ion-grid>
-    <ion-row style="text-align: center" *ngFor="let t of tutorApplications">
+    <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let t of tutorApplications">
 
       <ion-col>
         {{t.studentName}}
@@ -64,13 +64,11 @@
         
       <ion-col>
         <ion-list>
-          <ion-item>
-            <ion-select aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="t.status">
-              <ion-select-option [value]="a.status" *ngFor="let a of applicationStatus">
-                {{a.status}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
+          <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="t.status">
+            <ion-select-option [value]="a.status" *ngFor="let a of applicationStatus">
+              {{a.status}}
+            </ion-select-option>
+          </ion-select>
         </ion-list>
 
       </ion-col>
