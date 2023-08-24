@@ -94,6 +94,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'admin-review-applications',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../admin-review-applications/admin-review-applications.module').then(m => m.AdminReviewApplicationsPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'

@@ -46,6 +46,10 @@ const routes: Routes = [
   {
     path: 'admin-allocate-tutors',
     loadChildren: () => import('./pages/admin-allocate-tutors/admin-allocate-tutors.module').then( m => m.AdminAllocateTutorsPageModule)
+  },
+  {
+    path: 'admin-review-applications',
+    loadChildren: () => import('./pages/admin-review-applications/admin-review-applications.module').then( m => m.AdminReviewApplicationsPageModule)
   }
 
 ];

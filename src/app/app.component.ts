@@ -31,6 +31,11 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/admin-allocate-tutors',
       icon: 'people'
     },
+    {
+      title: 'Review Applications',
+      url: '/app/tabs/admin-review-applications',
+      icon: 'documents'
+    }
   ];
 
   tutorPages = [
