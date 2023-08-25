@@ -32,7 +32,7 @@
 
   <ion-grid>
 
-    <ion-row style="text-align: center" *ngFor="let a of assignedTutors">
+    <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let a of assignedTutors">
 
       <ion-col>
         {{a.studentName}}
@@ -44,13 +44,11 @@
 
       <ion-col>
         <ion-list>
-          <ion-item>
-            <ion-select aria-label="Assign Course" interface="popover" placeholder="Select course" [(ngModel)]="a.assignedCourse">
-              <ion-select-option [value]="c.courseCode" *ngFor="let c of Course">
-                {{c.courseCode}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
+          <ion-select fill="outline" aria-label="Assign Course" interface="popover" placeholder="Select course" [(ngModel)]="a.assignedCourse">
+            <ion-select-option [value]="c.courseCode" *ngFor="let c of Course">
+              {{c.courseCode}}
+            </ion-select-option>
+          </ion-select>
         </ion-list>
       </ion-col>
 
