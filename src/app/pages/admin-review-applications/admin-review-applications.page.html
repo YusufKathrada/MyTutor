@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Review Applications</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <!-- Headings -->
+    <ion-row style="text-align: center; font-weight: bold;">
+      <ion-col>
+        Student Name
+      </ion-col>
+
+      <!-- <ion-col>
+        Student Number
+      </ion-col> -->
+
+      <ion-col>
+        Degree
+      </ion-col>
+
+      <ion-col>
+        Year of Study
+      </ion-col>
+
+      <ion-col>
+        Average
+      </ion-col>
+
+      <ion-col>
+        Desired Course
+      </ion-col>
+
+      <ion-col>
+        Status
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let t of tutorApplications">
+
+      <ion-col>
+        {{t.studentName}}
+      </ion-col>
+
+      <ion-col>
+        {{t.degree}}
+      </ion-col>
+
+      <ion-col>
+        {{t.yearOfStudy}}
+      </ion-col>
+        
+      <ion-col>
+        {{t.average}}
+      </ion-col>
+        
+      <ion-col>
+        {{t.desiredCourse}}
+      </ion-col>
+        
+      <ion-col>
+        <ion-list>
+          <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="t.status">
+            <ion-select-option [value]="a.status" *ngFor="let a of applicationStatus">
+              {{a.status}}
+            </ion-select-option>
+          </ion-select>
+        </ion-list>
+
+      </ion-col>
+
+      
+    </ion-row>
+  </ion-grid>
+
+  <ion-button (click)="test()">
+    Update
+  </ion-button>
+
+</ion-content>

@@ -26,6 +26,16 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/upload-times',
       icon: 'cloud-upload'
     },
+    {
+      title: 'Allocate Tutors',
+      url: '/app/tabs/admin-allocate-tutors',
+      icon: 'people'
+    },
+    {
+      title: 'Review Applications',
+      url: '/app/tabs/admin-review-applications',
+      icon: 'documents'
+    }
   ];
 
   tutorPages = [
@@ -134,14 +144,14 @@ export class AppComponent implements OnInit {
     });
   }
 
-  async setMenu(){
-    if(await this.userData.getRole() == "admin"){
+  async setMenu() {
+    if (await this.userData.getRole() == "admin") {
       this.appPages = this.adminPages;
     }
-    else if(await this.userData.getRole() == "tutor"){
+    else if (await this.userData.getRole() == "tutor") {
       this.appPages = this.tutorPages;
     }
-    else if(await this.userData.getRole() == "student"){
+    else if (await this.userData.getRole() == "student") {
       this.appPages = this.studentPages;
     }
   }

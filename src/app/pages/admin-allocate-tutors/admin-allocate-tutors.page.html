@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Allocate Tutors</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+
+    <!-- Headings -->
+    <ion-row style="text-align: center; font-weight: bold;">
+      <ion-col>
+        Student Name
+      </ion-col>
+
+      <ion-col>
+        Student Number
+      </ion-col>
+
+      <ion-col>
+        Assign Course
+      </ion-col>
+
+      <ion-col>
+        Assigned
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+
+  <ion-grid>
+
+    <ion-row style="text-align: center" *ngFor="let a of assignedTutors">
+
+      <ion-col>
+        {{a.studentName}}
+      </ion-col>
+
+      <ion-col>
+        {{a.studentNumber}}
+      </ion-col>
+
+      <ion-col>
+        <ion-list>
+          <ion-item>
+            <ion-select aria-label="Assign Course" interface="popover" placeholder="Select course" [(ngModel)]="a.assignedCourse">
+              <ion-select-option [value]="c.courseCode" *ngFor="let c of Course">
+                {{c.courseCode}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+
+      <ion-col>
+        <!-- <ng-container *ngIf="a.assignedCourse">
+          <ion-checkbox [checked] = "true" [disabled] = "true"></ion-checkbox>
+        </ng-container>
+
+        <ng-container *ngIf="!a.assignedCourse">
+          <ion-checkbox [checked] = "false"></ion-checkbox>
+        </ng-container> -->
+
+        <ion-checkbox [disabled]= "true" [checked]="a.assignedCourse !== '' && a.assignedCourse !== 'Unassigned' "></ion-checkbox>
+      </ion-col>
+
+
+    </ion-row>
+
+  </ion-grid>
+
+
+  <ion-button (click)="test()">
+    Update
+  </ion-button>
+</ion-content>

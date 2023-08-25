@@ -85,6 +85,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'admin-allocate-tutors',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../admin-allocate-tutors/admin-allocate-tutors.module').then(m => m.AdminAllocateTutorsPageModule)
+          }
+        ]
+      },
+      {
+        path: 'admin-review-applications',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../admin-review-applications/admin-review-applications.module').then(m => m.AdminReviewApplicationsPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'
