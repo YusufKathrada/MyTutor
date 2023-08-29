@@ -179,17 +179,14 @@ export class SupabaseService {
  * status entered as 'pending' by default
  */
   async postApplication(application: any) {
-    let status: any = await this.getStatusIdByDescription('Pending')
-    application.status = status[0].data.id
-
     try {
-      let { data: Application, error } = await this.supabase
+      let {status, error} = await this.supabase
         .from('Application')
         .insert(application)
 
       if (error) throw error
 
-      return Application
+      return status
 
     } catch (error) {
       console.log('error', error)

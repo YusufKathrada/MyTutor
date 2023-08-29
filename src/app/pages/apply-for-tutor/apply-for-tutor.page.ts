@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Student } from '../../providers/student';
+import { TA } from '../../providers/ta';
+import { LoadingController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-apply-for-tutor',
@@ -7,19 +11,18 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./apply-for-tutor.page.scss'],
 })
 export class ApplyForTutorPage implements OnInit {
-  
-  tutor = {
+
+  tutorApplication = {
     name: '',
     surname: '',
     studentNumber: '',
     degreeOfStudy: '',
     yearOfStudy: '',
-    desiredCourse: '',
-    previousMark: '',
-    transcript: null
+    averageGrade: '',
+    // transcript: null
   };
 
-  ta ={
+  taApplication ={
     name: '',
     surname: '',
     email: '',
@@ -27,47 +30,64 @@ export class ApplyForTutorPage implements OnInit {
     desired_course: ''
   };
 
+  segment: string = '';
 
-  isTutor: boolean = false; // Initialized as false, will become true when Tutor is selected
-  isTA: boolean = false; // Initialized as false, will become true when TA is selected
-
-  constructor() { }
+  constructor(
+    public student: Student,
+    public ta: TA,
+    public loadingController: LoadingController,
+    public toastController: ToastController
+  ) { }
 
   ngOnInit() {
+    console.log('ngOnInit')
   }
 
-  // Handle checkbox changes to ensure only one of them is true at a time
-  onRoleChange(role: string) {
-    if (role === 'Tutor') {
-      this.isTutor = !this.isTutor;
-      this.isTA = false;
-    } else if (role === 'TA') {
-      this.isTA = !this.isTA;
-      this.isTutor = false;
-    }
+  async presentLoading() {
+    await this.loadingController.create({
+      message: 'Please wait...',
+    }).then((res) => {
+      res.present();
+    });
   }
 
-  onSubmit(form: NgForm) {
+  async presentToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  async onSubmit(form: NgForm) {
     if (form.valid) {
-      if (this.isTutor) {
-        this.tutor = form.value;
-        console.log('Tutor info:', this.tutor);
-      } else if (this.isTA) {
-        this.ta = form.value;
-        console.log('TA info:', this.ta);
+      this.presentLoading();
+      let res: any;
+      if (this.segment === 'tutor') {
+        // this.tutorApplication = form.value;
+        res = await this.student.applyForTutor(this.tutorApplication);
+      }
+      else if (this.segment === 'TA') {
+        // this.taApplication = form.value;
+        res = await this.ta.applyForTA(this.taApplication);
+      }
+      this.loadingController.dismiss();
+
+      if(res == 201){
+        this.presentToast('Application submitted successfully.', 'success');
+      }
+      else{
+        this.presentToast('Application failed.', 'danger');
       }
     }
   }
 
-  onFileChange(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.tutor.transcript = file;
-    }
-  }
+  // TODO
+  // onFileChange(event: any) {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     this.tutorApplication.transcript = file;
+  //   }
+  // }
 }
-
-
-
- 
-

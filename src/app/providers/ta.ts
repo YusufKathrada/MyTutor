@@ -7,7 +7,7 @@ import { SupabaseService } from '../../services/supabase.service';
 @Injectable({
   providedIn: 'root'
 })
-export class Student extends UserData {
+export class TA extends UserData {
 
 
   constructor(
@@ -23,20 +23,20 @@ export class Student extends UserData {
   *  Phase 2: Apply for tutor role
   */
 
-  async applyForTutor(tutorApplication: any) {
+  async applyForTA(taApplication: any) {
     let status: any = await this.supabaseService.getStatusIdByDescription('Pending');
 
     const tutorApplicationData: any = {
       statusId: status[0].id,
-      name: tutorApplication.name,
-      surname: tutorApplication.surname,
-      email: null,
-      stuNum: tutorApplication.studentNumber,
-      degree: tutorApplication.degreeOfStudy,
-      yearOfStudy: tutorApplication.yearOfStudy,
-      average: tutorApplication.averageGrade,
-      preferredCourse: null,
-      qualification: null,
+      name: taApplication.name,
+      surname: taApplication.surname,
+      email: taApplication.email,
+      stuNum: null,
+      degree: null,
+      yearOfStudy: null,
+      average: null,
+      preferredCourse: taApplication.desired_course,
+      qualification: taApplication.degree_completed,
     }
 
     return await this.supabaseService.postApplication(tutorApplicationData);
