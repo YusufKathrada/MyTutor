@@ -7,6 +7,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./apply-for-tutor.page.scss'],
 })
 export class ApplyForTutorPage implements OnInit {
+  
   tutor = {
     name: '',
     surname: '',
@@ -18,15 +19,43 @@ export class ApplyForTutorPage implements OnInit {
     transcript: null
   };
 
+  ta ={
+    name: '',
+    surname: '',
+    email: '',
+    degree_completed: '',
+    desired_course: ''
+  };
+
+
+  isTutor: boolean = false; // Initialized as false, will become true when Tutor is selected
+  isTA: boolean = false; // Initialized as false, will become true when TA is selected
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  // Handle checkbox changes to ensure only one of them is true at a time
+  onRoleChange(role: string) {
+    if (role === 'Tutor') {
+      this.isTutor = !this.isTutor;
+      this.isTA = false;
+    } else if (role === 'TA') {
+      this.isTA = !this.isTA;
+      this.isTutor = false;
+    }
+  }
+
   onSubmit(form: NgForm) {
     if (form.valid) {
-      console.log('Tutor info:', this.tutor);
-      // Send the form data to your server or handle it as needed
+      if (this.isTutor) {
+        this.tutor = form.value;
+        console.log('Tutor info:', this.tutor);
+      } else if (this.isTA) {
+        this.ta = form.value;
+        console.log('TA info:', this.ta);
+      }
     }
   }
 
@@ -37,4 +66,8 @@ export class ApplyForTutorPage implements OnInit {
     }
   }
 }
+
+
+
+ 
 
