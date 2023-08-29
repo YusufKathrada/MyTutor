@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
+import { Admin } from '../../providers/admin';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-upload-times',
@@ -12,16 +14,23 @@ export class UploadTimesPage implements OnInit {
   public eventForm: FormGroup;
   course: string = '';
 
+  allEvents: any = [];
+  showCourseEvents: any = [];
+  courses: any = [];
+  selectedGender: string = 'all';
+
   constructor(
     private fb: FormBuilder,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
+    private admin: Admin,
   ) {
     this.createForm();
   }
 
-  ngOnInit() {
-    console.log('UploadTimesPage');
+  async ngOnInit() {
     this.addSession();
+    await this.refreshEvents();
   }
 
   createForm() {
@@ -34,10 +43,23 @@ export class UploadTimesPage implements OnInit {
     return this.eventForm.get('sessions') as FormArray;
   }
 
-  async presentToast(message: string) {
+  async refreshEvents(){
+    let load = await this.loadingCtrl.create({
+      message: 'Loading events...',
+    });
+    load.present();
+
+    [this.allEvents, this.courses] = await this.admin.getAllEvents();
+    console.log("allEvents: ", this.allEvents)
+    console.log("courses: ", this.courses)
+
+    load.dismiss();
+  }
+
+  async presentToast(message: string, color: string = 'danger') {
     const toast = await this.toastCtrl.create({
       message: message,
-      color: 'danger',
+      color: color,
       duration: 2000
     });
     toast.present();
@@ -45,11 +67,12 @@ export class UploadTimesPage implements OnInit {
 
   addSession() {
     const sessionGroup = this.fb.group({
-      tutorialNumber: ['', Validators.required],
+      eventType: ['', Validators.required],
       day: ['', Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       tutorsNeeded: ['', Validators.required],
+      venue: ['', Validators.required],
     });
 
     this.sessions.push(sessionGroup);
@@ -65,6 +88,11 @@ export class UploadTimesPage implements OnInit {
     } else {
       this.presentToast("Please fill all the fields in the current session before adding a new one.");
     }
+  }
+
+  selectCourse(ev: any){
+    this.showCourseEvents = this.allEvents.filter((event) => { return event.name == ev.detail.value });
+    console.log("showCourseEvents: ", this.showCourseEvents);
   }
 
   removeLastSession(){
@@ -109,13 +137,27 @@ export class UploadTimesPage implements OnInit {
     }
   }
 
-  submit(form: any) {
+  async submit(form: any) {
+    const load = await this.loadingCtrl.create({
+      message: 'Uploading time slots...',
+    })
+    load.present();
+
     //remove the last session if it is empty
     if(form.length && form[form.length - 1].tutorialNumber == "") {
       form.pop();
     }
 
-    console.log("Submitted form:", form);
+    let res: any = await this.admin.uploadTimes(this.course, form);
+    load.dismiss();
+
+    if(res === 201) {
+      this.presentToast("Time slots uploaded successfully!", "success");
+    }
+    else {
+      this.presentToast("Error uploading time slots. Please try again.");
+    }
+    this.refreshEvents();
   }
 }
 

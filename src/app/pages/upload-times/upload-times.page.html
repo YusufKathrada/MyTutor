@@ -31,7 +31,7 @@
     <!-- Headings -->
     <ion-row style="text-align: center; font-weight: bold;">
       <ion-col>
-        Tutorial Number
+        Event
       </ion-col>
 
       <ion-col>
@@ -49,6 +49,10 @@
       <ion-col>
         Tutors Needed
       </ion-col>
+
+      <ion-col>
+        Venue
+      </ion-col>
     </ion-row>
   </ion-grid>
 
@@ -60,9 +64,9 @@
           <ion-col>
             <ion-input
               aria-label="Tutorial Number"
-              placeholder="Tutorial Number"
+              placeholder="Event"
               class="custom"
-              formControlName="tutorialNumber"
+              formControlName="eventType"
               required="true"
             ></ion-input>
           </ion-col>
@@ -102,6 +106,16 @@
               formControlName="tutorsNeeded"
             ></ion-input>
           </ion-col>
+
+          <ion-col>
+            <ion-input
+              aria-label="Venue"
+              placeholder="Venue"
+              class="custom"
+              formControlName="venue"
+            ></ion-input>
+          </ion-col>
+
         </ion-row>
       </div>
     </form>
@@ -122,4 +136,69 @@
     <ion-button class="submit-button" (click)="validate()">Submit</ion-button>
   </div>
 
+  <!-- <br><br> -->
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4" style="padding-left: 8px; font-weight: bold;">
+        View Events
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-item class="select">
+          <ion-select  label="Course" label-placement="floating" (ionChange)="selectCourse($event)">
+            <ion-select-option *ngFor="let course of courses" [value]="course">
+              {{course}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row style="text-align: center; font-weight: bold;">
+      <ion-col>
+        Event
+      </ion-col>
+
+      <ion-col>
+        Day
+      </ion-col>
+
+      <ion-col>
+        Times
+      </ion-col>
+
+      <ion-col>
+        Tutors Needed
+      </ion-col>
+
+      <ion-col>
+        Venue
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let event of showCourseEvents" style="text-align: center;">
+      <ion-col>
+        {{event.description}}
+      </ion-col>
+
+      <ion-col>
+        {{event.day}}
+      </ion-col>
+
+      <ion-col>
+        {{event.startTime}} - {{event.endTime}}
+      </ion-col>
+
+      <ion-col>
+        {{event.tutorsNeeded}}
+      </ion-col>
+
+      <ion-col>
+        {{event.venue}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

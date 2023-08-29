@@ -326,6 +326,22 @@ export class SupabaseService {
     }
   }
 
+  async getCourseId(courseName: string){
+    try {
+      let { data: Courses, error } = await this.supabase
+        .from('Courses')
+        .select('id')
+        .eq('name', courseName)
+
+      if (error) throw error;
+
+      return Courses
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   async insertCourse(course: any) {
     try {
       let { data: Courses, error } = await this.supabase
@@ -351,13 +367,14 @@ export class SupabaseService {
 
   async getAllEvents() {
     try {
-      let { data: Events, error } = await this.supabase
-        .from('Events')
+      // Over here I have created a view on the database that combines the events table with the type of session and courses table to make access easy
+      let { data: allEvents, error} = await this.supabase
+        .from('allevents')
         .select('*')
 
       if (error) throw error
 
-      return Events
+      return allEvents
 
     } catch (error) {
       console.log('error', error)
@@ -382,13 +399,13 @@ export class SupabaseService {
 
   async insertEvent(event: any) {
     try {
-      let { data: Events, error } = await this.supabase
+      let {status, error} = await this.supabase
         .from('Events')
         .insert(event)
 
       if (error) throw error
 
-      return Events
+      return status
 
     } catch (error) {
       console.log('error', error)
@@ -424,6 +441,22 @@ export class SupabaseService {
         .select('*')
 
       if (error) throw error
+
+      return SessionTypes
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  async getSessionId(sessionName: string){
+    try {
+      let { data: SessionTypes , error } = await this.supabase
+        .from('Type of Session')
+        .select('id')
+        .eq('description', sessionName)
+
+      if (error) throw error;
 
       return SessionTypes
 
