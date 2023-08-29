@@ -1,22 +1,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tutor Sign Up
-     <!-- <img src="assets/img/UCT_image.png" alt="UCT Image" width="30" height="30" style="vertical-align: middle;">-->
-      </ion-title>
+    <ion-title>Applications</ion-title>
   </ion-toolbar>
-</ion-header> 
+</ion-header>
 
 <ion-content>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>
-        <!--<img src="assets/img/UCT_image.png" alt="UCT Image" width="30" height="30" style="vertical-align: middle;">-->
-        Apply to Become a Tutor:</ion-card-title>
+      <ion-card-title>Apply for a Position:</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
+      
+      <!-- Role selection -->
+      <ion-item>
+        <ion-label slot="start">Which role are you applying for?</ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>Tutor</ion-label>
+        <ion-checkbox slot="end" [(ngModel)]="isTutor" name="roleType" value="Tutor" (ionChange)="onRoleChange('Tutor')"></ion-checkbox>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>TA</ion-label>
+        <ion-checkbox slot="end" [(ngModel)]="isTA" name="roleType" value="TA" (ionChange)="onRoleChange('TA')"></ion-checkbox>
+      </ion-item>
+      
+      <!-- Tutor Form -->
+      <form *ngIf="isTutor" #tutorForm="ngForm" (ngSubmit)="onSubmit(tutorForm)">
         <ion-list>
           <ion-item>
             <ion-label>Name:</ion-label>
@@ -39,21 +50,47 @@
             <ion-input type="number" [(ngModel)]="tutor.yearOfStudy" name="yearOfStudy" required></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label>Course Code to Tutor:</ion-label>
-            <ion-input type="text" [(ngModel)]="tutor.desiredCourse" name="desiredCourse" required></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label>Mark For Course:</ion-label>
-            <ion-input type="number" [(ngModel)]="tutor.previousMark" name="previousMark" required></ion-input>
-          </ion-item>
-          <ion-item>
             <ion-label>Upload Transcript:</ion-label>
             <ion-input type="file" (change)="onFileChange($event)" required></ion-input>
           </ion-item>
         </ion-list>
         <ion-button expand="block" type="submit">Sign Up</ion-button>
       </form>
+      
+      <!-- TA Form -->
+      <form *ngIf="isTA" #taForm="ngForm" (ngSubmit)="onSubmit(taForm)">
+        <ion-list>
+          <ion-item>
+            <ion-label>Name:</ion-label>
+            <ion-input type="text" [(ngModel)]="ta.name" name="name" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Surname:</ion-label>
+            <ion-input type="text" [(ngModel)]="ta.surname" name="Surname" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Email:</ion-label>
+            <ion-input type="text" [(ngModel)]="ta.email" name="email" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Degree Completed:</ion-label>
+            <ion-input type="text" [(ngModel)]="ta.degree_completed" name="degree_completed" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Desired Course to Assist:</ion-label>
+            <ion-input type="text" [(ngModel)]="tutor.desired_course_to_assist" name="desired_course_to_assist" required></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" type="submit">Sign Up</ion-button>
+      </form>
+      
     </ion-card-content>
   </ion-card>
 </ion-content>
+
+
+
+
+
+
 
