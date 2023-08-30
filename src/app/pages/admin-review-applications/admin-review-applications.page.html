@@ -5,80 +5,103 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-grid>
-    <!-- Headings -->
-    <ion-row style="text-align: center; font-weight: bold;">
-      <ion-col>
-        Student Name
-      </ion-col>
 
-      <!-- <ion-col>
-        Student Number
-      </ion-col> -->
+  <ion-segment [(ngModel)]="segment">
+    <ion-segment-button value="tutor">
+      <ion-label>Tutor</ion-label>
+    </ion-segment-button>
 
-      <ion-col>
-        Degree
-      </ion-col>
+    <ion-segment-button value="TA">
+      <ion-label>TA</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
-      <ion-col>
-        Year of Study
-      </ion-col>
+  <div [ngSwitch]="segment">
 
-      <ion-col>
-        Average
-      </ion-col>
+    <div *ngSwitchCase="'tutor'">
 
-      <ion-col>
-        Desired Course
-      </ion-col>
+      <ion-grid>
+        <!-- Headings -->
+        <ion-row style="text-align: center; font-weight: bold;">
+          <ion-col> Student Name </ion-col>
+          <ion-col> Student Number </ion-col>
+          <ion-col> Degree </ion-col>
+          <ion-col> Year of Study </ion-col>
+          <ion-col> Average </ion-col>
+          <ion-col> Status </ion-col>
+        </ion-row>
+      </ion-grid>
 
-      <ion-col>
-        Status
-      </ion-col>
+      <ion-grid>
+        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let t of tutorApplications">
+          <ion-col> {{t.studentName}} </ion-col>
 
-    </ion-row>
-  </ion-grid>
+          <ion-col> {{t.stuNum}} </ion-col>
 
-  <ion-grid>
-    <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let t of tutorApplications">
+          <ion-col> {{t.degree}} </ion-col>
 
-      <ion-col>
-        {{t.studentName}}
-      </ion-col>
+          <ion-col> {{t.yearOfStudy}} </ion-col>
 
-      <ion-col>
-        {{t.degree}}
-      </ion-col>
+          <ion-col> {{t.average}} </ion-col>
 
-      <ion-col>
-        {{t.yearOfStudy}}
-      </ion-col>
-        
-      <ion-col>
-        {{t.average}}
-      </ion-col>
-        
-      <ion-col>
-        {{t.desiredCourse}}
-      </ion-col>
-        
-      <ion-col>
-        <ion-list>
-          <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="t.status">
-            <ion-select-option [value]="a.status" *ngFor="let a of applicationStatus">
-              {{a.status}}
-            </ion-select-option>
-          </ion-select>
-        </ion-list>
+          <ion-col>
+            <ion-list>
+              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="t.status">
+                <ion-select-option [value]="a.description" *ngFor="let a of applicationStatus">
+                  {{a.description}}
+                </ion-select-option>
+              </ion-select>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-      </ion-col>
+      <ion-button (click)="updateTutors()">
+        Update
+      </ion-button>
 
-      
-    </ion-row>
-  </ion-grid>
+    </div>
 
-  <ion-button (click)="test()">
-    Update
-  </ion-button>
+    <div *ngSwitchCase="'TA'">
+
+      <ion-grid>
+        <!-- Headings -->
+        <ion-row style="text-align: center; font-weight: bold;">
+          <ion-col> Name </ion-col>
+          <ion-col> Email </ion-col>
+          <ion-col> Qualification </ion-col>
+          <ion-col> Desired Course </ion-col>
+          <ion-col> Status </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let t of taApplications">
+          <ion-col> {{t.name}} </ion-col>
+
+          <ion-col> {{t.email}} </ion-col>
+
+          <ion-col> {{t.qualification}} </ion-col>
+
+          <ion-col> {{t.desiredCourse}} </ion-col>
+
+          <ion-col>
+            <ion-list>
+              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="t.status">
+                <ion-select-option [value]="a.description" *ngFor="let a of applicationStatus">
+                  {{a.description}}
+                </ion-select-option>
+              </ion-select>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-button (click)="updateTAs()">
+        Update
+      </ion-button>
+
+    </div>
+  </div>
 
 </ion-content>

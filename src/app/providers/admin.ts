@@ -74,5 +74,19 @@ export class Admin extends UserData {
     return [allEvents, courses];
   }
 
+  async getApplications(){
+    let applications = await this.supabase.getAllApplications();
+    let tutorApplications = applications.filter((application) => { return application.qualification === null });
+    let taApplications = applications.filter((application) => { return application.qualification !== null });
 
+    return [tutorApplications, taApplications];
+  }
+
+  async getStatuses(){
+    return await this.supabase.getAllStatuses();
+  }
+
+  async updateApplicationStatus(applicationId: number, statusId: number){
+    return await this.supabase.updateApplication(applicationId, statusId);
+  }
 }

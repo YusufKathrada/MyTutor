@@ -229,6 +229,22 @@ export class SupabaseService {
     }
   }
 
+  async updateApplication(id: number, statusId: number) {
+    try {
+      let {status, error} = await this.supabase
+        .from('Application')
+        .update({ statusId: statusId })
+        .eq('id', id)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   // ======================================== Status ========================================
   /**
    * API calls to interact with the status table. This gives the status of the application
