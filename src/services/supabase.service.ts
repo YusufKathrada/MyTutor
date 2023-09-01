@@ -48,16 +48,16 @@ export class SupabaseService {
 
 
   // ======================================== Sign Up ========================================
-  async signUp(user: any){
+  async signUp(user: any) {
     return await this.supabase.auth.signUp({
-        email: user.username,
-        password: user.password,
-        options: {
-          data: {
-            userrole: user.role,
-          }
+      email: user.username,
+      password: user.password,
+      options: {
+        data: {
+          userrole: user.role,
         }
-      });
+      }
+    });
   }
 
   // ======================================== User ========================================
@@ -121,21 +121,21 @@ export class SupabaseService {
    */
 
   async updateUser(user: User) {
-      try {
-        let { data: Users, error } = await this.supabase
-          .from('Users')
-          .update(user)
-          .eq('id', user.id)
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .update(user)
+        .eq('id', user.id)
 
-        if (error) throw error
+      if (error) throw error
 
-        return Users
+      return Users
 
 
-      } catch (error) {
-        console.log('error', error)
-      }
+    } catch (error) {
+      console.log('error', error)
     }
+  }
 
   // ======================================== Application ========================================
   /**
@@ -173,14 +173,14 @@ export class SupabaseService {
     }
   }
 
-/**
- * @param application - Application object to be inserted into the database
- * Needs attributes: name, surname, stuNum, degree, yearOfStudy, average, preferredCourse, qualification
- * status entered as 'pending' by default
- */
+  /**
+   * @param application - Application object to be inserted into the database
+   * Needs attributes: name, surname, stuNum, degree, yearOfStudy, average, preferredCourse, qualification
+   * status entered as 'pending' by default
+   */
   async postApplication(application: any) {
     try {
-      let {status, error} = await this.supabase
+      let { status, error } = await this.supabase
         .from('Application')
         .insert(application)
 
@@ -231,7 +231,7 @@ export class SupabaseService {
 
   async updateApplication(id: number, statusId: number) {
     try {
-      let {status, error} = await this.supabase
+      let { status, error } = await this.supabase
         .from('Application')
         .update({ statusId: statusId })
         .eq('id', id)
@@ -239,6 +239,23 @@ export class SupabaseService {
       if (error) throw error
 
       return status
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  async getAllAcceptedTutors() {
+    try {
+      let { data: AcceptedTutors, error } = await this.supabase
+        .from('Application')
+        .select('*')
+        .eq('statusId', 2)
+        .is('qualification', null)
+
+      if (error) throw error
+
+      return AcceptedTutors
 
     } catch (error) {
       console.log('error', error)
@@ -302,12 +319,27 @@ export class SupabaseService {
     }
   }
 
-  async updateCourseForTutor(userId: string, courseId: string) {
+  async postAssignedTutors(tutorId: string, courseId: number, assignedStatus: boolean) {
+    try {
+      let { data: AssignedTutors, error } = await this.supabase
+        .from('Assigned Tutors')
+        .insert({ userId: tutorId, courseId: courseId, assigned: assignedStatus })
+
+      if (error) throw error
+
+      return AssignedTutors
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  async updateCourseForTutor(tutorId: string, courseId: number) {
     try {
       let { data: AssignedTutors, error } = await this.supabase
         .from('Assigned Tutors')
         .update({ courseId: courseId })
-        .eq('userId', userId)
+        .eq('userId', tutorId)
 
       if (error) throw error
 
@@ -339,7 +371,7 @@ export class SupabaseService {
     }
   }
 
-  async getCourseId(courseName: string){
+  async getCourseId(courseName: string) {
     try {
       let { data: Courses, error } = await this.supabase
         .from('Courses')
@@ -381,7 +413,7 @@ export class SupabaseService {
   async getAllEvents() {
     try {
       // Over here I have created a view on the database that combines the events table with the type of session and courses table to make access easy
-      let { data: allEvents, error} = await this.supabase
+      let { data: allEvents, error } = await this.supabase
         .from('allevents')
         .select('*')
 
@@ -412,7 +444,7 @@ export class SupabaseService {
 
   async insertEvent(event: any) {
     try {
-      let {status, error} = await this.supabase
+      let { status, error } = await this.supabase
         .from('Events')
         .insert(event)
 
@@ -462,9 +494,9 @@ export class SupabaseService {
     }
   }
 
-  async getSessionId(sessionName: string){
+  async getSessionId(sessionName: string) {
     try {
-      let { data: SessionTypes , error } = await this.supabase
+      let { data: SessionTypes, error } = await this.supabase
         .from('Type of Session')
         .select('id')
         .eq('description', sessionName)

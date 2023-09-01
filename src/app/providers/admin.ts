@@ -89,4 +89,16 @@ export class Admin extends UserData {
   async updateApplicationStatus(applicationId: number, statusId: number){
     return await this.supabase.updateApplication(applicationId, statusId);
   }
+
+  async getAcceptedTutors(){
+    return await this.supabase.getAllAcceptedTutors();
+  }
+
+  async getCourses(){
+    return await this.supabase.getAllCourses();
+  }
+
+  async updateTutorAllocations(tutorId: string, courseId: number){
+    return await this.supabase.updateCourseForTutor(tutorId, courseId);
+  }
 }
