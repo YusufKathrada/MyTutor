@@ -18,14 +18,15 @@
 
 
   <ion-grid>
-    <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let a of acceptedTutors">
+    <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let a of displayedTutors">
       <ion-col> {{a.tutorName}} </ion-col>
 
       <ion-col> {{a.tutorNum}} </ion-col>
 
       <ion-col>
         <ion-list>
-          <ion-select fill="outline" aria-label="Assign Course" interface="popover" placeholder="Select Course" [(ngModel)]="a.assignedCourse">
+          <ion-select fill="outline" aria-label="Assign Course" interface="popover" placeholder="Select Course"
+            [(ngModel)]="a.assignedCourse">
             <ion-select-option [value]="c.name" *ngFor="let c of courses">
               {{c.name}}
             </ion-select-option>
@@ -34,7 +35,7 @@
       </ion-col>
 
       <ion-col>
-        <ion-checkbox [disabled]= "true" [checked]="a.assignedCourse !== 'UNASSIGNED'"></ion-checkbox>
+        <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox>
       </ion-col>
     </ion-row>
 

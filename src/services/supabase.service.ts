@@ -321,13 +321,21 @@ export class SupabaseService {
 
   async postAssignedTutors(tutorId: string, courseId: number, assignedStatus: boolean) {
     try {
-      let { data: AssignedTutors, error } = await this.supabase
+      let { status, error } = await this.supabase
         .from('Assigned Tutors')
-        .insert({ userId: tutorId, courseId: courseId, assigned: assignedStatus })
+        .upsert(
+          {
+            userId: tutorId,
+            courseId: courseId,
+            assignedStatus: assignedStatus,
+          }, 
+          { onConflict: 'userId' })
+        .select()
 
       if (error) throw error
 
-      return AssignedTutors
+      console.log('status', status)
+      return status
 
     } catch (error) {
       console.log('error', error)

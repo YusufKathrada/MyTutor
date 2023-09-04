@@ -98,7 +98,7 @@ export class Admin extends UserData {
     return await this.supabase.getAllCourses();
   }
 
-  async updateTutorAllocations(tutorId: string, courseId: number){
-    return await this.supabase.updateCourseForTutor(tutorId, courseId);
+  async updateTutorAllocations(tutorId: string, courseId: number, assignedStatus: boolean){
+    return await this.supabase.postAssignedTutors(tutorId, courseId, assignedStatus);
   }
 }
