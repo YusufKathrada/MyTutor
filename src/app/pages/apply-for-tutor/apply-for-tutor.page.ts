@@ -22,7 +22,7 @@ export class ApplyForTutorPage implements OnInit {
     // transcript: null
   };
 
-  taApplication ={
+  taApplication = {
     name: '',
     surname: '',
     email: '',
@@ -74,10 +74,10 @@ export class ApplyForTutorPage implements OnInit {
       }
       this.loadingController.dismiss();
 
-      if(res == 201){
+      if (res == 201) {
         this.presentToast('Application submitted successfully.', 'success');
       }
-      else{
+      else {
         this.presentToast('Application failed.', 'danger');
       }
     }
