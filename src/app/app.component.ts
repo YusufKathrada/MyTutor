@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
       icon: 'cloud-upload'
     },
     {
-      title: 'Allocate Tutors',
+      title: 'Allocate Courses',
       url: '/app/tabs/admin-allocate-tutors',
       icon: 'people'
     },
