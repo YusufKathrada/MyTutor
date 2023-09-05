@@ -11,6 +11,7 @@ import { Student } from '../../providers/student';
 
 import { UserOptions } from '../../interfaces/user-options';
 import { AppComponent } from '../../app.component';
+import { Storage } from '@ionic/storage-angular';
 
 
 
@@ -33,6 +34,7 @@ export class LoginPage {
     public router: Router,
     public toastCtrl: ToastController,
     public appComponent: AppComponent,
+    public storage: Storage,
   ) { }
 
   async onLogin(form: NgForm) {
@@ -54,6 +56,8 @@ export class LoginPage {
         console.log("error", error);
 
         if (error) throw error;
+
+        await this.storage.set('userId', data.user.id);
 
         const role = data.user.user_metadata.userrole;
 

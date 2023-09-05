@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Admin } from '../../providers/admin';
+import { LoadingController, ToastController } from '@ionic/angular';
+import { assign } from 'cypress/types/lodash';
 
 @Component({
   selector: 'app-admin-allocate-tutors',
@@ -7,57 +10,143 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminAllocateTutorsPage implements OnInit {
 
-  assignedTutors: any = [{
-    studentName: "John Doe",
-    studentNumber: "DOEJHN001",
-    assignedCourse: "",
-  },
-  {
-    studentName: "Mary Adams",
-    studentNumber: "MRYADM001",
-    assignedCourse: "",
-  }  
-];
+  acceptedTutors: any = [];
+  displayedTutors: any = [];
+  courses: any = [];
+  courseMap: any = [];
 
-  //Basic courses added for now, proper list should be updated in future
-  Course: any = [
-  {
-    courseName: "",
-    courseCode: "Unassigned"
-  },
-  {
-    courseName: "Intro to Computer Science",
-    courseCode: "CSC1001F"
-  },
-  {
-  courseName: "Intro to Java",
-    courseCode: "CSC1002S"
-  },
-  {
-    courseName: "Data Structures and Algorithms",
-      courseCode: "CSC2001F"
-  },
-  {
-    courseName: "Parallel Computing",
-      courseCode: "CSC2002S"
-  },
-  {
-    courseName: "Networks and Operating Systems",
-      courseCode: "CSC3001F"
-  },
-  {
-    courseName: "Advanced Software Development",
-      courseCode: "CSC3002S"
-  },
-]
+  constructor(
+    public admin: Admin,
+    public loadingCtrl: LoadingController,
+    public toastCtrl: ToastController
+  ) { }
 
-  constructor() { }
+  async ngOnInit() {
+    await this.presentLoading();
 
-  ngOnInit() {
+    this.acceptedTutors = await this.admin.getAcceptedTutors();
+    this.courses = await this.admin.getCourses();
+
+    // console.log('courses: ', this.courses);
+    this.courseMap = this.courses.reduce((map, obj) => {
+      map[obj.name] = obj.id;
+      return map;
+    }, {});
+    // console.log('courseMap: ', this.courseMap);
+
+    // console.log('acceptedTutors: ', this.acceptedTutors);
+    await this.getAndFormatTutors();
+
+    await this.loadingCtrl.dismiss();
   }
 
-  test(){
-    console.log("Tutors", this.assignedTutors)
+  async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait...',
+    });
+    await loading.present();
   }
+
+  async presentToast(message: string, color: string) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      color: color,
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  async getAndFormatTutors(){
+    
+    this.displayedTutors = this.acceptedTutors.map((tutor) => {
+      return {
+        userId: tutor.userId,
+        tutorName: `${tutor.name} ${tutor.surname}`,
+        tutorNum: tutor.stuNum,
+        assignedCourse: null
+      }
+    });
+  }
+
+  // async updateTutorAllocations(){
+  //   // console.log("acceptedTutors: ", this.acceptedTutors);
+
+  //   this.presentLoading();
+  //   let success: boolean = true;
+  //   for (const tutor of this.displayedTutors){
+  //     if (!tutor.assignedCourse || tutor.assignedCourse === "UNASSIGNED") {
+  //       tutor.assignedStatus = false;
+  //     }
+  //     else {
+  //       tutor.assignedStatus = true;
+  //     }
+
+  //     // console.log("tutor: ", tutor.userId, this.courseMap[tutor.assignedCourse], tutor.assignedStatus);
+  //      let res = await this.admin.updateTutorAllocations(tutor.userId, this.courseMap[tutor.assignedCourse], tutor.assignedStatus);
+  //     //  console.log('res', res)
+  //     //  if (res !== 204) {
+  //     //     success = false;
+  //     //     break;
+  //     //  }
+  //   }
+  //   this.loadingCtrl.dismiss();
+
+  //   if (success) {
+  //     this.presentToast("Tutor allocations updated successfully", "success");
+  //   } else {
+  //     this.presentToast("Error updating tutor allocations", "danger");
+  //   }
+  // }
+
+  async updateTutorAllocations() {
+    this.presentLoading();
+    let success: boolean = true;
+    const updatePromises = [];
+  
+    for (const tutor of this.displayedTutors) {
+      if (!tutor.assignedCourse || tutor.assignedCourse === "UNASSIGNED") {
+        tutor.assignedStatus = false;
+      } else {
+        tutor.assignedStatus = true;
+      }
+  
+      // Add each update operation to an array of promises
+      updatePromises.push(
+        this.admin.updateTutorAllocations(
+          tutor.userId,
+          this.courseMap[tutor.assignedCourse],
+          tutor.assignedStatus
+        )
+      );
+    }
+  
+    try {
+      // Execute all update operations concurrently
+      const results = await Promise.all(updatePromises);
+  
+      // Check if any operation returned a non-204 status
+      if (results.some((res) => res !== 201)) {
+        success = false;
+      }
+
+      console.log('results', results);
+    } catch (error) {
+      // Handle any errors that might occur during the bulk update
+      success = false;
+    }
+  
+    this.loadingCtrl.dismiss();
+  
+    if (success) {
+      this.presentToast("Tutor allocations updated successfully", "success");
+    } else {
+      this.presentToast("Error updating tutor allocations", "danger");
+    }
+  }
+  
+
+  // test(){
+  //   console.log("Tutors", this.acceptedTutors)
+  // }
 
 }

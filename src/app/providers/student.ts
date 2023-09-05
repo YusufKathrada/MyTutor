@@ -25,6 +25,7 @@ export class Student extends UserData {
 
   async applyForTutor(tutorApplication: any) {
     let status: any = await this.supabaseService.getStatusIdByDescription('Pending');
+    const userId = await this.storage.get('userId');
 
     const tutorApplicationData: any = {
       statusId: status[0].id,
@@ -37,6 +38,7 @@ export class Student extends UserData {
       average: tutorApplication.averageGrade,
       preferredCourse: null,
       qualification: null,
+      userId: userId,
     }
 
     return await this.supabaseService.postApplication(tutorApplicationData);
