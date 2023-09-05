@@ -56,14 +56,14 @@ export class AdminAllocateTutorsPage implements OnInit {
     toast.present();
   }
 
-  async getAndFormatTutors(){
-    
+  async getAndFormatTutors() {
+
     this.displayedTutors = this.acceptedTutors.map((tutor) => {
       return {
         userId: tutor.userId,
         tutorName: `${tutor.name} ${tutor.surname}`,
         tutorNum: tutor.stuNum,
-        assignedCourse: null
+        assignedCourse: 'UNASSIGNED',
       }
     });
   }
@@ -102,14 +102,14 @@ export class AdminAllocateTutorsPage implements OnInit {
     this.presentLoading();
     let success: boolean = true;
     const updatePromises = [];
-  
+
     for (const tutor of this.displayedTutors) {
       if (!tutor.assignedCourse || tutor.assignedCourse === "UNASSIGNED") {
         tutor.assignedStatus = false;
       } else {
         tutor.assignedStatus = true;
       }
-  
+
       // Add each update operation to an array of promises
       updatePromises.push(
         this.admin.updateTutorAllocations(
@@ -119,12 +119,12 @@ export class AdminAllocateTutorsPage implements OnInit {
         )
       );
     }
-  
+
     try {
       // Execute all update operations concurrently
       const results = await Promise.all(updatePromises);
-  
-      // Check if any operation returned a non-204 status
+
+      // Check if any operation returned a non-201 status
       if (results.some((res) => res !== 201)) {
         success = false;
       }
@@ -134,16 +134,16 @@ export class AdminAllocateTutorsPage implements OnInit {
       // Handle any errors that might occur during the bulk update
       success = false;
     }
-  
+
     this.loadingCtrl.dismiss();
-  
+
     if (success) {
       this.presentToast("Tutor allocations updated successfully", "success");
     } else {
       this.presentToast("Error updating tutor allocations", "danger");
     }
   }
-  
+
 
   // test(){
   //   console.log("Tutors", this.acceptedTutors)

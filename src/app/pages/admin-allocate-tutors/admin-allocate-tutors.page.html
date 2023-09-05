@@ -25,8 +25,7 @@
 
       <ion-col>
         <ion-list>
-          <ion-select fill="outline" aria-label="Assign Course" interface="popover" placeholder="Select Course"
-            [(ngModel)]="a.assignedCourse">
+          <ion-select fill="outline" aria-label="Assign Course" interface="popover" [(ngModel)]="a.assignedCourse">
             <ion-select-option [value]="c.name" *ngFor="let c of courses">
               {{c.name}}
             </ion-select-option>
