@@ -362,7 +362,7 @@ export class SupabaseService {
   async postAssignedTAs(taId: string, courseId: number, assignedStatus: boolean) {
     try {
       let { status, error } = await this.supabase
-        .from('Assigned Tutors')
+        .from('Assigned TAs')
         .upsert(
           {
             userId: taId,
