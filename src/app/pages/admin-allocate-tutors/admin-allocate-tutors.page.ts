@@ -68,35 +68,6 @@ export class AdminAllocateTutorsPage implements OnInit {
     });
   }
 
-  // async updateTutorAllocations(){
-  //   // console.log("acceptedTutors: ", this.acceptedTutors);
-
-  //   this.presentLoading();
-  //   let success: boolean = true;
-  //   for (const tutor of this.displayedTutors){
-  //     if (!tutor.assignedCourse || tutor.assignedCourse === "UNASSIGNED") {
-  //       tutor.assignedStatus = false;
-  //     }
-  //     else {
-  //       tutor.assignedStatus = true;
-  //     }
-
-  //     // console.log("tutor: ", tutor.userId, this.courseMap[tutor.assignedCourse], tutor.assignedStatus);
-  //      let res = await this.admin.updateTutorAllocations(tutor.userId, this.courseMap[tutor.assignedCourse], tutor.assignedStatus);
-  //     //  console.log('res', res)
-  //     //  if (res !== 204) {
-  //     //     success = false;
-  //     //     break;
-  //     //  }
-  //   }
-  //   this.loadingCtrl.dismiss();
-
-  //   if (success) {
-  //     this.presentToast("Tutor allocations updated successfully", "success");
-  //   } else {
-  //     this.presentToast("Error updating tutor allocations", "danger");
-  //   }
-  // }
 
   async updateTutorAllocations() {
     this.presentLoading();
