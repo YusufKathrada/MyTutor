@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Admin } from '../../providers/admin';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { assign } from 'cypress/types/lodash';
@@ -11,6 +11,12 @@ import { assign } from 'cypress/types/lodash';
 export class AdminAllocateTutorsPage implements OnInit {
 
   public segment: string = '';
+  public filterOption: string = 'all';
+
+  assignedTutors: any = [];   // Array for assigned students
+  unassignedTutors: any = []; // Array for unassigned students
+  assignedTAs: any = [];   // Array for assigned students
+  unassignedTAs: any = []; // Array for unassigned students
 
   acceptedTutors: any = [];
   acceptedTAs: any = [];
@@ -27,7 +33,8 @@ export class AdminAllocateTutorsPage implements OnInit {
   constructor(
     public admin: Admin,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    private cdr: ChangeDetectorRef
   ) { }
 
   async ngOnInit() {
@@ -110,6 +117,9 @@ export class AdminAllocateTutorsPage implements OnInit {
         assignedStatus: assignedCourse !== 0 ? true : false,
       }
     });
+
+    this.assignedTutors = this.displayedTutors.filter((tutor) => tutor.assignedStatus);
+    this.unassignedTutors = this.displayedTutors.filter((tutor) => !tutor.assignedStatus);
   }
 
   async getAndFormatTAs() {
@@ -124,6 +134,9 @@ export class AdminAllocateTutorsPage implements OnInit {
         assignedStatus: assignedCourse !== 0 ? true : false,
       }
     });
+
+    this.assignedTAs = this.displayedTAs.filter((ta) => ta.assignedStatus);
+    this.unassignedTAs = this.displayedTAs.filter((ta) => !ta.assignedStatus);
   }
 
 
@@ -171,6 +184,8 @@ export class AdminAllocateTutorsPage implements OnInit {
     } else {
       this.presentToast("Error updating tutor allocations", "danger");
     }
+    
+    this.ngOnInit();
   }
 
   async updateTAAllocations() {
@@ -217,8 +232,55 @@ export class AdminAllocateTutorsPage implements OnInit {
     } else {
       this.presentToast("Error updating TA allocations", "danger");
     }
+
+    this.ngOnInit();
   }
 
+  async applyTutorFilter() {
+    this.getAndFormatTutors();
+
+    switch (this.filterOption) {
+      case 'all':
+        // Display all students
+        this.getAndFormatTutors();
+        break;
+      case 'assigned':
+        // Display only students with assigned courses
+        this.displayedTutors = this.assignedTutors;
+        break;
+      case 'unassigned':
+        // Display only unassigned students
+        this.displayedTutors = this.unassignedTutors;
+        break;
+      default:
+        break;
+    }
+  }
+
+  async applyTAFilter() {
+    this.getAndFormatTAs();
+
+    switch (this.filterOption) {
+      case 'all':
+        // Display all students
+        this.getAndFormatTAs();
+        break;
+      case 'assigned':
+        // Display only students with assigned courses
+        this.displayedTAs = this.assignedTAs;
+        break;
+      case 'unassigned':
+        // Display only unassigned students
+        this.displayedTAs = this.unassignedTAs;
+        break;
+      default:
+        break;
+    }
+  }
+
+  reloadPage() {
+    location.reload();
+  }
 
   // test(){
   //   console.log("Tutors", this.acceptedTutors)
