@@ -48,7 +48,8 @@
           </ion-col>
 
           <ion-col>
-            <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox>
+            <!-- <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox> -->
+            <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
           </ion-col>
         </ion-row>
 
@@ -86,7 +87,8 @@
           </ion-col>
 
           <ion-col>
-            <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox>
+            <!-- <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox> -->
+            <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
           </ion-col>
         </ion-row>
       </ion-grid>

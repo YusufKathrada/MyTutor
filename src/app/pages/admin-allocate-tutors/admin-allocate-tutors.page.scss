@@ -2,3 +2,8 @@ ion-select {
     --padding-start: 50px;
     justify-content: center;
 }
+
+ion-checkbox {
+    opacity: 1;
+    pointer-events: none;
+}

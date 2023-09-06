@@ -109,4 +109,12 @@ export class Admin extends UserData {
   async updateTAAllocations(taId: string, courseId: number, assignedStatus: boolean){
     return await this.supabase.postAssignedTAs(taId, courseId, assignedStatus);
   }
+
+  async getTutorAllocations(){
+    return await this.supabase.getAllAssignedTutors();
+  }
+
+  async getTAAllocations(){
+    return await this.supabase.getAllAssignedTAs();
+  }
 }

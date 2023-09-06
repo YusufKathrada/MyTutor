@@ -19,6 +19,11 @@ export class AdminAllocateTutorsPage implements OnInit {
   courses: any = [];
   courseMap: any = [];
 
+  allocatedTutors: any = [];
+  tutorsMap: any = [];
+  allocatedTAs: any = [];
+  tasMap: any = [];
+
   constructor(
     public admin: Admin,
     public loadingCtrl: LoadingController,
@@ -30,28 +35,48 @@ export class AdminAllocateTutorsPage implements OnInit {
 
     this.segment = 'tutor';
 
-
-    
     this.acceptedTutors = await this.admin.getAcceptedTutors();
     this.acceptedTAs = await this.admin.getAcceptedTAs();
-    console.log('acceptedTAs: ', this.acceptedTAs);
-    this.courses = await this.admin.getCourses();
+    // console.log('acceptedTAs: ', this.acceptedTAs);
 
+    this.courses = await this.admin.getCourses();
     // console.log('courses: ', this.courses);
+
+    this.allocatedTutors = await this.admin.getTutorAllocations();
+    this.allocatedTAs = await this.admin.getTAAllocations();
+
     this.courseMap = this.courses.reduce((map, obj) => {
       map[obj.name] = obj.id;
       return map;
     }, {});
-    // console.log('courseMap: ', this.courseMap);
+    console.log('courseMap: ', this.courseMap);
+
+    this.tutorsMap = this.allocatedTutors.reduce((map, obj) => {
+      map[obj.userId] = obj.courseId;
+      return map;
+    }, {});
+    console.log('tutorsMap: ', this.tutorsMap);
+
+    this.tasMap = this.allocatedTAs.reduce((map, obj) => {
+      map[obj.userId] = obj.courseId;
+      return map;
+    }, {});
+    console.log('tasMap: ', this.tasMap);
 
     // console.log('acceptedTutors: ', this.acceptedTutors);
     await this.getAndFormatTutors();
     await this.getAndFormatTAs();
 
-    console.log('dispalyedTAs', this.displayedTAs);
 
-    // console.log('acceptedTutors: ', this.acceptedTutors);
-    // console.log('displayedTutors: ', this.displayedTutors);
+    // console.log('dispalyedTAs', this.displayedTAs);
+
+    console.log('acceptedTutors: ', this.acceptedTutors);
+    console.log('displayedTutors: ', this.displayedTutors);
+    console.log('allocatedTutors: ', this.allocatedTutors);
+
+    console.log('acceptedTAs: ', this.acceptedTAs);
+    console.log('displayedTAs: ', this.displayedTAs);
+    console.log('allocatedTAs: ', this.allocatedTAs);
 
     await this.loadingCtrl.dismiss();
   }
@@ -73,23 +98,30 @@ export class AdminAllocateTutorsPage implements OnInit {
   }
 
   async getAndFormatTutors() {
-
     this.displayedTutors = this.acceptedTutors.map((tutor) => {
+
+      const assignedCourse = this.tutorsMap[tutor.userId];
+
       return {
         userId: tutor.userId,
         tutorName: `${tutor.name} ${tutor.surname}`,
         tutorNum: tutor.stuNum,
-        assignedCourse: 'UNASSIGNED',
+        assignedCourse: this.tutorsMap[tutor.userId] ? this.courses.find((course) => { return course.id === this.tutorsMap[tutor.userId] }).name : 'UNASSIGNED',
+        assignedStatus: assignedCourse !== 0 ? true : false,
       }
     });
   }
 
   async getAndFormatTAs() {
     this.displayedTAs = this.acceptedTAs.map((ta) => {
+
+      const assignedCourse = this.tasMap[ta.userId];
+
       return {
         userId: ta.userId,
         taName: `${ta.name} ${ta.surname}`,
-        assignedCourse: 'UNASSIGNED',
+        assignedCourse: this.tasMap[ta.userId] ? this.courses.find((course) => { return course.id === this.tasMap[ta.userId] }).name : 'UNASSIGNED',
+        assignedStatus: assignedCourse !== 0 ? true : false,
       }
     });
   }
