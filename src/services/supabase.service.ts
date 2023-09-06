@@ -262,6 +262,42 @@ export class SupabaseService {
     }
   }
 
+  async getApplicationByUserId(userId: string) {
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select(`
+          *,
+          status:statusId (description)
+        `)
+        .eq('userId', userId);
+
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  async updateApplicationResponse(userId: string, response: string){
+    try {
+      let { status, error } = await this.supabase
+        .from('Application')
+        .update({ response: response })
+        .eq('userId', userId);
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   // ======================================== Status ========================================
   /**
    * API calls to interact with the status table. This gives the status of the application
@@ -328,7 +364,7 @@ export class SupabaseService {
             userId: tutorId,
             courseId: courseId,
             assignedStatus: assignedStatus,
-          }, 
+          },
           { onConflict: 'userId' })
         .select()
 
