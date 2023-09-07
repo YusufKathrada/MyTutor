@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Admin } from '../../providers/admin';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { assign } from 'cypress/types/lodash';
@@ -13,15 +13,16 @@ export class AdminAllocateTutorsPage implements OnInit {
   public segment: string = '';
   public filterOption: string = 'all';
 
-  assignedTutors: any = [];   // Array for assigned students
-  unassignedTutors: any = []; // Array for unassigned students
-  assignedTAs: any = [];   // Array for assigned students
-  unassignedTAs: any = []; // Array for unassigned students
+  assignedTutors: any = [];   
+  unassignedTutors: any = []; 
+  assignedTAs: any = [];   
+  unassignedTAs: any = []; 
 
   acceptedTutors: any = [];
   acceptedTAs: any = [];
   displayedTutors: any = [];
   displayedTAs: any = [];
+
   courses: any = [];
   courseMap: any = [];
 
@@ -34,7 +35,6 @@ export class AdminAllocateTutorsPage implements OnInit {
     public admin: Admin,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
-    private cdr: ChangeDetectorRef
   ) { }
 
   async ngOnInit() {
@@ -44,10 +44,8 @@ export class AdminAllocateTutorsPage implements OnInit {
 
     this.acceptedTutors = await this.admin.getAcceptedTutors();
     this.acceptedTAs = await this.admin.getAcceptedTAs();
-    // console.log('acceptedTAs: ', this.acceptedTAs);
 
     this.courses = await this.admin.getCourses();
-    // console.log('courses: ', this.courses);
 
     this.allocatedTutors = await this.admin.getTutorAllocations();
     this.allocatedTAs = await this.admin.getTAAllocations();
@@ -70,23 +68,12 @@ export class AdminAllocateTutorsPage implements OnInit {
     }, {});
     console.log('tasMap: ', this.tasMap);
 
-    // console.log('acceptedTutors: ', this.acceptedTutors);
     await this.getAndFormatTutors();
     await this.getAndFormatTAs();
 
-
-    // console.log('dispalyedTAs', this.displayedTAs);
-
-    console.log('acceptedTutors: ', this.acceptedTutors);
-    console.log('displayedTutors: ', this.displayedTutors);
-    console.log('allocatedTutors: ', this.allocatedTutors);
-
-    console.log('acceptedTAs: ', this.acceptedTAs);
-    console.log('displayedTAs: ', this.displayedTAs);
-    console.log('allocatedTAs: ', this.allocatedTAs);
-
     await this.loadingCtrl.dismiss();
   }
+
 
   async presentLoading() {
     const loading = await this.loadingCtrl.create({
@@ -94,6 +81,7 @@ export class AdminAllocateTutorsPage implements OnInit {
     });
     await loading.present();
   }
+
 
   async presentToast(message: string, color: string) {
     const toast = await this.toastCtrl.create({
@@ -103,6 +91,7 @@ export class AdminAllocateTutorsPage implements OnInit {
     });
     toast.present();
   }
+
 
   async getAndFormatTutors() {
     this.displayedTutors = this.acceptedTutors.map((tutor) => {
@@ -121,6 +110,7 @@ export class AdminAllocateTutorsPage implements OnInit {
     this.assignedTutors = this.displayedTutors.filter((tutor) => tutor.assignedStatus);
     this.unassignedTutors = this.displayedTutors.filter((tutor) => !tutor.assignedStatus);
   }
+
 
   async getAndFormatTAs() {
     this.displayedTAs = this.acceptedTAs.map((ta) => {
@@ -188,6 +178,7 @@ export class AdminAllocateTutorsPage implements OnInit {
     this.ngOnInit();
   }
 
+
   async updateTAAllocations() {
     this.presentLoading();
     let success: boolean = true;
@@ -236,6 +227,7 @@ export class AdminAllocateTutorsPage implements OnInit {
     this.ngOnInit();
   }
 
+
   async applyTutorFilter() {
     this.getAndFormatTutors();
 
@@ -256,6 +248,7 @@ export class AdminAllocateTutorsPage implements OnInit {
         break;
     }
   }
+
 
   async applyTAFilter() {
     this.getAndFormatTAs();
@@ -278,12 +271,9 @@ export class AdminAllocateTutorsPage implements OnInit {
     }
   }
 
+
   reloadPage() {
     location.reload();
   }
-
-  // test(){
-  //   console.log("Tutors", this.acceptedTutors)
-  // }
 
 }
