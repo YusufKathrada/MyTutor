@@ -19,6 +19,10 @@ export class UploadTimesPage implements OnInit {
   courses: any = [];
   selectedGender: string = 'all';
 
+  allCourses: any = [];
+  sessionTypes: any = [];
+  days: any = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
   constructor(
     private fb: FormBuilder,
     private toastCtrl: ToastController,
@@ -31,12 +35,26 @@ export class UploadTimesPage implements OnInit {
   async ngOnInit() {
     this.addSession();
     await this.refreshEvents();
+
+    await this.getAllCourses();
+
+    this.sessionTypes = await this.admin.getAllSessions();
   }
 
   createForm() {
     this.eventForm = this.fb.group({
       sessions: this.fb.array([])
     });
+  }
+
+  async getAllCourses(){
+    this.allCourses = await this.admin.getCourses();
+
+    // Removes 'UNASSIGNED' course from the list
+    const unassignedCourse = 0;
+    this.allCourses = this.allCourses.filter(course => course.id !== unassignedCourse);
+
+    console.log("allCourses: ", this.allCourses);
   }
 
   get sessions(): FormArray {

@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
 
   adminPages = [
     {
-      title: 'Upload timeslots',
+      title: 'Upload Time Slots',
       url: '/app/tabs/upload-times',
       icon: 'cloud-upload'
     },

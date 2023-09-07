@@ -117,4 +117,8 @@ export class Admin extends UserData {
   async getTAAllocations(){
     return await this.supabase.getAllAssignedTAs();
   }
+
+  async getAllSessions(){
+    return await this.supabase.getAllSessionTypes();
+  }
 }
