@@ -48,9 +48,9 @@
 
               <ion-col> {{a.tutorNum}} </ion-col>
 
-              <ion-col>
+              <ion-col left-padding="">
                 <ion-list>
-                  <ion-select class="custom-select-course" fill="outline" aria-label="Assign Course" interface="popover" [(ngModel)]="a.assignedCourse">
+                  <ion-select style="align-self: auto;"  class="custom-select-course" fill="outline" aria-label="Assign Course" interface="popover" [(ngModel)]="a.assignedCourse">
                     <ion-select-option [value]="c.name" *ngFor="let c of courses">
                       {{c.name}}
                     </ion-select-option>
