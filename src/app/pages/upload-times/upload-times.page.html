@@ -83,7 +83,7 @@
 
           <ion-col>
             <ion-list>
-              <ion-select class="custom-select" fill="outline" interface="popover" [(ngModel)]="eventType" placeholder="Select Event">
+              <ion-select class="custom-select" fill="outline" interface="popover" formControlName="eventType" placeholder="Select Event">
                 <ion-select-option [value]="s.description" *ngFor="let s of sessionTypes">
                   {{s.description}}
                 </ion-select-option>
@@ -102,7 +102,7 @@
 
           <ion-col>
             <ion-list>
-              <ion-select class="custom-select" fill="outline" interface="popover" [(ngModel)]="day" placeholder="Select Day">
+              <ion-select class="custom-select" fill="outline" interface="popover" formControlName="day" placeholder="Select Day">
                 <ion-select-option [value]="d" *ngFor="let d of days">
                   {{d}}
                 </ion-select-option>
@@ -120,22 +120,19 @@
           </ion-col> -->
 
           <ion-col>
-            <!-- <ion-datetime-button datetime="datetime"></ion-datetime-button>
+          
+            <ion-datetime-button datetime="startTime"></ion-datetime-button>
 
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime id="datetime" displayFormat="HH:mm"></ion-datetime>
-              </ng-template>
-            </ion-modal> -->
-
-            <ion-datetime-button datetime="startTime"> </ion-datetime-button>
-
-            <ion-modal [keepContentsMounted]="true">
-              <ng-template>
-                <ion-datetime id="startTime" presentation="time" showDefaultButtons="true"  hourCycle="h23"> </ion-datetime>
+                <ion-datetime id="startTime" presentation="time" showDefaultButtons="true"  hourCycle="h23" formControlName="startTime"></ion-datetime>
               </ng-template>
             </ion-modal>
+
           </ion-col>
+
+
+
 
           <ion-col>
             <!-- <ion-input
@@ -145,11 +142,11 @@
               formControlName="endTime"
             ></ion-input> -->
 
-            <ion-datetime-button datetime="endTime"> </ion-datetime-button>
+            <ion-datetime-button datetime="endTime"></ion-datetime-button>
 
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime id="endTime" presentation="time" showDefaultButtons="true"  hourCycle="h23"></ion-datetime>
+                <ion-datetime id="endTime" presentation="time" showDefaultButtons="true"  hourCycle="h23" formControlName="endTime"></ion-datetime>
               </ng-template>
             </ion-modal>
           </ion-col>

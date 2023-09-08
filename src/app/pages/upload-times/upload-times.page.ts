@@ -11,6 +11,9 @@ import { LoadingController } from '@ionic/angular';
 })
 export class UploadTimesPage implements OnInit {
 
+  startTime = new Date().toTimeString().slice(0, 5);
+  endTime = new Date().toTimeString().slice(0, 5);
+
   public eventForm: FormGroup;
   course: string = '';
 
@@ -87,8 +90,8 @@ export class UploadTimesPage implements OnInit {
     const sessionGroup = this.fb.group({
       eventType: ['', Validators.required],
       day: ['', Validators.required],
-      startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
+      startTime: [this.startTime, Validators.required],
+      endTime: [this.endTime, Validators.required],
       tutorsNeeded: ['', Validators.required],
       venue: ['', Validators.required],
     });
@@ -123,6 +126,10 @@ export class UploadTimesPage implements OnInit {
     this.course = ev.detail.value.toString().toUpperCase();
   }
 
+  setStartTime(ev: any) {
+    this.startTime = ev.detail.value.toTimeString().slice(0, 5);
+  }
+
   validate(){
     console.log("Validating form", this.eventForm.value);
     let sessions = this.eventForm.value.sessions as Array<any>;
@@ -141,7 +148,7 @@ export class UploadTimesPage implements OnInit {
 
     for(let i = 0; i < sessions.length; i++) {
       let session = sessions[i];
-      if(session.tutorialNumber == "" || session.day == "" || session.startTime == "" || session.endTime == "" || session.tutorsNeeded == "") {
+      if(session.tutorialNumber == "" || session.day == "" || session.startTime == "" || session.endTime == "" || session.tutorsNeeded == "" || session.venue == "") {
         valid = false;
         message = "Please fill all the fields.";
         break;
