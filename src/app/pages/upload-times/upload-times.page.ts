@@ -11,8 +11,8 @@ import { LoadingController } from '@ionic/angular';
 })
 export class UploadTimesPage implements OnInit {
 
-  startTime = new Date().toTimeString().slice(0, 5);
-  endTime = new Date().toTimeString().slice(0, 5);
+  // startTime = new Date().toTimeString().slice(0, 5);
+  // endTime = new Date().toTimeString().slice(0, 5);
 
   public eventForm: FormGroup;
   course: string = '';
@@ -90,8 +90,8 @@ export class UploadTimesPage implements OnInit {
     const sessionGroup = this.fb.group({
       eventType: ['', Validators.required],
       day: ['', Validators.required],
-      startTime: [this.startTime, Validators.required],
-      endTime: [this.endTime, Validators.required],
+      startTime: [new Date().toTimeString().slice(0, 5), Validators.required],
+      endTime: [new Date().toTimeString().slice(0, 5), Validators.required],
       tutorsNeeded: ['', Validators.required],
       venue: ['', Validators.required],
     });
@@ -126,9 +126,6 @@ export class UploadTimesPage implements OnInit {
     this.course = ev.detail.value.toString().toUpperCase();
   }
 
-  setStartTime(ev: any) {
-    this.startTime = ev.detail.value.toTimeString().slice(0, 5);
-  }
 
   validate(){
     console.log("Validating form", this.eventForm.value);
@@ -184,5 +181,10 @@ export class UploadTimesPage implements OnInit {
     }
     this.refreshEvents();
   }
+
+  formatTime(time: string) {
+    return time.slice(0, 5);
+  }
+
 }
 

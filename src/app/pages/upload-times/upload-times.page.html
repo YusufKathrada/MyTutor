@@ -9,20 +9,6 @@
   <ion-grid>
     <ion-row>
 
-      <!-- <ion-col size="2" style="padding-left: 8px; font-weight: bold;">
-        Course
-      </ion-col> -->
-
-      <!-- <ion-col size="2" style="padding-left: 28px; padding-top: 0px;">
-        <ion-input
-          aria-label="Course"
-          placeholder="Course"
-          class="custom"
-          (ionChange)="setCourse($event)"
-          [(ngModel)]="course"
-        ></ion-input>
-      </ion-col> -->
-
       <ion-list>
         <ion-select class="custom-select-course"  placeholder="Select Course" fill="outline" aria-label="Course" interface="popover" [(ngModel)]="course" (ionChange)="setCourse($event)">
           <ion-select-option [value]="a.name" *ngFor="let a of allCourses">
@@ -31,8 +17,8 @@
         </ion-select>
       </ion-list>
 
-
       <ion-col size="8"></ion-col>
+
     </ion-row>
 
     <br><br>
@@ -71,16 +57,6 @@
       <div formArrayName="sessions">
         <ion-row *ngFor="let sessionCtrl of sessions.controls; let i = index" [formGroupName]="i">
 
-          <!-- <ion-col>
-            <ion-input
-              aria-label="Tutorial Number"
-              placeholder="Event"
-              class="custom"
-              formControlName="eventType"
-              required="true"
-            ></ion-input>
-          </ion-col> -->
-
           <ion-col>
             <ion-list>
               <ion-select class="custom-select" fill="outline" interface="popover" formControlName="eventType" placeholder="Select Event">
@@ -90,15 +66,6 @@
               </ion-select>
             </ion-list>
           </ion-col>
-
-          <!-- <ion-col>
-            <ion-input
-              aria-label="Day"
-              placeholder="Day"
-              class="custom"
-              formControlName="day"
-            ></ion-input>
-          </ion-col> -->
 
           <ion-col>
             <ion-list>
@@ -110,43 +77,22 @@
             </ion-list>
           </ion-col>
 
-          <!-- <ion-col>
-            <ion-input
-              aria-label="Start Time"
-              placeholder="Start Time"
-              class="custom"
-              formControlName="startTime"
-            ></ion-input>
-          </ion-col> -->
-
           <ion-col>
-          
-            <ion-datetime-button datetime="startTime"></ion-datetime-button>
-
+            <!-- Updated Start Time ion-datetime-button and ion-datetime -->
+            <ion-datetime-button [attr.datetime]="'datetimeStart' + i" class="custom-datetime"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime id="startTime" presentation="time" showDefaultButtons="true"  hourCycle="h23" formControlName="startTime"></ion-datetime>
+                <ion-datetime [id]="'datetimeStart' + i" presentation="time" formControlName="startTime" hourCycle="h23"></ion-datetime>
               </ng-template>
             </ion-modal>
-
           </ion-col>
 
-
-
-
           <ion-col>
-            <!-- <ion-input
-              aria-label="End Time"
-              placeholder="End TIme"
-              class="custom"
-              formControlName="endTime"
-            ></ion-input> -->
-
-            <ion-datetime-button datetime="endTime"></ion-datetime-button>
-
+            <!-- Updated End Time ion-datetime-button and ion-datetime -->
+            <ion-datetime-button [attr.datetime]="'datetimeEnd' + i" class="custom-datetime"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime id="endTime" presentation="time" showDefaultButtons="true"  hourCycle="h23" formControlName="endTime"></ion-datetime>
+                <ion-datetime [id]="'datetimeEnd' + i" presentation="time" showDefaultButtons="true" hourCycle="h23" formControlName="endTime"></ion-datetime>
               </ng-template>
             </ion-modal>
           </ion-col>
@@ -155,7 +101,7 @@
             <ion-input
               aria-label="Tutors Needed"
               placeholder="Tutors Needed"
-              class="custom"
+              fill="outline"
               formControlName="tutorsNeeded"
             ></ion-input>
           </ion-col>
@@ -164,7 +110,7 @@
             <ion-input
               aria-label="Venue"
               placeholder="Venue"
-              class="custom"
+              fill="outline"
               formControlName="venue"
             ></ion-input>
           </ion-col>
@@ -240,7 +186,7 @@
       </ion-col>
 
       <ion-col>
-        {{event.startTime}} - {{event.endTime}}
+        {{formatTime(event.startTime)}} - {{formatTime(event.endTime)}}
       </ion-col>
 
       <ion-col>
