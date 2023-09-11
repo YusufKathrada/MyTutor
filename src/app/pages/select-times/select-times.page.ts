@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { Tutor } from '../../providers/tutor';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-select-times',
@@ -17,7 +17,8 @@ export class SelectTimesPage implements OnInit {
   constructor(
     private storage: Storage,
     private tutor: Tutor,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private toastController: ToastController,
   ) { }
 
   async ngOnInit() {
@@ -30,6 +31,7 @@ export class SelectTimesPage implements OnInit {
     this.sessions = this.formatEvents(events);
     console.log(this.sessions);
 
+    // Sort by tutors needed
     this.sessions.sort((a, b) => (a.tutorsNeeded > b.tutorsNeeded) ? -1 : 1);
   }
 
@@ -57,9 +59,17 @@ export class SelectTimesPage implements OnInit {
   async joinEvent(session: any) {
     await this.presentLoading();
     console.log(session);
-    let res = await this.tutor.joinEvent(session.id, this.userId);
-    console.log(res);
-    this.doRefresh(null);
+    try {
+      let res = await this.tutor.joinEvent(session.id, this.userId);
+      console.log('res', res);
+      this.doRefresh(null);
+
+      await this.presentToast('Joined session', 'success');
+    } catch (error) {
+      await this.presentToast('Error joining session', 'danger');
+      console.log(error);
+    }
+
     await this.dismissLoading();
   }
 
@@ -72,5 +82,14 @@ export class SelectTimesPage implements OnInit {
 
   async dismissLoading() {
     await this.loadingController.dismiss();
+  }
+
+  async presentToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      color: color,
+      duration: 2000,
+    });
+    await toast.present();
   }
 }

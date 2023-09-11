@@ -8,6 +8,7 @@ import {
   User,
 } from '@supabase/supabase-js'
 import { environment } from '../environments/environment'
+import { ToastController } from '@ionic/angular'
 
 
 @Injectable({
@@ -17,8 +18,21 @@ export class SupabaseService {
   private supabase: SupabaseClient
   _session: AuthSession | null = null
 
-  constructor() {
+  constructor(
+    private toastController: ToastController,
+  ) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey)
+  }
+
+  // ======================================== Error Handler ========================================
+
+  async presentError() {
+    const toast = await this.toastController.create({
+      message: 'Something went wrong, please try again or contact support',
+      duration: 2000,
+      color: 'danger',
+    });
+    toast.present();
   }
 
   // ======================================== Auth ========================================
@@ -77,6 +91,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
 
   }
@@ -94,6 +109,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -110,6 +126,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
 
   }
@@ -134,6 +151,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -154,6 +172,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -170,6 +189,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -190,6 +210,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -208,6 +229,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -226,6 +248,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -242,6 +265,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -259,6 +283,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -276,6 +301,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -296,6 +322,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -312,6 +339,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -332,6 +360,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -348,6 +377,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -369,6 +399,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -384,6 +415,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -400,6 +432,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -423,6 +456,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -446,6 +480,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -462,6 +497,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -483,6 +519,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -499,6 +536,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -514,6 +552,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -538,6 +577,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -554,6 +594,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -575,6 +616,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -590,6 +632,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -606,6 +649,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -625,7 +669,8 @@ export class SupabaseService {
       const { data: updatedEvents, error: updateError } = await this.supabase
         .from('Events')
         .update({ tutorsNeeded: newTutorCount })
-        .eq('id', eventId);
+        .eq('id', eventId)
+        .select();
 
       if (updateError) throw updateError;
 
@@ -633,6 +678,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error);
+      await this.presentError();
     }
   }
 
@@ -653,6 +699,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -669,6 +716,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -684,6 +732,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -705,6 +754,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 }

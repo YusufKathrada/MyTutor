@@ -39,8 +39,7 @@ export class Tutor extends UserData {
       return await this.supabase.updateEventTutorCount(eventId);
     }
     else {
-      console.log("error") //TODO: handle error
-      return status;
+      throw new Error('Error joining event');
     }
   }
 
