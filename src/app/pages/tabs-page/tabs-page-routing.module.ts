@@ -112,6 +112,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'tutor-events',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../tutor-events/tutor-events.module').then(m => m.TutorEventsPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'

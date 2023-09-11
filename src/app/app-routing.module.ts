@@ -54,6 +54,10 @@ const routes: Routes = [
   {
     path: 'view-application-status',
     loadChildren: () => import('./pages/view-application-status/view-application-status.module').then( m => m.ViewApplicationStatusPageModule)
+  },
+  {
+    path: 'tutor-events',
+    loadChildren: () => import('./pages/tutor-events/tutor-events.module').then( m => m.TutorEventsPageModule)
   }
 
 ];

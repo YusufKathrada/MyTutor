@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>View Selected Times</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <!-- Headings -->
+    <ion-row style="text-align: center; font-weight: bold;">
+
+      <ion-col>
+        Course
+      </ion-col>
+
+      <ion-col>
+        Event Type
+      </ion-col>
+
+      <ion-col>
+        Day
+      </ion-col>
+
+      <ion-col>
+        Time
+      </ion-col>
+
+      <ion-col>
+        Action
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+
+    <ion-row style="text-align: center" *ngFor="let s of sessions">
+
+      <ion-col>
+        {{s.course}}
+      </ion-col>
+
+      <ion-col>
+        {{s.eventType}}
+      </ion-col>
+
+      <ion-col>
+        {{s.day}}
+      </ion-col>
+
+      <ion-col>
+        {{s.time}}
+      </ion-col>
+
+      <ion-col>
+
+      <ion-button id="fullButton" (click)="removeEvent(s)">
+        REMOVE
+      </ion-button>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

@@ -653,7 +653,7 @@ export class SupabaseService {
     }
   }
 
-  async updateEventTutorCount(eventId: string) {
+  async updateEventTutorCount(eventId: string, countUpdate: number) {
     try {
       // Get the current number of tutors needed
       let { data: Events, error } = await this.supabase
@@ -663,7 +663,7 @@ export class SupabaseService {
 
       if (error || !Events || Events.length === 0) throw error || new Error("Event not found");
 
-      const newTutorCount = Events[0].tutorsNeeded - 1;
+      const newTutorCount = Events[0].tutorsNeeded + countUpdate;
 
       // Update value
       const { data: updatedEvents, error: updateError } = await this.supabase
@@ -758,12 +758,49 @@ export class SupabaseService {
     }
   }
 
+  async deleteTutorForEvent(eventId: string, userId: string){
+    try {
+      let { status, error } = await this.supabase
+        .from('Tutors to Events')
+        .delete()
+        .eq('eventId', eventId)
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
   async getChosenEvents(userId: string) {
     try {
       let { data: Events, error } = await this.supabase
         .from('Tutors to Events')
         .select(`
           events:eventId (id)
+        `)
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getAllEventsDetails(userId: string) {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Tutors to Events')
+        .select(`
+          events:eventId (id, courses:courseId (name), day, startTime, endTime, typeOfSession:sessionId (description))
         `)
         .eq('userId', userId)
 
