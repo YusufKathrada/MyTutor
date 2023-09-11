@@ -22,12 +22,12 @@ export class AppComponent implements OnInit {
 
   adminPages = [
     {
-      title: 'Upload timeslots',
+      title: 'Upload Time Slots',
       url: '/app/tabs/upload-times',
       icon: 'cloud-upload'
     },
     {
-      title: 'Allocate Tutors',
+      title: 'Allocate Courses',
       url: '/app/tabs/admin-allocate-tutors',
       icon: 'people'
     },

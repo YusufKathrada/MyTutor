@@ -25,6 +25,7 @@ export class TA extends UserData {
 
   async applyForTA(taApplication: any) {
     let status: any = await this.supabaseService.getStatusIdByDescription('Pending');
+    const userId = await this.storage.get('userId');
 
     const tutorApplicationData: any = {
       statusId: status[0].id,
@@ -37,6 +38,7 @@ export class TA extends UserData {
       average: null,
       preferredCourse: taApplication.desired_course,
       qualification: taApplication.degree_completed,
+      userId: userId
     }
 
     return await this.supabaseService.postApplication(tutorApplicationData);

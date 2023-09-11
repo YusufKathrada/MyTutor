@@ -262,6 +262,23 @@ export class SupabaseService {
     }
   }
 
+  async getAllAcceptedTAs() {
+    try {
+      let { data: AcceptedTAs, error } = await this.supabase
+        .from('Application')
+        .select('*')
+        .eq('statusId', 2)
+        .is('stuNum', null)
+
+      if (error) throw error
+
+      return AcceptedTAs
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   async getApplicationByUserId(userId: string) {
     try {
       let { data: Application, error } = await this.supabase
@@ -335,7 +352,7 @@ export class SupabaseService {
   }
 
 
-  // ======================================== Assigned Tutors ========================================
+  // ======================================== Assigned Tutors and Assigned TAs ========================================
   /**
    * API calls to interact with the assigned tutors table. This is how tutors are liked to assigned sessions
    */
@@ -349,6 +366,21 @@ export class SupabaseService {
       if (error) throw error
 
       return AssignedTutors
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  async getAllAssignedTAs() {
+    try {
+      let { data: AssignedTAs, error } = await this.supabase
+        .from('Assigned TAs')
+        .select('*')
+
+      if (error) throw error
+
+      return AssignedTAs
 
     } catch (error) {
       console.log('error', error)
@@ -378,6 +410,29 @@ export class SupabaseService {
         .upsert(
           {
             userId: tutorId,
+            courseId: courseId,
+            assignedStatus: assignedStatus,
+          },
+          { onConflict: 'userId' })
+        .select()
+
+      if (error) throw error
+
+      console.log('status', status)
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  async postAssignedTAs(taId: string, courseId: number, assignedStatus: boolean) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Assigned TAs')
+        .upsert(
+          {
+            userId: taId,
             courseId: courseId,
             assignedStatus: assignedStatus,
           },
