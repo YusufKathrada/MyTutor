@@ -11,6 +11,9 @@ import { LoadingController } from '@ionic/angular';
 })
 export class UploadTimesPage implements OnInit {
 
+  // startTime = new Date().toTimeString().slice(0, 5);
+  // endTime = new Date().toTimeString().slice(0, 5);
+
   public eventForm: FormGroup;
   course: string = '';
 
@@ -18,6 +21,10 @@ export class UploadTimesPage implements OnInit {
   showCourseEvents: any = [];
   courses: any = [];
   selectedGender: string = 'all';
+
+  allCourses: any = [];
+  sessionTypes: any = [];
+  days: any = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   constructor(
     private fb: FormBuilder,
@@ -31,12 +38,26 @@ export class UploadTimesPage implements OnInit {
   async ngOnInit() {
     this.addSession();
     await this.refreshEvents();
+
+    await this.getAllCourses();
+
+    this.sessionTypes = await this.admin.getAllSessions();
   }
 
   createForm() {
     this.eventForm = this.fb.group({
       sessions: this.fb.array([])
     });
+  }
+
+  async getAllCourses(){
+    this.allCourses = await this.admin.getCourses();
+
+    // Removes 'UNASSIGNED' course from the list
+    const unassignedCourse = 0;
+    this.allCourses = this.allCourses.filter(course => course.id !== unassignedCourse);
+
+    console.log("allCourses: ", this.allCourses);
   }
 
   get sessions(): FormArray {
@@ -69,8 +90,8 @@ export class UploadTimesPage implements OnInit {
     const sessionGroup = this.fb.group({
       eventType: ['', Validators.required],
       day: ['', Validators.required],
-      startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
+      startTime: [new Date().toTimeString().slice(0, 5), Validators.required],
+      endTime: [new Date().toTimeString().slice(0, 5), Validators.required],
       tutorsNeeded: ['', Validators.required],
       venue: ['', Validators.required],
     });
@@ -105,6 +126,7 @@ export class UploadTimesPage implements OnInit {
     this.course = ev.detail.value.toString().toUpperCase();
   }
 
+
   validate(){
     console.log("Validating form", this.eventForm.value);
     let sessions = this.eventForm.value.sessions as Array<any>;
@@ -123,7 +145,7 @@ export class UploadTimesPage implements OnInit {
 
     for(let i = 0; i < sessions.length; i++) {
       let session = sessions[i];
-      if(session.tutorialNumber == "" || session.day == "" || session.startTime == "" || session.endTime == "" || session.tutorsNeeded == "") {
+      if(session.tutorialNumber == "" || session.day == "" || session.startTime == "" || session.endTime == "" || session.tutorsNeeded == "" || session.venue == "") {
         valid = false;
         message = "Please fill all the fields.";
         break;
@@ -159,5 +181,10 @@ export class UploadTimesPage implements OnInit {
     }
     this.refreshEvents();
   }
+
+  formatTime(time: string) {
+    return time.slice(0, 5);
+  }
+
 }
 

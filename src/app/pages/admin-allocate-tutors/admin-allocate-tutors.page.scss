@@ -2,3 +2,28 @@ ion-select {
     --padding-start: 50px;
     justify-content: center;
 }
+
+ion-checkbox {
+    opacity: 1;
+    pointer-events: none;
+}
+
+
+/* Styling for the custom-select class */
+.custom-select {
+    width: min-content;
+    font-size: 16px; /* Adjust the font size */
+    border: 2px solid #007bff; /* Add a border with a color of your choice */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    background-color: #007bff; /* Set background color */
+    color: #fff; /* Set text color */
+    padding: 8px; /* Add padding for better spacing */
+}
+
+  
+
+.custom-select-course {
+    width: min-content;
+    font-size: 16px; /* Adjust the font size */
+}
+  
