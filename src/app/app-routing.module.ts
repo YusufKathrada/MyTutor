@@ -50,6 +50,10 @@ const routes: Routes = [
   {
     path: 'admin-review-applications',
     loadChildren: () => import('./pages/admin-review-applications/admin-review-applications.module').then( m => m.AdminReviewApplicationsPageModule)
+  },
+  {
+    path: 'view-application-status',
+    loadChildren: () => import('./pages/view-application-status/view-application-status.module').then( m => m.ViewApplicationStatusPageModule)
   }
 
 ];

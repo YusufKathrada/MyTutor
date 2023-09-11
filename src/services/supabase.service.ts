@@ -279,6 +279,42 @@ export class SupabaseService {
     }
   }
 
+  async getApplicationByUserId(userId: string) {
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select(`
+          *,
+          status:statusId (description)
+        `)
+        .eq('userId', userId);
+
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  async updateApplicationResponse(userId: string, response: string){
+    try {
+      let { status, error } = await this.supabase
+        .from('Application')
+        .update({ response: response })
+        .eq('userId', userId);
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   // ======================================== Status ========================================
   /**
    * API calls to interact with the status table. This gives the status of the application
@@ -351,6 +387,22 @@ export class SupabaseService {
     }
   }
 
+  async getCourseIdForTutor(tutorId: string) {
+    try {
+      let { data: AssignedTutors, error } = await this.supabase
+        .from('Assigned Tutors')
+        .select('courseId')
+        .eq('userId', tutorId)
+
+      if (error) throw error
+
+      return AssignedTutors
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   async postAssignedTutors(tutorId: string, courseId: number, assignedStatus: boolean) {
     try {
       let { status, error } = await this.supabase
@@ -360,7 +412,7 @@ export class SupabaseService {
             userId: tutorId,
             courseId: courseId,
             assignedStatus: assignedStatus,
-          }, 
+          },
           { onConflict: 'userId' })
         .select()
 
@@ -383,7 +435,7 @@ export class SupabaseService {
             userId: taId,
             courseId: courseId,
             assignedStatus: assignedStatus,
-          }, 
+          },
           { onConflict: 'userId' })
         .select()
 
@@ -505,6 +557,27 @@ export class SupabaseService {
     }
   }
 
+  async getEventByCourseId(courseId: string) {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Events')
+        .select(
+          `
+          *,
+          typeOfSession:sessionId (description)
+          `
+        )
+        .eq('courseId', courseId)
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   async insertEvent(event: any) {
     try {
       let { status, error } = await this.supabase
@@ -536,6 +609,32 @@ export class SupabaseService {
     }
   }
 
+  async updateEventTutorCount(eventId: string) {
+    try {
+      // Get the current number of tutors needed
+      let { data: Events, error } = await this.supabase
+        .from('Events')
+        .select('tutorsNeeded')
+        .eq('id', eventId);
+
+      if (error || !Events || Events.length === 0) throw error || new Error("Event not found");
+
+      const newTutorCount = Events[0].tutorsNeeded - 1;
+
+      // Update value
+      const { data: updatedEvents, error: updateError } = await this.supabase
+        .from('Events')
+        .update({ tutorsNeeded: newTutorCount })
+        .eq('id', eventId);
+
+      if (updateError) throw updateError;
+
+      return updatedEvents;
+
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
 
   // ======================================== Type of Session ========================================
   /**
@@ -582,6 +681,27 @@ export class SupabaseService {
       if (error) throw error
 
       return SessionTypes
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  // ======================================== Tutors to Events ========================================
+  /**
+   * API calls to interact with the tutors to events types table. Stores which tutors are assigned to which events
+   */
+
+  async insertTutorForEvent(eventId: string, userId: string) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Tutors to Events')
+        .upsert({ eventId: eventId, userId: userId })
+        .select()
+
+      if (error) throw error
+
+      return status
 
     } catch (error) {
       console.log('error', error)

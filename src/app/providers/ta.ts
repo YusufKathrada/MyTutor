@@ -43,4 +43,14 @@ export class TA extends UserData {
 
     return await this.supabaseService.postApplication(tutorApplicationData);
   }
+
+  async getTAApplication() {
+    const userId = await this.storage.get('userId');
+    return await this.supabaseService.getApplicationByUserId(userId);
+  }
+
+  async updateApplicationResponse(response: any) {
+    const userId = await this.storage.get('userId');
+    return await this.supabaseService.updateApplicationResponse(userId, response);
+  }
 }

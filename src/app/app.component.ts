@@ -52,6 +52,11 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/apply-for-tutor',
       icon: 'person-add'
     },
+    {
+      title: 'View application status',
+      url: '/app/tabs/view-application-status',
+      icon: 'documents'
+    },
   ];
 
   appPages = [

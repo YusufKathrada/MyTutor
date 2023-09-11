@@ -7,29 +7,10 @@
 <ion-content class="ion-padding">
 
   <ion-grid>
-    <ion-row>
-
-      <ion-col size="2" style="padding-left: 25px; font-weight: bold;">
-        Course
-      </ion-col>
-
-      <ion-col size="2" style="padding-left: 28px; padding-top: 0px;">
-        <ion-input
-          aria-label="Course"
-          placeholder="Course"
-          class="custom"
-        ></ion-input>
-      </ion-col>
-
-      <ion-col size="8"></ion-col>
-    </ion-row>
-
-    <br><br>
-
     <!-- Headings -->
     <ion-row style="text-align: center; font-weight: bold;">
       <ion-col>
-        Tutorial Number
+        Event Type
       </ion-col>
 
       <ion-col>
@@ -41,7 +22,7 @@
       </ion-col>
 
       <ion-col>
-        Availability
+        Tutors Needed
       </ion-col>
 
       <ion-col>
@@ -56,7 +37,7 @@
     <ion-row style="text-align: center" *ngFor="let s of sessions">
 
       <ion-col>
-        {{s.tutorialNumber}}
+        {{s.eventType}}
       </ion-col>
 
       <ion-col>
@@ -68,7 +49,7 @@
       </ion-col>
 
       <ion-col>
-        {{s.availability}}
+        {{s.tutorsNeeded}}
       </ion-col>
 
       <ion-col>
@@ -80,16 +61,12 @@
         </ng-container>
 
         <ng-container *ngIf="!s.full">
-          <ion-button class="joinButton">
+          <ion-button class="joinButton" (click)="joinEvent(s)">
             JOIN
           </ion-button>
         </ng-container>
-
-        <!-- <ion-button [disabled]="s.full" class="custom">
-        {{s.action}}
-        </ion-button> -->
       </ion-col>
-    
+
     </ion-row>
 
   </ion-grid>

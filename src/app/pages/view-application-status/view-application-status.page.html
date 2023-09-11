@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>View Application Status</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Headings -->
+  <ion-grid>
+    <ion-row class="ion-align-items-center" style="text-align: center">
+      <ion-col> Application </ion-col>
+      <ion-col> Status </ion-col>
+      <ion-col> Actions </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- List of applications -->
+  <ion-grid>
+    <ion-row class="ion-align-items-center" style="text-align: center">
+
+      <ion-col> {{application.type}} </ion-col>
+
+      <ion-col> {{application.status}} </ion-col>
+
+      <ion-col>
+          <ion-list>
+            <ion-select
+              fill="outline"
+              aria-label="Application Status"
+              interface="popover"
+              placeholder="Select Status"
+              [(ngModel)]="response"
+              [disabled]="application.status !== 'Accepted'"
+              (ionChange)="updateApplicationResponse()">
+              <ion-select-option value="accept">Accept</ion-select-option>
+              <ion-select-option value="reject">Reject</ion-select-option>
+            </ion-select>
+          </ion-list>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+
+</ion-content>
