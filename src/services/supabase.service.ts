@@ -757,4 +757,23 @@ export class SupabaseService {
       await this.presentError();
     }
   }
+
+  async getChosenEvents(userId: string) {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Tutors to Events')
+        .select(`
+          events:eventId (id)
+        `)
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
 }

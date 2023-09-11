@@ -13,6 +13,7 @@ export class SelectTimesPage implements OnInit {
   private userId: string;
 
   sessions: any = [];
+  chosenSessions: any = [];
 
   constructor(
     private storage: Storage,
@@ -27,6 +28,12 @@ export class SelectTimesPage implements OnInit {
 
   async doRefresh(event) {
     this.userId = await this.storage.get('userId');
+
+    // Get the 'events' (prac, tut, workshop, etc.) that the tutor has already signed up for
+    let chosenEvents: any = await this.tutor.getChosenEvents(this.userId);
+    this.chosenSessions = chosenEvents.map((event) => {return event.events.id});
+
+    // Get the 'events' (prac, tut, workshop, etc.) that the tutor can sign up for
     let events = await this.tutor.getTutorTimes(this.userId);
     this.sessions = this.formatEvents(events);
     console.log(this.sessions);
@@ -39,6 +46,8 @@ export class SelectTimesPage implements OnInit {
     let formattedEvents = [];
     for (let event of events) {
       const full = event.tutorsNeeded <= 0;
+      const status = this.chosenSessions.includes(event.id) ? 'Joined' : 'Available';
+
       let formattedEvent = {
         id: event.id,
         eventType: event.typeOfSession.description,
@@ -46,6 +55,7 @@ export class SelectTimesPage implements OnInit {
         time: this.formatTime(event.startTime) + ' - ' + this.formatTime(event.endTime),
         tutorsNeeded: event.tutorsNeeded,
         full: full,
+        status: status,
       }
       formattedEvents.push(formattedEvent);
     }

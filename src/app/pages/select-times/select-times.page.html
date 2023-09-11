@@ -54,17 +54,27 @@
 
       <ion-col>
 
-        <ng-container *ngIf="s.full">
+        <!-- If the tutor has joined the session show joined -->
+        <ng-container *ngIf="s.status === 'Joined'">
+          <ion-button id="fullButton" [disabled] = "true">
+            JOINED
+          </ion-button>
+        </ng-container>
+
+        <!-- If the tutor has not joined, but is full, show full -->
+        <ng-container *ngIf="s.full && s.status === 'Available'">
           <ion-button id="fullButton" [disabled] = "true">
             FULL
           </ion-button>
         </ng-container>
 
-        <ng-container *ngIf="!s.full">
+        <!-- If the tutor has not joined and is not full, show join -->
+        <ng-container *ngIf="!s.full && s.status === 'Available'">
           <ion-button class="joinButton" (click)="joinEvent(s)">
             JOIN
           </ion-button>
         </ng-container>
+
       </ion-col>
 
     </ion-row>

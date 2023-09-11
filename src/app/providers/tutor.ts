@@ -33,6 +33,10 @@ export class Tutor extends UserData {
     return await this.supabase.getEventByCourseId(courseId);
   }
 
+  async getChosenEvents(userId: string) {
+    return await this.supabase.getChosenEvents(userId);
+  }
+
   async joinEvent(eventId: string, userId: string) {
     let status = await this.updateTutorsToEvent(eventId, userId);
     if (status == 201) {
