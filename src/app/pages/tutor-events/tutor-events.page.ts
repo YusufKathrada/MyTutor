@@ -21,7 +21,13 @@ export class TutorEventsPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+    console.log('tutor.events.ngOnInit');
+  }
+
+  async ionViewWillEnter() {
+    await this.presentLoading();
     await this.doRefresh(null);
+    await this.dismissLoading();
   }
 
   async doRefresh(event) {
@@ -54,7 +60,7 @@ export class TutorEventsPage implements OnInit {
   }
 
   async removeEvent(session: any){
-    await this.presentLoading();
+    await this.presentLoading('Removing session...');
     console.log(session);
     try {
       let res = await this.tutor.removeEvent(session.id, this.userId);
@@ -70,9 +76,9 @@ export class TutorEventsPage implements OnInit {
     await this.dismissLoading();
   }
 
-  async presentLoading() {
+  async presentLoading(message: string = null) {
     const loading = await this.loadingController.create({
-      message: 'Joining Session...',
+      message: message ? message : 'Loading...',
     });
     await loading.present();
   }

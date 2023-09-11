@@ -23,7 +23,13 @@ export class SelectTimesPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+    console.log('tutor.events.ngOnInit');
+  }
+
+  async ionViewWillEnter() {
+    await this.presentLoading();
     await this.doRefresh(null);
+    await this.dismissLoading();
   }
 
   async doRefresh(event) {
@@ -67,7 +73,7 @@ export class SelectTimesPage implements OnInit {
   }
 
   async joinEvent(session: any) {
-    await this.presentLoading();
+    await this.presentLoading('Joining session...');
     console.log(session);
     try {
       let res = await this.tutor.joinEvent(session.id, this.userId);
@@ -83,9 +89,9 @@ export class SelectTimesPage implements OnInit {
     await this.dismissLoading();
   }
 
-  async presentLoading() {
+  async presentLoading(message: string = null) {
     const loading = await this.loadingController.create({
-      message: 'Joining Session...',
+      message: message ? message : 'Loading...',
     });
     await loading.present();
   }
