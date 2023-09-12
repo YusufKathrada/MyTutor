@@ -33,20 +33,20 @@
       </ion-grid>
 
       <ion-grid>
-        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let t of tutorApplications">
-          <ion-col> {{t.studentName}} </ion-col>
+        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let d of displayedTutors">
+          <ion-col> {{d.studentName}} </ion-col>
 
-          <ion-col> {{t.stuNum}} </ion-col>
+          <ion-col> {{d.stuNum}} </ion-col>
 
-          <ion-col> {{t.degree}} </ion-col>
+          <ion-col> {{d.degree}} </ion-col>
 
-          <ion-col> {{t.yearOfStudy}} </ion-col>
+          <ion-col> {{d.yearOfStudy}} </ion-col>
 
-          <ion-col> {{t.average}} </ion-col>
+          <ion-col> {{d.average}} </ion-col>
 
           <ion-col>
             <ion-list>
-              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="t.status">
+              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="d.status">
                 <ion-select-option [value]="a.description" *ngFor="let a of applicationStatus">
                   {{a.description}}
                 </ion-select-option>
@@ -76,18 +76,18 @@
       </ion-grid>
 
       <ion-grid>
-        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let t of taApplications">
-          <ion-col> {{t.name}} </ion-col>
+        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let d of displayedTAs">
+          <ion-col> {{d.name}} </ion-col>
 
-          <ion-col> {{t.email}} </ion-col>
+          <ion-col> {{d.email}} </ion-col>
 
-          <ion-col> {{t.qualification}} </ion-col>
+          <ion-col> {{d.qualification}} </ion-col>
 
-          <ion-col> {{t.desiredCourse}} </ion-col>
+          <ion-col> {{d.desiredCourse}} </ion-col>
 
           <ion-col>
             <ion-list>
-              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="t.status">
+              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="d.status">
                 <ion-select-option [value]="a.description" *ngFor="let a of applicationStatus">
                   {{a.description}}
                 </ion-select-option>

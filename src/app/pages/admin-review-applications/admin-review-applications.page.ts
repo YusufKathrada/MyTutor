@@ -16,6 +16,14 @@ export class AdminReviewApplicationsPage implements OnInit {
   applicationStatus: any = [];
   statusMap: any;
 
+  tutApps: any = [];
+  taApps: any = [];
+
+  displayedTutors: any = [];
+  displayedTAs: any = [];
+
+  tutorStatusMap: any = [];
+  taStatusMap: any = [];
 
   constructor(
     public admin: Admin,
@@ -28,14 +36,35 @@ export class AdminReviewApplicationsPage implements OnInit {
 
     this.segment = 'tutor';
 
+    this.tutApps = await this.admin.getTutorApplications();
+    this.taApps = await this.admin.getTAApplications();
+
+    await this.getAndFormatApplications();
+
+    this.displayedTutors = await this.getDisplayedTutors();
+    this.displayedTAs = await this.getDisplayedTAs();
+
     this.applicationStatus = await this.admin.getStatuses();
+
     this.statusMap = this.applicationStatus.reduce((map, obj) => {
       map[obj.description] = obj.id;
       return map;
     }, {});
-    console.log('applicationStatus: ', this.applicationStatus);
 
-    await this.getAndFormatApplications();
+    // console.log('statusMap: ', this.statusMap);
+    // console.log('applicationStatus: ', this.applicationStatus);
+
+
+    // console.log('tutApps: ', this.tutApps);
+    // console.log('taApps: ', this.taApps);
+
+
+    // console.log('tutorApplications: ', this.tutorApplications);
+    // console.log('taApplications: ', this.taApplications);
+
+    // console.log('displayedTutors: ', this.displayedTutors);
+    // console.log('displayedTAs: ', this.displayedTAs);
+
 
     await this.loadingCtrl.dismiss();
   }
@@ -57,9 +86,8 @@ export class AdminReviewApplicationsPage implements OnInit {
   }
 
   async getAndFormatApplications(){
-    let [tutorApps, taApps] = await this.admin.getApplications();
 
-    this.tutorApplications = tutorApps.map((application) => {
+    this.tutorApplications = this.tutApps.map((application) => {
       return {
         id: application.id,
         studentName: `${application.name} ${application.surname}`,
@@ -72,7 +100,7 @@ export class AdminReviewApplicationsPage implements OnInit {
       };
     });
 
-    this.taApplications = taApps.map((application) => {
+    this.taApplications = this.taApps.map((application) => {
       return {
         id: application.id,
         name: `${application.name} ${application.surname}`,
@@ -106,6 +134,8 @@ export class AdminReviewApplicationsPage implements OnInit {
     } else {
       this.presentToast('Failed to update applications', 'danger');
     }
+
+    this.ngOnInit();
   }
 
   async updateTAs(){
@@ -129,5 +159,31 @@ export class AdminReviewApplicationsPage implements OnInit {
     else {
       this.presentToast('Failed to update applications', 'danger');
     }
+
+    this.ngOnInit();
+  }
+
+  async getDisplayedTutors(){
+
+    const pendingTutors: any = [];
+    //Only want to displayed pending applications
+    for (const application of this.tutorApplications) {
+      if (application.status !== 0 && application.status !== 2) {
+        pendingTutors.push(application);
+      }
+    }
+    return pendingTutors;
+  }
+
+  async getDisplayedTAs(){
+
+    const pendingTAs: any = [];
+    //Only want to displayed pending applications
+    for (const application of this.taApplications) {
+      if (application.status !== 0 && application.status !== 2) {
+        pendingTAs.push(application);
+      }
+    }
+    return pendingTAs;
   }
 }

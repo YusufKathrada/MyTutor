@@ -194,6 +194,40 @@ export class SupabaseService {
     }
   }
 
+  async getTutorApplications(){
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select('*')
+        .is('qualification', null)
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getTAApplications(){
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select('*')
+        .is('stuNum', null)
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
   async getApplicationById(id: string) {
     try {
       let { data: Application, error } = await this.supabase
