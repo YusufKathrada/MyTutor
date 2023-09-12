@@ -45,6 +45,16 @@ export class ViewApplicationStatusPage implements OnInit {
 
   async getCurrentApplication() {
     let res = await this.student.getTutorApplication();
+
+    if(!res.length) {
+      this.application = {
+        type: 'None',
+        status: 'None',
+      }
+      await this.presentToast('No application found', 'danger');
+      return;
+    }
+
     let tempApp = res[0];
     this.formatApplication(tempApp);
   }
