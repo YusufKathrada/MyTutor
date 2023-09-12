@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Admin } from '../../providers/admin';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { stat } from 'fs';
 
 @Component({
   selector: 'app-admin-review-applications',
@@ -68,7 +67,8 @@ export class AdminReviewApplicationsPage implements OnInit {
         degree: application.degree,
         yearOfStudy: application.yearOfStudy,
         average: application.average,
-        status: application.statusId
+        status: application.statusId,
+        userId: application.userId
       };
     });
 
@@ -79,7 +79,8 @@ export class AdminReviewApplicationsPage implements OnInit {
         email: application.email,
         qualification: application.qualification,
         desiredCourse: application.preferredCourse,
-        status: application.statusId
+        status: application.statusId,
+        userId: application.userId
       };
     });
   }
@@ -90,7 +91,9 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.presentLoading();
     let success: boolean = true;
     for (const application of this.tutorApplications) {
-      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status]);
+      const role = application.status === 'Accepted' ? 'tutor' : 'student';
+
+      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, role);
       if (res !== 204) {
         success = false;
         break;
@@ -111,7 +114,8 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.presentLoading();
     let success: boolean = true;
     for (const application of this.taApplications) {
-      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status]);
+      // TODO: Update role of ta appropiately
+      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, 'student');
       if (res !== 204) {
         success = false;
         break;

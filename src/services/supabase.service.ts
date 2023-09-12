@@ -8,6 +8,7 @@ import {
   User,
 } from '@supabase/supabase-js'
 import { environment } from '../environments/environment'
+import { ToastController } from '@ionic/angular'
 
 
 @Injectable({
@@ -17,8 +18,21 @@ export class SupabaseService {
   private supabase: SupabaseClient
   _session: AuthSession | null = null
 
-  constructor() {
+  constructor(
+    private toastController: ToastController,
+  ) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey)
+  }
+
+  // ======================================== Error Handler ========================================
+
+  async presentError() {
+    const toast = await this.toastController.create({
+      message: 'Something went wrong, please try again or contact support',
+      duration: 2000,
+      color: 'danger',
+    });
+    toast.present();
   }
 
   // ======================================== Auth ========================================
@@ -77,6 +91,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
 
   }
@@ -94,6 +109,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -110,8 +126,27 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
+  }
 
+  async updateRole(userId: string, role: string) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .update({ role: role })
+        .eq('id', userId)
+        .select()
+
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
   }
 
   /**
@@ -134,6 +169,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -154,6 +190,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -170,6 +207,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -190,6 +228,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -208,6 +247,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -226,6 +266,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -242,6 +283,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -259,6 +301,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -276,6 +319,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -296,6 +340,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -312,6 +357,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -332,6 +378,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -348,6 +395,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -369,6 +417,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -384,6 +433,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -400,6 +450,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -423,6 +474,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -446,6 +498,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -462,6 +515,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -483,6 +537,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -499,6 +554,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -514,6 +570,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -538,6 +595,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -554,6 +612,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -575,6 +634,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -590,6 +650,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -606,10 +667,11 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
-  async updateEventTutorCount(eventId: string) {
+  async updateEventTutorCount(eventId: string, countUpdate: number) {
     try {
       // Get the current number of tutors needed
       let { data: Events, error } = await this.supabase
@@ -619,13 +681,14 @@ export class SupabaseService {
 
       if (error || !Events || Events.length === 0) throw error || new Error("Event not found");
 
-      const newTutorCount = Events[0].tutorsNeeded - 1;
+      const newTutorCount = Events[0].tutorsNeeded + countUpdate;
 
       // Update value
       const { data: updatedEvents, error: updateError } = await this.supabase
         .from('Events')
         .update({ tutorsNeeded: newTutorCount })
-        .eq('id', eventId);
+        .eq('id', eventId)
+        .select();
 
       if (updateError) throw updateError;
 
@@ -633,6 +696,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error);
+      await this.presentError();
     }
   }
 
@@ -653,6 +717,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -669,6 +734,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -684,6 +750,7 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
     }
   }
 
@@ -705,6 +772,63 @@ export class SupabaseService {
 
     } catch (error) {
       console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async deleteTutorForEvent(eventId: string, userId: string){
+    try {
+      let { status, error } = await this.supabase
+        .from('Tutors to Events')
+        .delete()
+        .eq('eventId', eventId)
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getChosenEvents(userId: string) {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Tutors to Events')
+        .select(`
+          events:eventId (id)
+        `)
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getAllEventsDetails(userId: string) {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Tutors to Events')
+        .select(`
+          events:eventId (id, courses:courseId (name), day, startTime, endTime, typeOfSession:sessionId (description))
+        `)
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
     }
   }
 }

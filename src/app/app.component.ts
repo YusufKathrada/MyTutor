@@ -44,6 +44,11 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/select-times',
       icon: 'calendar'
     },
+    {
+      title: 'View selected times',
+      url: '/app/tabs/tutor-events',
+      icon: 'documents'
+    },
   ];
 
   studentPages = [

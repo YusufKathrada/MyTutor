@@ -4,16 +4,14 @@ import { Tutor } from '../../providers/tutor';
 import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-select-times',
-  templateUrl: './select-times.page.html',
-  styleUrls: ['./select-times.page.scss'],
+  selector: 'app-tutor-events',
+  templateUrl: './tutor-events.page.html',
+  styleUrls: ['./tutor-events.page.scss'],
 })
-export class SelectTimesPage implements OnInit {
+export class TutorEventsPage implements OnInit {
 
   private userId: string;
-
-  sessions: any = [];
-  chosenSessions: any = [];
+  sessions: any[] = []
 
   constructor(
     private storage: Storage,
@@ -35,22 +33,14 @@ export class SelectTimesPage implements OnInit {
   async doRefresh(event) {
     this.userId = await this.storage.get('userId');
 
-    try {
-      // Get the 'events' (prac, tut, workshop, etc.) that the tutor has already signed up for
-      let chosenEvents: any = await this.tutor.getChosenEvents(this.userId);
-      this.chosenSessions = chosenEvents.map((event) => {return event.events.id});
+    // Get the 'events' (prac, tut, workshop, etc.) that the tutor has already signed up for
+    let events = await this.tutor.getChosenEventsDetails(this.userId);
 
-      // Get the 'events' (prac, tut, workshop, etc.) that the tutor can sign up for
-      let events = await this.tutor.getTutorTimes(this.userId);
-      this.sessions = this.formatEvents(events);
-      console.log(this.sessions);
-
-      // Sort by tutors needed
-      this.sessions.sort((a, b) => (a.tutorsNeeded > b.tutorsNeeded) ? -1 : 1);
-    } catch (error) {
+    if(!events.length) {
       this.sessions = [
         {
           id: null,
+          course: 'None',
           eventType: 'None',
           day: 'None',
           time: 'None',
@@ -59,45 +49,45 @@ export class SelectTimesPage implements OnInit {
           status: 'Available',
         },
       ];
-      this.presentToast('No assigned session(s)', 'danger');
+      this.presentToast('No sessions found', 'danger');
+      return;
     }
+
+    console.log("events", events);
+    this.sessions = this.formatEvents(events);
+    console.log('tutor.events.sessions', this.sessions);
   }
 
   formatEvents(events: any) {
     let formattedEvents = [];
     for (let event of events) {
-      const full = event.tutorsNeeded <= 0;
-      const status = this.chosenSessions.includes(event.id) ? 'Joined' : 'Available';
-
       let formattedEvent = {
-        id: event.id,
-        eventType: event.typeOfSession.description,
-        day: event.day,
-        time: this.formatTime(event.startTime) + ' - ' + this.formatTime(event.endTime),
-        tutorsNeeded: event.tutorsNeeded,
-        full: full,
-        status: status,
+        id: event.events.id,
+        course: event.events.courses.name,
+        eventType: event.events.typeOfSession.description,
+        day: event.events.day,
+        time: this.formatTime(event.events.startTime) + ' - ' + this.formatTime(event.events.endTime),
       }
       formattedEvents.push(formattedEvent);
     }
     return formattedEvents;
   }
 
-  formatTime(time: string){
+  formatTime(time: string) {
     return time.slice(0,5);
   }
 
-  async joinEvent(session: any) {
-    await this.presentLoading('Joining session...');
+  async removeEvent(session: any){
+    await this.presentLoading('Removing session...');
     console.log(session);
     try {
-      let res = await this.tutor.joinEvent(session.id, this.userId);
+      let res = await this.tutor.removeEvent(session.id, this.userId);
       console.log('res', res);
       this.doRefresh(null);
 
-      await this.presentToast('Joined session', 'success');
+      await this.presentToast('Removed session', 'success');
     } catch (error) {
-      await this.presentToast('Error joining session', 'danger');
+      await this.presentToast('Error removing session', 'danger');
       console.log(error);
     }
 
@@ -123,4 +113,5 @@ export class SelectTimesPage implements OnInit {
     });
     await toast.present();
   }
+
 }
