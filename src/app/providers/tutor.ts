@@ -29,6 +29,9 @@ export class Tutor extends UserData {
 
   async getTutorTimes(userId: string) {
     let res = await this.getCourseIDForTutor(userId);
+
+    if(!res.length) throw new Error('No course found for tutor')
+
     let courseId = res[0].courseId;
     return await this.supabase.getEventByCourseId(courseId);
   }

@@ -35,6 +35,24 @@ export class TutorEventsPage implements OnInit {
 
     // Get the 'events' (prac, tut, workshop, etc.) that the tutor has already signed up for
     let events = await this.tutor.getChosenEventsDetails(this.userId);
+
+    if(!events.length) {
+      this.sessions = [
+        {
+          id: null,
+          course: 'None',
+          eventType: 'None',
+          day: 'None',
+          time: 'None',
+          tutorsNeeded: 'N/A',
+          full: true,
+          status: 'Available',
+        },
+      ];
+      this.presentToast('No sessions found', 'danger');
+      return;
+    }
+
     console.log("events", events);
     this.sessions = this.formatEvents(events);
     console.log('tutor.events.sessions', this.sessions);

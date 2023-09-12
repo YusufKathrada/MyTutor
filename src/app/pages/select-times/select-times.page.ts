@@ -35,17 +35,32 @@ export class SelectTimesPage implements OnInit {
   async doRefresh(event) {
     this.userId = await this.storage.get('userId');
 
-    // Get the 'events' (prac, tut, workshop, etc.) that the tutor has already signed up for
-    let chosenEvents: any = await this.tutor.getChosenEvents(this.userId);
-    this.chosenSessions = chosenEvents.map((event) => {return event.events.id});
+    try {
+      // Get the 'events' (prac, tut, workshop, etc.) that the tutor has already signed up for
+      let chosenEvents: any = await this.tutor.getChosenEvents(this.userId);
+      this.chosenSessions = chosenEvents.map((event) => {return event.events.id});
 
-    // Get the 'events' (prac, tut, workshop, etc.) that the tutor can sign up for
-    let events = await this.tutor.getTutorTimes(this.userId);
-    this.sessions = this.formatEvents(events);
-    console.log(this.sessions);
+      // Get the 'events' (prac, tut, workshop, etc.) that the tutor can sign up for
+      let events = await this.tutor.getTutorTimes(this.userId);
+      this.sessions = this.formatEvents(events);
+      console.log(this.sessions);
 
-    // Sort by tutors needed
-    this.sessions.sort((a, b) => (a.tutorsNeeded > b.tutorsNeeded) ? -1 : 1);
+      // Sort by tutors needed
+      this.sessions.sort((a, b) => (a.tutorsNeeded > b.tutorsNeeded) ? -1 : 1);
+    } catch (error) {
+      this.sessions = [
+        {
+          id: null,
+          eventType: 'None',
+          day: 'None',
+          time: 'None',
+          tutorsNeeded: 'N/A',
+          full: true,
+          status: 'Available',
+        },
+      ];
+      this.presentToast('No assigned session(s)', 'danger');
+    }
   }
 
   formatEvents(events: any) {

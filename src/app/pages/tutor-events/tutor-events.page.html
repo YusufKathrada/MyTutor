@@ -53,8 +53,8 @@
         {{s.time}}
       </ion-col>
 
-      <ion-col style="padding-top: 0px;">
-        <ion-button id="fullButton" (click)="removeEvent(s)">
+      <ion-col style="padding-top: 0px;" >
+        <ion-button id="fullButton" [disabled]="!s.id" (click)="removeEvent(s)">
           REMOVE
         </ion-button>
       </ion-col>
