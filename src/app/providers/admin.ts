@@ -86,7 +86,14 @@ export class Admin extends UserData {
     return await this.supabase.getAllStatuses();
   }
 
-  async updateApplicationStatus(applicationId: number, statusId: number){
+  async updateApplicationStatus(applicationId: number, statusId: number, userId: string, role: string){
+    // Update role of user if accepted
+    // TODO: Update role of ta appropiately
+    if(role === 'tutor'){
+      await this.supabase.updateRole(userId, role);
+    }
+
+    // Update status of application
     return await this.supabase.updateApplication(applicationId, statusId);
   }
 

@@ -128,7 +128,25 @@ export class SupabaseService {
       console.log('error', error)
       await this.presentError();
     }
+  }
 
+  async updateRole(userId: string, role: string) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .update({ role: role })
+        .eq('id', userId)
+        .select()
+
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
   }
 
   /**
