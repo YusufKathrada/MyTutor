@@ -33,7 +33,7 @@
       </ion-grid>
 
       <ion-grid>
-        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let d of displayedTutors">
+        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let d of formattedTutorApplications">
           <ion-col> {{d.studentName}} </ion-col>
 
           <ion-col> {{d.stuNum}} </ion-col>
@@ -46,8 +46,8 @@
 
           <ion-col>
             <ion-list>
-              <ion-select fill="outline" aria-label="Application Status" interface="popover" [(ngModel)]="this.revStatusMap[d.status]">
-                <ion-select-option [value]="a.description" *ngFor="let a of applicationStatus">
+              <ion-select fill="outline" aria-label="Application Status" interface="popover" [placeholder]="this.revStatusMap[d.status]" [(ngModel)]="d.status">
+                <ion-select-option [value]="a.description" *ngFor="let a of applicationStatuses">
                   {{a.description}}
                 </ion-select-option>
               </ion-select>
@@ -72,11 +72,13 @@
           <ion-col> Qualification </ion-col>
           <ion-col> Desired Course </ion-col>
           <ion-col> Status </ion-col>
+          <ion-col> Admin Right </ion-col>
+
         </ion-row>
       </ion-grid>
 
       <ion-grid>
-        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let d of displayedTAs">
+        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let d of formattedTAApplications">
           <ion-col> {{d.name}} </ion-col>
 
           <ion-col> {{d.email}} </ion-col>
@@ -85,15 +87,21 @@
 
           <ion-col> {{d.desiredCourse}} </ion-col>
 
+          
           <ion-col>
             <ion-list>
-              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="this.revStatusMap[d.status]">
-                <ion-select-option [value]="a.description" *ngFor="let a of applicationStatus">
+              <ion-select fill="outline" aria-label="Application Status" interface="popover" [placeholder]="this.revStatusMap[d.status]" [(ngModel)]="d.status">
+                <ion-select-option [value]="a.description" *ngFor="let a of applicationStatuses">
                   {{a.description}}
                 </ion-select-option>
               </ion-select>
             </ion-list>
           </ion-col>
+
+          <ion-col>
+            <ion-checkbox [disabled]="!isCheckboxEnabled(d.status)" [(ngModel)]="d.adminRights"></ion-checkbox>
+          </ion-col>
+
         </ion-row>
       </ion-grid>
 

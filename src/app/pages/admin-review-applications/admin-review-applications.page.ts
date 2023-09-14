@@ -11,20 +11,18 @@ export class AdminReviewApplicationsPage implements OnInit {
 
   public segment: string = '';
 
-  tutorApplications: any = [];
-  taApplications: any = [];
-  applicationStatus: any = [];
+  fullTutorApplications: any = [];
+  fullTAApplications: any = [];
+
+  formattedTutorApplications: any = [];
+  formattedTAApplications: any = [];
+
+  applicationStatuses: any = [];
   statusMap: any;
   revStatusMap: any = [];
 
-  tutApps: any = [];
-  taApps: any = [];
-
-  displayedTutors: any = [];
-  displayedTAs: any = [];
-
-  tutorStatusMap: any = [];
-  taStatusMap: any = [];
+  // displayedTutors: any = [];
+  // displayedTAs: any = [];
 
   constructor(
     public admin: Admin,
@@ -35,14 +33,14 @@ export class AdminReviewApplicationsPage implements OnInit {
   async ngOnInit() {
     await this.presentLoading();
 
-    this.applicationStatus = await this.admin.getStatuses();
+    this.applicationStatuses = await this.admin.getStatuses();
 
-    this.statusMap = this.applicationStatus.reduce((map, obj) => {
+    this.statusMap = this.applicationStatuses.reduce((map, obj) => {
       map[obj.description] = obj.id;
       return map;
     }, {});
 
-    this.revStatusMap = this.applicationStatus.reduce((map, obj) => {
+    this.revStatusMap = this.applicationStatuses.reduce((map, obj) => {
       map[obj.id] = obj.description;
       return map;
     }, {});
@@ -55,28 +53,22 @@ export class AdminReviewApplicationsPage implements OnInit {
 
     this.segment = 'tutor';
 
-    this.tutApps = await this.admin.getTutorApplications();
-    this.taApps = await this.admin.getTAApplications();
+    this.fullTutorApplications = await this.admin.getTutorApplications();
+    this.fullTAApplications = await this.admin.getTAApplications();
 
     
 
     await this.getAndFormatApplications();
 
-    this.displayedTutors = await this.getDisplayedTutors();
-    this.displayedTAs = await this.getDisplayedTAs();
+    // this.displayedTutors = await this.getDisplayedTutors();
+    // this.displayedTAs = await this.getDisplayedTAs();
+
+    console.log('fullTutorApps', this.fullTutorApplications);
+    console.log('fullTAAplications', this.fullTAApplications);
 
 
-    
-
-    // console.log('applicationStatus: ', this.applicationStatus);
-
-
-    console.log('tutApps: ', this.tutApps);
-    console.log('taApps: ', this.taApps);
-
-
-    console.log('tutorApplications: ', this.tutorApplications);
-    // console.log('taApplications: ', this.taApplications);
+    console.log('formattedTutorApplications: ', this.formattedTutorApplications);
+    console.log('formattedTAApplications: ', this.formattedTAApplications);
 
     // console.log('displayedTutors: ', this.displayedTutors);
     // console.log('displayedTAs: ', this.displayedTAs);
@@ -103,7 +95,7 @@ export class AdminReviewApplicationsPage implements OnInit {
 
   async getAndFormatApplications(){
 
-    this.tutorApplications = this.tutApps.map((application) => {
+    this.formattedTutorApplications = this.fullTutorApplications.map((application) => {
       return {
         id: application.id,
         studentName: `${application.name} ${application.surname}`,
@@ -116,7 +108,7 @@ export class AdminReviewApplicationsPage implements OnInit {
       };
     });
 
-    this.taApplications = this.taApps.map((application) => {
+    this.formattedTAApplications = this.fullTAApplications.map((application) => {
       return {
         id: application.id,
         name: `${application.name} ${application.surname}`,
@@ -124,17 +116,19 @@ export class AdminReviewApplicationsPage implements OnInit {
         qualification: application.qualification,
         desiredCourse: application.preferredCourse,
         status: application.statusId,
-        userId: application.userId
+        userId: application.userId,
+        adminRights: application.adminRights,
+        checkboxEnabled: this.isCheckboxEnabled(application.status)
       };
     });
   }
 
   async updateTutors(){
-    console.log('tutorApplications: ', this.tutorApplications)
+    console.log('tutorApplications: ', this.formattedTutorApplications)
 
     this.presentLoading();
     let success: boolean = true;
-    for (const application of this.tutorApplications) {
+    for (const application of this.formattedTutorApplications) {
       const role = application.status === 'Accepted' ? 'tutor' : 'student';
 
       let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, role);
@@ -154,14 +148,22 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.ngOnInit();
   }
 
+
   async updateTAs(){
-    console.log('taApplications: ', this.taApplications)
+    console.log('taApplications: ', this.formattedTAApplications)
 
     this.presentLoading();
     let success: boolean = true;
-    for (const application of this.taApplications) {
-      // TODO: Update role of ta appropiately
-      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, 'student');
+    for (const application of this.formattedTAApplications) {
+
+    console.log('application: ', application);
+      let role = application.status === 'Accepted' ? 'ta' : 'student';
+      if (application.adminRights) {
+        role = 'admin';
+      }
+      console.log(application.name,'role', role);
+      //TODO: Update role of ta appropiately
+      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, role);
       if (res !== 204) {
         success = false;
         break;
@@ -179,28 +181,33 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.ngOnInit();
   }
 
-  
-  async getDisplayedTutors(){
-    const pendingTutors: any = [];
-    //Only want to displayed pending applications
-    for (const application of this.tutorApplications) {
-      console.log(this.revStatusMap[application.status]);
-      if (application.status !== 0 && application.status !== 2) {
-        pendingTutors.push(application);
-      }
-    }
-    return pendingTutors;
+  isCheckboxEnabled(status: string): boolean {
+    return status === 'Accepted';
   }
 
-  async getDisplayedTAs(){
+  // async getDisplayedTutors(){
+  //   const pendingTutors: any = [];
+  //   //Only want to displayed pending applications
+  //   for (const application of this.tutorApplications) {
+  //     console.log(this.revStatusMap[application.status]);
+  //     if (application.status !== 0 && application.status !== 2) {
+  //       pendingTutors.push(application);
+  //     }
+  //   }
+  //   return pendingTutors;
+  // }
 
-    const pendingTAs: any = [];
-    //Only want to displayed pending applications
-    for (const application of this.taApplications) {
-      if (application.status !== 0 && application.status !== 2) {
-        pendingTAs.push(application);
-      }
-    }
-    return pendingTAs;
-  }
+  // async getDisplayedTAs(){
+
+  //   const pendingTAs: any = [];
+  //   //Only want to displayed pending applications
+  //   for (const application of this.taApplications) {
+  //     if (application.status !== 0 && application.status !== 2) {
+  //       pendingTAs.push(application);
+  //     }
+  //   }
+  //   return pendingTAs;
+  // }
+
+
 }
