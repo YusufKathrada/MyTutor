@@ -46,7 +46,7 @@
 
           <ion-col>
             <ion-list>
-              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="d.status">
+              <ion-select fill="outline" aria-label="Application Status" interface="popover" [(ngModel)]="this.revStatusMap[d.status]">
                 <ion-select-option [value]="a.description" *ngFor="let a of applicationStatus">
                   {{a.description}}
                 </ion-select-option>
@@ -87,7 +87,7 @@
 
           <ion-col>
             <ion-list>
-              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="d.status">
+              <ion-select fill="outline" aria-label="Application Status" interface="popover" placeholder="Select Status" [(ngModel)]="this.revStatusMap[d.status]">
                 <ion-select-option [value]="a.description" *ngFor="let a of applicationStatus">
                   {{a.description}}
                 </ion-select-option>

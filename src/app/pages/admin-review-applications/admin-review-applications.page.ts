@@ -15,6 +15,7 @@ export class AdminReviewApplicationsPage implements OnInit {
   taApplications: any = [];
   applicationStatus: any = [];
   statusMap: any;
+  revStatusMap: any = [];
 
   tutApps: any = [];
   taApps: any = [];
@@ -34,16 +35,6 @@ export class AdminReviewApplicationsPage implements OnInit {
   async ngOnInit() {
     await this.presentLoading();
 
-    this.segment = 'tutor';
-
-    this.tutApps = await this.admin.getTutorApplications();
-    this.taApps = await this.admin.getTAApplications();
-
-    await this.getAndFormatApplications();
-
-    this.displayedTutors = await this.getDisplayedTutors();
-    this.displayedTAs = await this.getDisplayedTAs();
-
     this.applicationStatus = await this.admin.getStatuses();
 
     this.statusMap = this.applicationStatus.reduce((map, obj) => {
@@ -51,15 +42,40 @@ export class AdminReviewApplicationsPage implements OnInit {
       return map;
     }, {});
 
-    // console.log('statusMap: ', this.statusMap);
+    this.revStatusMap = this.applicationStatus.reduce((map, obj) => {
+      map[obj.id] = obj.description;
+      return map;
+    }, {});
+
+    
+
+    console.log('statusMap: ', this.statusMap);
+
+    console.log('RevstatusMap: ', this.revStatusMap);
+
+    this.segment = 'tutor';
+
+    this.tutApps = await this.admin.getTutorApplications();
+    this.taApps = await this.admin.getTAApplications();
+
+    
+
+    await this.getAndFormatApplications();
+
+    this.displayedTutors = await this.getDisplayedTutors();
+    this.displayedTAs = await this.getDisplayedTAs();
+
+
+    
+
     // console.log('applicationStatus: ', this.applicationStatus);
 
 
-    // console.log('tutApps: ', this.tutApps);
-    // console.log('taApps: ', this.taApps);
+    console.log('tutApps: ', this.tutApps);
+    console.log('taApps: ', this.taApps);
 
 
-    // console.log('tutorApplications: ', this.tutorApplications);
+    console.log('tutorApplications: ', this.tutorApplications);
     // console.log('taApplications: ', this.taApplications);
 
     // console.log('displayedTutors: ', this.displayedTutors);
@@ -163,11 +179,12 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.ngOnInit();
   }
 
+  
   async getDisplayedTutors(){
-
     const pendingTutors: any = [];
     //Only want to displayed pending applications
     for (const application of this.tutorApplications) {
+      console.log(this.revStatusMap[application.status]);
       if (application.status !== 0 && application.status !== 2) {
         pendingTutors.push(application);
       }
