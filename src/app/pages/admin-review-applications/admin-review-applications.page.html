@@ -20,6 +20,16 @@
 
     <div *ngSwitchCase="'tutor'">
 
+      <ion-list>
+        <ion-select class="custom-select" fill="outline" interface="popover" [(ngModel)]="filterOption" (ionChange)="applyTutorFilter()">
+          <ion-select-option value="all">Display All</ion-select-option>
+          <ion-select-option value="accepted">Display Accepted</ion-select-option>
+          <ion-select-option value="pending">Display Pending</ion-select-option>
+          <ion-select-option value="rejected">Display Rejected</ion-select-option>
+        </ion-select>
+      </ion-list>
+
+
       <ion-grid>
         <!-- Headings -->
         <ion-row style="text-align: center; font-weight: bold;">
@@ -63,6 +73,16 @@
     </div>
 
     <div *ngSwitchCase="'TA'">
+
+      <ion-list>
+        <ion-select class="custom-select" fill="outline" interface="popover" [(ngModel)]="filterOption" (ionChange)="applyTAFilter()">
+          <ion-select-option value="all">Display All</ion-select-option>
+          <ion-select-option value="accepted">Display Accepted</ion-select-option>
+          <ion-select-option value="pending">Display Pending</ion-select-option>
+          <ion-select-option value="rejected">Display Rejected</ion-select-option>
+        </ion-select>
+      </ion-list>
+
 
       <ion-grid>
         <!-- Headings -->

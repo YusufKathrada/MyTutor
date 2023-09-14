@@ -10,12 +10,21 @@ import { LoadingController, ToastController } from '@ionic/angular';
 export class AdminReviewApplicationsPage implements OnInit {
 
   public segment: string = '';
+  public filterOption: string = 'all';
 
   fullTutorApplications: any = [];
   fullTAApplications: any = [];
 
   formattedTutorApplications: any = [];
   formattedTAApplications: any = [];
+
+  acceptedTutors: any = [];
+  pendingTutors: any = [];
+  rejectedTutors: any = [];
+
+  acceptedTAs: any = [];
+  pendingTAs: any = [];
+  rejectedTAs: any = [];
 
   applicationStatuses: any = [];
   statusMap: any;
@@ -74,6 +83,15 @@ export class AdminReviewApplicationsPage implements OnInit {
     // console.log('displayedTAs: ', this.displayedTAs);
 
 
+    console.log('acceptedTutors: ', this.acceptedTutors);
+    console.log('pendingTutors: ', this.pendingTutors);
+    console.log('rejectedTutors: ', this.rejectedTutors);
+
+    console.log('acceptedTAs: ', this.acceptedTAs);
+    console.log('pendingTAs: ', this.pendingTAs);
+    console.log('rejectedTAs: ', this.rejectedTAs);
+
+
     await this.loadingCtrl.dismiss();
   }
 
@@ -108,6 +126,11 @@ export class AdminReviewApplicationsPage implements OnInit {
       };
     });
 
+    this.rejectedTutors = this.formattedTutorApplications.filter((application) => application.status === 0);
+    this.pendingTutors = this.formattedTutorApplications.filter((application) => application.status === 1);
+    this.acceptedTutors = this.formattedTutorApplications.filter((application) => application.status === 2);
+
+
     this.formattedTAApplications = this.fullTAApplications.map((application) => {
       return {
         id: application.id,
@@ -117,10 +140,15 @@ export class AdminReviewApplicationsPage implements OnInit {
         desiredCourse: application.preferredCourse,
         status: application.statusId,
         userId: application.userId,
-        adminRights: application.adminRights,
+        adminRights: application.adminRights && application.statusId === 2 ? true : false,
         checkboxEnabled: this.isCheckboxEnabled(this.revStatusMap[application.status])
       };
     });
+
+    this.rejectedTAs = this.formattedTAApplications.filter((application) => application.status === 0);
+    this.pendingTAs = this.formattedTAApplications.filter((application) => application.status === 1);
+    this.acceptedTAs = this.formattedTAApplications.filter((application) => application.status === 2);
+
   }
 
   async updateTutors(){
@@ -145,6 +173,7 @@ export class AdminReviewApplicationsPage implements OnInit {
       this.presentToast('Failed to update applications', 'danger');
     }
 
+    this.filterOption = 'all';
     this.ngOnInit();
   }
 
@@ -178,12 +207,58 @@ export class AdminReviewApplicationsPage implements OnInit {
       this.presentToast('Failed to update applications', 'danger');
     }
 
+    this.filterOption = 'all';
     this.ngOnInit();
   }
 
   isCheckboxEnabled(status: string): boolean {
     return status === 'Accepted';
   }
+
+  async applyTutorFilter(){
+    this.getAndFormatApplications();
+
+    switch (this.filterOption) {
+      case 'all':
+        this.getAndFormatApplications();
+        break;
+      case 'accepted':
+        this.formattedTutorApplications = this.acceptedTutors;
+        break;
+      case 'pending':
+        this.formattedTutorApplications = this.pendingTutors;
+        break;
+      case 'rejected':
+        this.formattedTutorApplications = this.rejectedTutors;
+        break;
+      default:
+        break;
+    }
+  }
+
+
+  async applyTAFilter(){
+    this.getAndFormatApplications();
+
+    switch (this.filterOption) {
+      case 'all':
+        this.getAndFormatApplications();
+        break;
+      case 'accepted':
+        this.formattedTAApplications = this.acceptedTAs;
+        break;
+      case 'pending':
+        this.formattedTAApplications = this.pendingTAs;
+        break;
+      case 'rejected':
+        this.formattedTAApplications = this.rejectedTAs;
+        break;
+      default:
+        break;
+    }
+  }
+
+}
 
   // async getDisplayedTutors(){
   //   const pendingTutors: any = [];
@@ -209,5 +284,3 @@ export class AdminReviewApplicationsPage implements OnInit {
   //   return pendingTAs;
   // }
 
-
-}
