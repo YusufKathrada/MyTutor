@@ -118,7 +118,7 @@ export class AdminReviewApplicationsPage implements OnInit {
         status: application.statusId,
         userId: application.userId,
         adminRights: application.adminRights,
-        checkboxEnabled: this.isCheckboxEnabled(application.status)
+        checkboxEnabled: this.isCheckboxEnabled(this.revStatusMap[application.status])
       };
     });
   }
@@ -163,7 +163,7 @@ export class AdminReviewApplicationsPage implements OnInit {
       }
       console.log(application.name,'role', role);
       //TODO: Update role of ta appropiately
-      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, role);
+      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, role, application.adminRights);
       if (res !== 204) {
         success = false;
         break;

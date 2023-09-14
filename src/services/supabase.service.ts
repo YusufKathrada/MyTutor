@@ -149,6 +149,8 @@ export class SupabaseService {
     }
   }
 
+
+
   /**
    *
    * @param user - User object to be inserted into the database
@@ -310,6 +312,23 @@ export class SupabaseService {
         .from('Application')
         .update({ statusId: statusId })
         .eq('id', id)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async updateAdminRights(userId: string, adminRights: boolean) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Application')
+        .update({ adminRights: adminRights })
+        .eq('userId', userId)
 
       if (error) throw error
 

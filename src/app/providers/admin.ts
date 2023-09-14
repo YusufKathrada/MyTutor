@@ -94,11 +94,12 @@ export class Admin extends UserData {
     return await this.supabase.getAllStatuses();
   }
 
-  async updateApplicationStatus(applicationId: number, statusId: number, userId: string, role: string){
+  async updateApplicationStatus(applicationId: number, statusId: number, userId: string, role: string, adminRights: boolean = false){
     // Update role of user if accepted
     // TODO: Update role of ta appropiately
     
       await this.supabase.updateRole(userId, role);
+      await this.supabase.updateAdminRights(userId, adminRights);
 
     // Update status of application
     return await this.supabase.updateApplication(applicationId, statusId);

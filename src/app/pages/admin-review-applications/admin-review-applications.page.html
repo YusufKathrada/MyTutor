@@ -99,7 +99,7 @@
           </ion-col>
 
           <ion-col>
-            <ion-checkbox [disabled]="!isCheckboxEnabled(d.status)" [(ngModel)]="d.adminRights"></ion-checkbox>
+            <ion-checkbox [disabled]="!isCheckboxEnabled(d.status)" [(ngModel)]="d.adminRights" [checked]="d.adminRights"></ion-checkbox>
           </ion-col>
 
         </ion-row>
