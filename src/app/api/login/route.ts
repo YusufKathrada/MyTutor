@@ -111,15 +111,32 @@ export async function POST(request: NextRequest, res: Response) {
       email: profileInfo.attributes['urn:oid:1.2.840.113549.1.9.1'][0],
       role: profileInfo.attributes.Role,
     };
-
     console.log("user: ", user)
 
+    const dbUser = {
+      name: user.fname,
+      surname: user.lname,
+      email: user.email,
+      nameId: user.name_id,
+      role: 'student',
+      session_index: user.session_index,
+    }
+    console.log("dbUser: ", dbUser)
+
+    try {
+      const res = await supabase.insertUctUser(dbUser);
+      console.log("res: ", res)
+    } catch (error) {
+      console.error("Error inserting user into database:", error);
+      NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    }
 
     // Respond success
     return NextResponse.redirect('https://my-tutor-lime.vercel.app/login', { headers: corsHeaders, status: 302 });
   } catch (error) {
     console.error('Error in SAML assertion handling:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.redirect('https://my-tutor-lime.vercel.app/login', { headers: corsHeaders, status: 302 });
+    // return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -130,5 +147,3 @@ export function OPTIONS(request: NextRequest) {
     status: 204
   });
 }
-
-

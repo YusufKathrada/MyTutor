@@ -328,7 +328,7 @@ export class SupabaseService {
             userId: tutorId,
             courseId: courseId,
             assignedStatus: assignedStatus,
-          }, 
+          },
           { onConflict: 'userId' })
         .select()
 
@@ -532,4 +532,30 @@ export class SupabaseService {
       console.log('error', error)
     }
   }
+
+
+// ======================================== users table (for uct login) ========================================
+
+  async insertUctUser(user: any) {
+    try {
+
+      const { data, error } = await this.supabase
+        .from('Users')
+        .upsert(
+          user,
+          { onConflict:'nameId' }
+        );
+        // .upsert(user)
+        // .eq('nameId', user.nameId)
+
+      if (error) throw error
+
+      return data
+
+    } catch (error) {
+      console.log('error', error)
+      throw error;
+    }
+  }
+
 }
