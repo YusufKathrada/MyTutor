@@ -110,8 +110,7 @@ export class LoginPage {
   // }
 
   async uctLogin() {
-    // Make a GET request to your Vercel serverless function
-    // Replace 'your-vercel-function-url' with the actual URL of your serverless function
+    // Make a GET request to the Vercel serverless function
     let url = 'http://localhost:3000/api/login';
     let res: any = await lastValueFrom(this.http.get(url, {
       headers: {
