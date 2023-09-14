@@ -11,11 +11,13 @@ import { LoadingController } from '@ionic/angular';
 })
 export class UploadTimesPage implements OnInit {
 
-  // startTime = new Date().toTimeString().slice(0, 5);
-  // endTime = new Date().toTimeString().slice(0, 5);
-
   public eventForm: FormGroup;
   course: string = '';
+
+  allEventsWithIDs: any = [];
+  allTutorsToEvents: any = [];
+
+  tutorsToEventsMap: any = [];
 
   allEvents: any = [];
   showCourseEvents: any = [];
@@ -42,6 +44,14 @@ export class UploadTimesPage implements OnInit {
     await this.getAllCourses();
 
     this.sessionTypes = await this.admin.getAllSessions();
+
+    this.allEventsWithIDs = await this.admin.getAllEventsFromEventsTable();
+    console.log("allEventsWithID: ", this.allEventsWithIDs);
+
+    this.allTutorsToEvents = await this.admin.getAllTutorsToEvents();
+    console.log("allTutorsToEvents: ", this.allTutorsToEvents);
+
+    await this.formatTutorsToEvents();
   }
 
   createForm() {
@@ -184,6 +194,25 @@ export class UploadTimesPage implements OnInit {
 
   formatTime(time: string) {
     return time.slice(0, 5);
+  }
+
+  async formatTutorsToEvents() {
+
+    this.tutorsToEventsMap = this.allEventsWithIDs.map((event) => {
+      return {
+        id: event.id,
+        courseId: event.courseId,
+        day: event.day,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        venue: event.venue,
+        tutorsNeeded: event.tutorsNeeded,
+        //Below, currently returns UserIDs, should change to tutor names in future
+        tutors: this.allTutorsToEvents.filter((tutor) => tutor.eventId === event.id).map((tutor) => tutor.userId)
+      }
+    });
+
+    console.log("tutorsToEventsMap: ", this.tutorsToEventsMap);
   }
 
 }

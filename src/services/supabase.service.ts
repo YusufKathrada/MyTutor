@@ -652,6 +652,24 @@ export class SupabaseService {
     }
   }
 
+  async getAllEventsFromEventsTable () {
+    try {
+
+      let { data: allEvents, error } = await this.supabase
+        .from('Events')
+        .select('*')
+
+      if (error) throw error
+
+      return allEvents
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
   async getEventById(id: string) {
     try {
       let { data: Events, error } = await this.supabase
@@ -865,6 +883,23 @@ export class SupabaseService {
       await this.presentError();
     }
   }
+
+  async getAllTutorsToEvents() {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Tutors to Events')
+        .select('*')
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+  
 
   async getAllEventsDetails(userId: string) {
     try {
