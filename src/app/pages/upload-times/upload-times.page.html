@@ -175,6 +175,9 @@
       <ion-col>
         Venue
       </ion-col>
+
+      <ion-col></ion-col>
+      
     </ion-row>
 
     <ion-row *ngFor="let event of showCourseEvents" style="text-align: center;">
@@ -196,6 +199,10 @@
 
       <ion-col>
         {{event.venue}}
+      </ion-col>
+
+      <ion-col>
+        <ion-button (click)="presentPopover($event)">View Tutors</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

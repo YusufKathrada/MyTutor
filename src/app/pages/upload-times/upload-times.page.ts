@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 import { Admin } from '../../providers/admin';
 import { LoadingController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
+import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-component/timeslots-popover-component.component';
+
 
 @Component({
   selector: 'app-upload-times',
@@ -33,6 +36,7 @@ export class UploadTimesPage implements OnInit {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private admin: Admin,
+    public popoverController: PopoverController
   ) {
     this.createForm();
   }
@@ -60,7 +64,7 @@ export class UploadTimesPage implements OnInit {
     });
   }
 
-  async getAllCourses(){
+  async getAllCourses() {
     this.allCourses = await this.admin.getCourses();
 
     // Removes 'UNASSIGNED' course from the list
@@ -74,7 +78,7 @@ export class UploadTimesPage implements OnInit {
     return this.eventForm.get('sessions') as FormArray;
   }
 
-  async refreshEvents(){
+  async refreshEvents() {
     let load = await this.loadingCtrl.create({
       message: 'Loading events...',
     });
@@ -121,13 +125,16 @@ export class UploadTimesPage implements OnInit {
     }
   }
 
-  selectCourse(ev: any){
-    this.showCourseEvents = this.allEvents.filter((event) => { return event.name == ev.detail.value });
+  selectCourse(ev: any) {
+    // this.showCourseEvents = this.allEvents.filter((event) => { return event.name == ev.detail.value });
+    // console.log("showCourseEvents: ", this.showCourseEvents);
+
+    this.showCourseEvents = this.tutorsToEventsMap.filter((event) => { return event.course == ev.detail.value });
     console.log("showCourseEvents: ", this.showCourseEvents);
   }
 
-  removeLastSession(){
-    if(this.sessions.length > 1){
+  removeLastSession() {
+    if (this.sessions.length > 1) {
       this.sessions.removeAt(this.sessions.length - 1);
     }
   }
@@ -137,15 +144,15 @@ export class UploadTimesPage implements OnInit {
   }
 
 
-  validate(){
+  validate() {
     console.log("Validating form", this.eventForm.value);
     let sessions = this.eventForm.value.sessions as Array<any>;
 
-    if(sessions.length && sessions[sessions.length - 1].tutorialNumber == "") {
+    if (sessions.length && sessions[sessions.length - 1].tutorialNumber == "") {
       sessions.pop();
     }
 
-    if(sessions.length == 0) {
+    if (sessions.length == 0) {
       this.presentToast("Please add at least one session.");
       return;
     }
@@ -153,16 +160,16 @@ export class UploadTimesPage implements OnInit {
     let valid = true;
     let message = "";
 
-    for(let i = 0; i < sessions.length; i++) {
+    for (let i = 0; i < sessions.length; i++) {
       let session = sessions[i];
-      if(session.tutorialNumber == "" || session.day == "" || session.startTime == "" || session.endTime == "" || session.tutorsNeeded == "" || session.venue == "") {
+      if (session.tutorialNumber == "" || session.day == "" || session.startTime == "" || session.endTime == "" || session.tutorsNeeded == "" || session.venue == "") {
         valid = false;
         message = "Please fill all the fields.";
         break;
       }
     }
 
-    if(valid) {
+    if (valid) {
       this.submit(sessions);
     } else {
       this.presentToast(message);
@@ -176,14 +183,14 @@ export class UploadTimesPage implements OnInit {
     load.present();
 
     //remove the last session if it is empty
-    if(form.length && form[form.length - 1].tutorialNumber == "") {
+    if (form.length && form[form.length - 1].tutorialNumber == "") {
       form.pop();
     }
 
     let res: any = await this.admin.uploadTimes(this.course, form);
     load.dismiss();
 
-    if(res === 201) {
+    if (res === 201) {
       this.presentToast("Time slots uploaded successfully!", "success");
     }
     else {
@@ -201,7 +208,8 @@ export class UploadTimesPage implements OnInit {
     this.tutorsToEventsMap = this.allEventsWithIDs.map((event) => {
       return {
         id: event.id,
-        courseId: event.courseId,
+        course: this.allCourses.find((course) => course.id === event.courseId).name,
+        description: this.sessionTypes.find((session) => session.id === event.sessionId).description,
         day: event.day,
         startTime: event.startTime,
         endTime: event.endTime,
@@ -213,6 +221,22 @@ export class UploadTimesPage implements OnInit {
     });
 
     console.log("tutorsToEventsMap: ", this.tutorsToEventsMap);
+  }
+
+  async presentPopover(e: Event) {
+    const popover = await this.popoverController.create({
+      component: TimeslotsPopoverComponentComponent,
+      event: e,
+      // translucent: true,
+      componentProps: {
+        showCourseEvents: this.showCourseEvents,
+      }
+    });
+
+    await popover.present();
+
+    const { role } = await popover.onDidDismiss();
+    console.log(`Popover dismissed with role: ${role}`);
   }
 
 }
