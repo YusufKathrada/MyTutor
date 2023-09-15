@@ -540,7 +540,7 @@ export class SupabaseService {
     try {
 
       const { data, error } = await this.supabase
-        .from('Users')
+        .from('users')
         .upsert(
           user,
           { onConflict:'nameId' }

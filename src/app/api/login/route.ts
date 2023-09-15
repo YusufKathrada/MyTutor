@@ -101,6 +101,7 @@ export async function POST(request: NextRequest, res: Response) {
       // return NextResponse.json({ message: 'User data not found in SAML assertion' }, { status: 401 });
       return NextResponse.redirect('https://my-tutor-lime.vercel.app/login', { headers: corsHeaders, status: 302 });
     }
+    console.log("profileInfo: ", profileInfo)
 
     const user = {
       name_id: profileInfo.name_id,
