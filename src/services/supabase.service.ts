@@ -831,4 +831,23 @@ export class SupabaseService {
       await this.presentError();
     }
   }
+
+  // ======================================== File Uploads ========================================
+
+  async uploadFile(file: any, filePath: string) {
+    try {
+      console.log('file', file)
+      const res = await this.supabase
+        .storage
+        .from('transcripts')
+        .upload(filePath, file);
+
+        console.log('res', res)
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Admin } from '../../providers/admin';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-admin-review-applications',
@@ -129,5 +130,10 @@ export class AdminReviewApplicationsPage implements OnInit {
     else {
       this.presentToast('Failed to update applications', 'danger');
     }
+  }
+
+  viewTranscript(userId){
+    const url = `${environment.supabaseUrl}/storage/v1/object/public/transcripts/${userId}/doc.pdf`;
+    window.open(url, '_blank');
   }
 }

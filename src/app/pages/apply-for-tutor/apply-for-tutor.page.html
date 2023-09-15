@@ -47,11 +47,10 @@
                 <ion-input label="Average: " type="number" [(ngModel)]="tutorApplication.averageGrade" name="averageGrade" required></ion-input>
               </ion-item>
 
-              <!-- TODO: implement file uploads -->
-              <!-- <ion-item>
+              <ion-item>
                 <ion-label>Upload Transcript: </ion-label>
-                <ion-input type="file" (change)="onFileChange($event)" required></ion-input>
-              </ion-item> -->
+                <ion-input type="file" (change)="onFileChangeTutor($event)" required></ion-input>
+              </ion-item>
             </ion-list>
             <ion-button expand="block" type="submit">Sign Up</ion-button>
           </form>
@@ -74,6 +73,10 @@
               </ion-item>
               <ion-item>
                 <ion-input label="Desired Course to Assist: " type="text" [(ngModel)]="taApplication.desired_course" name="desired_course_to_assist" required></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label>Upload Recent Transcript: </ion-label>
+                <ion-input type="file" (change)="onFileChangeTutor($event)" required></ion-input>
               </ion-item>
             </ion-list>
             <ion-button expand="block" type="submit">Sign Up</ion-button>

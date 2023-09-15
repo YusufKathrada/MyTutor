@@ -28,6 +28,7 @@
           <ion-col> Degree </ion-col>
           <ion-col> Year of Study </ion-col>
           <ion-col> Average </ion-col>
+          <ion-col> Transcript </ion-col>
           <ion-col> Status </ion-col>
         </ion-row>
       </ion-grid>
@@ -43,6 +44,10 @@
           <ion-col> {{t.yearOfStudy}} </ion-col>
 
           <ion-col> {{t.average}} </ion-col>
+
+          <ion-col>
+            <a (click)="viewTranscript(t.userId)" style="color: blue; cursor: pointer;">View</a>
+          </ion-col>
 
           <ion-col>
             <ion-list>
