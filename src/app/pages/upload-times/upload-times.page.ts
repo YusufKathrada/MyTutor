@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 import { Admin } from '../../providers/admin';
 import { LoadingController } from '@ionic/angular';
 import { PopoverController } from '@ionic/angular';
 import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-component/timeslots-popover-component.component';
+import { ConnectableObservable } from 'rxjs';
 
 
 @Component({
@@ -13,6 +14,10 @@ import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-comp
   styleUrls: ['./upload-times.page.scss'],
 })
 export class UploadTimesPage implements OnInit {
+
+  // @Input() deleteTutorEvent(eventId: number, userId: string) { 
+  //   this.deleteTutorFromEvent(eventId, userId);
+  // }
 
   public eventForm: FormGroup;
   course: string = '';
@@ -223,20 +228,70 @@ export class UploadTimesPage implements OnInit {
     console.log("tutorsToEventsMap: ", this.tutorsToEventsMap);
   }
 
-  async presentPopover(e: Event) {
+  async presentPopover(e: any) {
+    let res = await this.admin.getTutorsFromEventId(e.id);
+
+    if (res.length === 0) {
+      res = [{
+        name: "none",
+        surname: "none",
+        stuNum: "none",
+        userId: "none"
+      }]
+    }
+
     const popover = await this.popoverController.create({
       component: TimeslotsPopoverComponentComponent,
-      event: e,
-      // translucent: true,
+      cssClass: 'popover-width-large',
       componentProps: {
-        showCourseEvents: this.showCourseEvents,
+        showCourseEvents: res,
       }
     });
 
     await popover.present();
 
-    const { role } = await popover.onDidDismiss();
-    console.log(`Popover dismissed with role: ${role}`);
+  }
+
+  async deleteEvent(eventId: number) {
+    let load = await this.loadingCtrl.create({
+      message: 'Removing event...',
+    });
+    load.present();
+
+    let res = await this.admin.deleteEvent(eventId);
+
+    load.dismiss();
+
+    if (res === 204) {
+      this.presentToast("Event removed successfully!", "success");
+    }
+    else {
+      this.presentToast("Error removing event. Please try again.");
+    }
+    this.refreshEvents();
+    //this.selectCourse({ detail: { value: this.course } });
+  }
+
+  async deleteTutorFromEvent(eventId: number, userId: string) {
+    let load = await this.loadingCtrl.create({
+      message: 'Removing tutor from event...',
+    });
+    load.present();
+
+    console.log("eventId: ", eventId);
+    console.log("tutorId: ", userId);
+    let res = await this.admin.deleteTutorFromEvent(eventId, userId);
+
+    load.dismiss();
+
+    if (res === 204) {
+      this.presentToast("Tutor removed from event successfully!", "success");
+    }
+    else {
+      this.presentToast("Error removing tutor from event. Please try again.");
+    }
+    this.refreshEvents();
+    //this.selectCourse({ detail: { value: this.course } });
   }
 
 }

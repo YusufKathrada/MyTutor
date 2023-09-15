@@ -4,6 +4,10 @@ ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #ffffff));
 }
 
+ion-split-pane {
+  --side-width: ;
+}
+
 /* Remove background transitions for switching themes */
 ion-menu ion-item {
   --transition: none;

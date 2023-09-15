@@ -176,7 +176,13 @@
         Venue
       </ion-col>
 
-      <ion-col></ion-col>
+      <ion-col>
+        View
+      </ion-col>
+
+      <ion-col>
+        <!-- remove -->
+      </ion-col>
       
     </ion-row>
 
@@ -202,8 +208,15 @@
       </ion-col>
 
       <ion-col>
-        <ion-button (click)="presentPopover($event)">View Tutors</ion-button>
+        <ion-button (click)="presentPopover(event)">Tutors</ion-button>
       </ion-col>
+
+      <ion-col>
+        <ion-button color="danger" (click)="deleteEvent(event.id)">
+          Remove
+        </ion-button>
+      </ion-col>
+
     </ion-row>
   </ion-grid>
 </ion-content>

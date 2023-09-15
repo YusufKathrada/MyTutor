@@ -1,5 +1,51 @@
-<ion-content>
-  <div *ngFor="let event of showCourseEvents">
-    {{event.tutors}}
-  </div>
+<ion-content class="ion-padding">
+  <ion-grid>
+
+    <ion-row style="text-align: center; font-weight: bold;">
+      <!-- headings -->
+      <ion-col>
+        Name
+      </ion-col>
+  
+      <ion-col>
+        Surname
+      </ion-col>
+  
+      <ion-col>
+        Student Number
+      </ion-col>
+  
+      <ion-col>
+        <!-- remove -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngFor="let event of showCourseEvents">
+
+    <ion-row style="text-align: center;">
+      <!-- data -->
+      <ion-col>
+        {{event.name}}
+      </ion-col>
+  
+      <ion-col>
+        {{event.surname}}
+      </ion-col>
+  
+      <ion-col>
+        {{event.stuNum}}
+      </ion-col>
+  
+      <ion-col>
+        <ion-button color="danger" (click)="deleteTutorFromEvent(event.id, event.userId)">Remove</ion-button>
+      </ion-col>
+  
+    </ion-row>
+  </ion-grid>
+    
 </ion-content>
+<!-- Make grid
+      Add remove button
+      when remove, pass in userId
+  -->

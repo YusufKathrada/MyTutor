@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 
 
@@ -10,6 +10,12 @@ import { PopoverController } from '@ionic/angular';
 export class TimeslotsPopoverComponentComponent {
 
   @Input() showCourseEvents: any = [];
+  @Output() deleteTutorEvent = new EventEmitter<{ eventId: number, userId: string }>();
+
+  deleteTutorFromEvent(eventId: number, userId: string) {
+    this.deleteTutorEvent.emit({ eventId, userId });
+  }
+
 
   constructor() { }
 
