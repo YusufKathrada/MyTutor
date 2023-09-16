@@ -33,3 +33,8 @@
  */
 
 @import "./app/app";
+
+.popover-width-large {
+    --min-width: 80%;
+    --ion-padding: 5px 10px;
+}

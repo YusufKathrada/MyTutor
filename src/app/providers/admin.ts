@@ -74,6 +74,23 @@ export class Admin extends UserData {
     return [allEvents, courses];
   }
 
+  async deleteEvent(eventId: number){
+    return await this.supabase.deleteEvent(eventId);
+  }
+
+  async deleteTutorFromEvent(eventId: number, userId: string){
+    return await this.supabase.deleteTutorFromEvent(eventId, userId);
+  }
+
+
+  async getAllEventsFromEventsTable(){
+    return await this.supabase.getAllEventsFromEventsTable();
+  }
+
+  async getAllTutorsToEvents(){
+    return await this.supabase.getAllTutorsToEvents();
+  }
+
   async getApplications(){
     let applications = await this.supabase.getAllApplications();
     let tutorApplications = applications.filter((application) => { return application.qualification === null });
@@ -89,6 +106,14 @@ export class Admin extends UserData {
   async getTAApplications(){
     return await this.supabase.getTAApplications();
   }
+
+  async getTutorNameFromApplication(userId: string){
+    return await this.supabase.getTutorNameFromApplication(userId);
+  }
+
+  async getTutorsFromEventId(eventId: string) {
+    return await this.supabase.getTutorsFromEventId(eventId);
+  } 
 
   async getStatuses(){
     return await this.supabase.getAllStatuses();

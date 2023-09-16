@@ -11,6 +11,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { FormsModule } from '@angular/forms';
 
+import { TimeslotsPopoverComponentComponent } from './timeslots-popover-component/timeslots-popover-component.component';
+import { UploadTimesPage } from './pages/upload-times/upload-times.page';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -23,7 +26,7 @@ import { FormsModule } from '@angular/forms';
       enabled: environment.production
     })
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, TimeslotsPopoverComponentComponent],
   providers: [InAppBrowser],
   bootstrap: [AppComponent]
 })
