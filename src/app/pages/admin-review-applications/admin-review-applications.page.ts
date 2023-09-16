@@ -92,9 +92,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.presentLoading();
     let success: boolean = true;
     for (const application of this.tutorApplications) {
-      const role = application.status === 'Accepted' ? 'tutor' : 'student';
-
-      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, role);
+      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status]);
       if (res !== 204) {
         success = false;
         break;
@@ -115,8 +113,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.presentLoading();
     let success: boolean = true;
     for (const application of this.taApplications) {
-      // TODO: Update role of ta appropiately
-      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, 'student');
+      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status]);
       if (res !== 204) {
         success = false;
         break;
