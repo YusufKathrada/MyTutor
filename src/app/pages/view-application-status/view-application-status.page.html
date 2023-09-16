@@ -11,6 +11,7 @@
     <ion-row class="ion-align-items-center" style="text-align: center">
       <ion-col> Application </ion-col>
       <ion-col> Status </ion-col>
+      <ion-col> Course Assigned </ion-col>
       <ion-col> Actions </ion-col>
     </ion-row>
   </ion-grid>
@@ -23,6 +24,8 @@
 
       <ion-col> {{application.status}} </ion-col>
 
+      <ion-col> {{application.courseAssigned}} </ion-col>
+
       <ion-col>
           <ion-list>
             <ion-select
@@ -31,7 +34,7 @@
               interface="popover"
               placeholder="Select Status"
               [(ngModel)]="response"
-              [disabled]="application.status !== 'Accepted'"
+              [disabled]="application.courseAssigned === 'None'"
               (ionChange)="updateApplicationResponse()">
               <ion-select-option value="accept">Accept</ion-select-option>
               <ion-select-option value="reject">Reject</ion-select-option>

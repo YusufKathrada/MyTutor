@@ -454,6 +454,25 @@ export class SupabaseService {
     }
   }
 
+  async getCourseAssignedByUserId(userId: string) {
+    try {
+      let { data: AssignedTutors, error } = await this.supabase
+        .from('Assigned Tutors')
+        .select(`
+          courses:courseId (name)`
+          )
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return AssignedTutors
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
   async postAssignedTutors(tutorId: string, courseId: number, assignedStatus: boolean) {
     try {
       let { status, error } = await this.supabase
