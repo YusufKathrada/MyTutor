@@ -38,6 +38,19 @@ export class AppComponent implements OnInit {
     }
   ];
 
+  taPages = [
+    {
+      title: 'Upload Time Slots',
+      url: '/app/tabs/upload-times',
+      icon: 'cloud-upload'
+    },
+    {
+      title: 'Allocate Courses',
+      url: '/app/tabs/admin-allocate-tutors',
+      icon: 'people'
+    }
+  ];
+
   tutorPages = [
     {
       title: 'Select timeslot',
@@ -163,6 +176,9 @@ export class AppComponent implements OnInit {
     }
     else if (await this.userData.getRole() == "student") {
       this.appPages = this.studentPages;
+    }
+    else if (await this.userData.getRole() == "ta") {
+      this.appPages = this.taPages;
     }
   }
 

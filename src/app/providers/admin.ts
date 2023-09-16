@@ -82,11 +82,22 @@ export class Admin extends UserData {
     return [tutorApplications, taApplications];
   }
 
+  async getTutorApplications(){
+    return await this.supabase.getTutorApplications();
+  }
+
+  async getTAApplications(){
+    return await this.supabase.getTAApplications();
+  }
+
   async getStatuses(){
     return await this.supabase.getAllStatuses();
   }
 
-  async updateApplicationStatus(applicationId: number, statusId: number){
+  async updateApplicationStatus(applicationId: number, statusId: number, userId: string, adminRights: boolean = false){
+    await this.supabase.updateAdminRights(userId, adminRights);
+
+    // Update status of application
     return await this.supabase.updateApplication(applicationId, statusId);
   }
 

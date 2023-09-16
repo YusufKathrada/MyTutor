@@ -54,13 +54,16 @@ export class Student extends UserData {
     return await this.supabaseService.getCourseAssignedByUserId(userId);
   }
 
-  async updateApplicationResponse(response: any, applicationType: any) {
+  async updateApplicationResponse(response: any, applicationType: any, adminRights?: boolean) {
     const userId = await this.storage.get('userId');
 
     if(applicationType === 'Tutor' && response === 'accept'){
       await this.supabaseService.updateRole(userId, 'tutor');
     }
-    else if(applicationType === 'TA' && response === 'accept'){
+    else if(applicationType === 'TA' && response === 'accept' && adminRights){
+      await this.supabaseService.updateRole(userId, 'admin');
+    }
+    else if(applicationType === 'TA' && response === 'accept' && !adminRights){
       await this.supabaseService.updateRole(userId, 'ta');
     }
     return await this.supabaseService.updateApplicationResponse(userId, response);

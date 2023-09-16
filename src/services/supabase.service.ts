@@ -149,6 +149,8 @@ export class SupabaseService {
     }
   }
 
+
+
   /**
    *
    * @param user - User object to be inserted into the database
@@ -183,6 +185,40 @@ export class SupabaseService {
       let { data: Application, error } = await this.supabase
         .from('Application')
         .select('*')
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getTutorApplications(){
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select('*')
+        .is('qualification', null)
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getTAApplications(){
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select('*')
+        .is('stuNum', null)
 
       if (error) throw error
 
@@ -276,6 +312,23 @@ export class SupabaseService {
         .from('Application')
         .update({ statusId: statusId })
         .eq('id', id)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async updateAdminRights(userId: string, adminRights: boolean) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Application')
+        .update({ adminRights: adminRights })
+        .eq('userId', userId)
 
       if (error) throw error
 
@@ -426,6 +479,25 @@ export class SupabaseService {
       let { data: AssignedTAs, error } = await this.supabase
         .from('Assigned TAs')
         .select('*')
+
+      if (error) throw error
+
+      return AssignedTAs
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getTACourseAssignedByUserId(userId: string) {
+    try {
+      let { data: AssignedTAs, error } = await this.supabase
+        .from('Assigned TAs')
+        .select(`
+          courses:courseId (name)`
+          )
+        .eq('userId', userId)
 
       if (error) throw error
 

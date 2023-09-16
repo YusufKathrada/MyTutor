@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Student } from '../../providers/student';
+import { TA } from '../../providers/ta';
 import { LoadingController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 
@@ -19,6 +20,7 @@ export class ViewApplicationStatusPage implements OnInit {
 
   constructor(
     private student: Student,
+    private ta: TA,
     private loadingController: LoadingController,
     private toastController: ToastController,
   ) { }
@@ -46,11 +48,8 @@ export class ViewApplicationStatusPage implements OnInit {
 
   async getCurrentApplication() {
     let app = await this.student.getTutorApplication();
-    let res: any = await this.student.getTutorCourseAssigned();
-    let courseAssigned = 'None';
 
-    if (res.length)
-      courseAssigned = res[0].courses.name;
+
 
     if(!app.length) {
       this.application = {
@@ -63,6 +62,19 @@ export class ViewApplicationStatusPage implements OnInit {
     }
 
     let tempApp = app[0];
+
+    let res: any;
+    let courseAssigned = 'None';
+    if(tempApp.qualification) {
+      res = await this.ta.getTACourseAssigned();
+    }
+    else {
+      res = await this.student.getTutorCourseAssigned();
+    }
+
+    if (res.length)
+      courseAssigned = res[0].courses.name;
+
     this.formatApplication(tempApp, courseAssigned);
   }
 
@@ -72,6 +84,7 @@ export class ViewApplicationStatusPage implements OnInit {
       id: application.id,
       type: application.qualification ? 'TA' : 'Tutor',
       courseAssigned: courseAssigned,
+      adminRights: application.adminRights,
       status: application.status.description,
     }
     this.response = application.response;
@@ -87,10 +100,10 @@ export class ViewApplicationStatusPage implements OnInit {
   }
 
   async updateApplicationResponse(){
-    let status = await this.student.updateApplicationResponse(this.response, this.application.type);
+    let status = await this.student.updateApplicationResponse(this.response, this.application.type, this.application.adminRights);
 
     if (status == 204 && this.response == 'accept') {
-      this.presentToast('Response updated, please sign out and log in again to see tutor pages', 'success', 5000);
+      this.presentToast('Response updated, please sign out and log in again to see updated pages', 'success', 5000);
     }
     else if (status == 204 && this.response == 'reject') {
       this.presentToast('Response updated', 'success');
