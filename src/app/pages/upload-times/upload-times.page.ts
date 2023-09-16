@@ -6,6 +6,7 @@ import { LoadingController } from '@ionic/angular';
 import { PopoverController } from '@ionic/angular';
 import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-component/timeslots-popover-component.component';
 import { ConnectableObservable } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -41,7 +42,8 @@ export class UploadTimesPage implements OnInit {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private admin: Admin,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private router: Router
   ) {
     this.createForm();
   }
@@ -277,8 +279,8 @@ export class UploadTimesPage implements OnInit {
       this.presentToast("Error removing event. Please try again.");
     }
     this.refreshEvents();
-    this.selectCourse({ detail: { value: this.course }});
-    
+    location.reload();
+
   }
   reloadPage() {
     this.eventForm.reset(); // Reset the form
@@ -288,6 +290,13 @@ export class UploadTimesPage implements OnInit {
     this.showCourseEvents = []; // Clear the displayed course events
     this.refreshEvents(); // Refresh events data
   }
+
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+}
 
 }
 
