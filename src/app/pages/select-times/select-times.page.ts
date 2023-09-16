@@ -47,6 +47,8 @@ export class SelectTimesPage implements OnInit {
 
       // Sort by tutors needed
       this.sessions.sort((a, b) => (a.tutorsNeeded > b.tutorsNeeded) ? -1 : 1);
+
+      if(this.sessions.length == 0) throw new Error('No assigned session(s)');
     } catch (error) {
       this.sessions = [
         {
