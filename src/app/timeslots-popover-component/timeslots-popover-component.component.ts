@@ -57,10 +57,10 @@ export class TimeslotsPopoverComponentComponent {
     else {
       this.presentToast("Error removing tutor from event. Please try again.");
     }
-
-
+    location.reload();
     // this.refreshEvents();
     // this.selectCourse({ detail: { value: this.course } });
+
   }
 
 }
