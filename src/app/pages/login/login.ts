@@ -71,6 +71,9 @@ export class LoginPage {
           case 'student':
             await this.student.setRole('student');
             break;
+          case 'ta':
+            await this.student.setRole('ta');
+            break;
           default:
             break;
         };

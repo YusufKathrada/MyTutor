@@ -149,6 +149,8 @@ export class SupabaseService {
     }
   }
 
+
+
   /**
    *
    * @param user - User object to be inserted into the database
@@ -183,6 +185,40 @@ export class SupabaseService {
       let { data: Application, error } = await this.supabase
         .from('Application')
         .select('*')
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getTutorApplications(){
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select('*')
+        .is('qualification', null)
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getTAApplications(){
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select('*')
+        .is('stuNum', null)
 
       if (error) throw error
 
@@ -287,6 +323,23 @@ export class SupabaseService {
     }
   }
 
+  async updateAdminRights(userId: string, adminRights: boolean) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Application')
+        .update({ adminRights: adminRights })
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
   async getAllAcceptedTutors() {
     try {
       let { data: AcceptedTutors, error } = await this.supabase
@@ -360,6 +413,24 @@ export class SupabaseService {
       await this.presentError();
     }
   }
+
+  async getTutorNameFromApplication(userId: string) {
+    try {
+      let { data: Application, error } = await this.supabase
+        .from('Application')
+        .select('name')
+        .eq('userId', userId);
+
+      if (error) throw error
+
+      return Application
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 
   // ======================================== Status ========================================
   /**
@@ -437,12 +508,50 @@ export class SupabaseService {
     }
   }
 
+  async getTACourseAssignedByUserId(userId: string) {
+    try {
+      let { data: AssignedTAs, error } = await this.supabase
+        .from('Assigned TAs')
+        .select(`
+          courses:courseId (name)`
+          )
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return AssignedTAs
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
   async getCourseIdForTutor(tutorId: string) {
     try {
       let { data: AssignedTutors, error } = await this.supabase
         .from('Assigned Tutors')
         .select('courseId')
         .eq('userId', tutorId)
+
+      if (error) throw error
+
+      return AssignedTutors
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getCourseAssignedByUserId(userId: string) {
+    try {
+      let { data: AssignedTutors, error } = await this.supabase
+        .from('Assigned Tutors')
+        .select(`
+          courses:courseId (name)`
+          )
+        .eq('userId', userId)
 
       if (error) throw error
 
@@ -599,6 +708,24 @@ export class SupabaseService {
     }
   }
 
+  async getAllEventsFromEventsTable () {
+    try {
+
+      let { data: allEvents, error } = await this.supabase
+        .from('Events')
+        .select('*')
+
+      if (error) throw error
+
+      return allEvents
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
   async getEventById(id: string) {
     try {
       let { data: Events, error } = await this.supabase
@@ -700,6 +827,24 @@ export class SupabaseService {
     }
   }
 
+  async deleteEvent(eventId: number) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Events')
+        .delete()
+        .eq('id', eventId)
+
+      if (error) throw error
+
+      console.log('status', status)
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
   // ======================================== Type of Session ========================================
   /**
    * API calls to interact with the event types table. Stores the type of event
@@ -776,6 +921,25 @@ export class SupabaseService {
     }
   }
 
+  async deleteTutorFromEvent(eventId: number, userId: string) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Tutors to Events')
+        .delete()
+        .eq('eventId', eventId)
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
   async deleteTutorForEvent(eventId: string, userId: string){
     try {
       let { status, error } = await this.supabase
@@ -813,6 +977,23 @@ export class SupabaseService {
     }
   }
 
+  async getAllTutorsToEvents() {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Tutors to Events')
+        .select('*')
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
   async getAllEventsDetails(userId: string) {
     try {
       let { data: Events, error } = await this.supabase
@@ -831,4 +1012,63 @@ export class SupabaseService {
       await this.presentError();
     }
   }
+
+  async getTutorsFromEventId(eventId: string) {
+    try {
+      // let res = await this.supabase
+      //   .from('Tutors to Events')
+      //   .select(`
+      //     users:userId (name, surname, stuNum)
+      //   `)
+      //   .eq('eventId', eventId)
+
+      // if (error) throw error
+
+      // return Tutors
+
+      let res = await this.supabase
+        .from('Tutors to Events')
+        .select('userId')
+        .eq('eventId', eventId)
+
+      let userIds = res.data.map((item: any) => item.userId)
+
+      let { data: Tutors, error } = await this.supabase
+        .from('Application')
+        .select('name, surname, stuNum, userId')
+        .in('userId', userIds)
+
+      if (error) throw error
+
+      return Tutors
+
+      // console.log('data', Tutors)
+      // console.log('userIds', userIds)
+      // console.log('res', res)
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
+  // ======================================== File Uploads ========================================
+
+  async uploadFile(file: any, filePath: string) {
+    try {
+      console.log('file', file)
+      const res = await this.supabase
+        .storage
+        .from('transcripts')
+        .upload(filePath, file);
+
+        console.log('res', res)
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 }

@@ -71,6 +71,8 @@ export class AdminAllocateTutorsPage implements OnInit {
     await this.getAndFormatTutors();
     await this.getAndFormatTAs();
 
+
+    console.log('displayedTutors: ', this.displayedTutors);
     await this.loadingCtrl.dismiss();
   }
 
@@ -103,7 +105,7 @@ export class AdminAllocateTutorsPage implements OnInit {
         tutorName: `${tutor.name} ${tutor.surname}`,
         tutorNum: tutor.stuNum,
         assignedCourse: this.tutorsMap[tutor.userId] ? this.courses.find((course) => { return course.id === this.tutorsMap[tutor.userId] }).name : 'UNASSIGNED',
-        assignedStatus: assignedCourse !== 0 ? true : false,
+        assignedStatus: assignedCourse >=1 && assignedCourse <= 11,
       }
     });
 
@@ -121,7 +123,7 @@ export class AdminAllocateTutorsPage implements OnInit {
         userId: ta.userId,
         taName: `${ta.name} ${ta.surname}`,
         assignedCourse: this.tasMap[ta.userId] ? this.courses.find((course) => { return course.id === this.tasMap[ta.userId] }).name : 'UNASSIGNED',
-        assignedStatus: assignedCourse !== 0 ? true : false,
+        assignedStatus: assignedCourse >=1 && assignedCourse <= 11,
       }
     });
 

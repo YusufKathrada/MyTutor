@@ -72,6 +72,15 @@ export class SignupPage {
         toast.present();
         this.router.navigateByUrl('/login');
       }
+      else{
+        const toast = await this.toastCtrl.create({
+          message: 'Please fill in all fields',
+          duration: 3000,
+          position: 'bottom',
+          color: 'danger',
+        });
+        toast.present();
+      }
     } catch (error) {
       console.log("error", error);
 
