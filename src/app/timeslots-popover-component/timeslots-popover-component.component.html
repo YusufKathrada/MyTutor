@@ -38,7 +38,7 @@
       </ion-col>
   
       <ion-col>
-        <ion-button color="danger" (click)="deleteTutorFromEvent(event.id, event.userId)">Remove</ion-button>
+        <ion-button [disabled]="event.name === 'none'" color="danger" (click)="deleteTutorFromEvent(eventId, event.userId)">Remove</ion-button>
       </ion-col>
   
     </ion-row>
