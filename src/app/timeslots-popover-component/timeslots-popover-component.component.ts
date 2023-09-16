@@ -1,5 +1,8 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
+import { Admin } from '../providers/admin';
+import { ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -10,15 +13,54 @@ import { PopoverController } from '@ionic/angular';
 export class TimeslotsPopoverComponentComponent {
 
   @Input() showCourseEvents: any = [];
-  @Output() deleteTutorEvent = new EventEmitter<{ eventId: number, userId: string }>();
+  @Input() eventId: number;
 
-  deleteTutorFromEvent(eventId: number, userId: string) {
-    this.deleteTutorEvent.emit({ eventId, userId });
+
+  constructor(
+    private loadingCtrl: LoadingController,
+    private admin: Admin,
+    private toastCtrl: ToastController,
+
+
+  ) { }
+
+  ngOnInit(
+
+
+  ) {}
+
+  async presentToast(message: string, color: string = 'danger') {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      color: color,
+      duration: 2000
+    });
+    toast.present();
   }
 
+  async deleteTutorFromEvent(eventId: number, userId: string) {
+    let load = await this.loadingCtrl.create({
+      message: 'Removing tutor from event...',
+    });
+    load.present();
 
-  constructor() { }
+    console.log('WE ARE HERE')
+    console.log("eventId: ", eventId);
+    console.log("tutorId: ", userId);
+    let res = await this.admin.deleteTutorFromEvent(eventId, userId);
 
-  ngOnInit() {}
+    load.dismiss();
+
+    if (res === 204) {
+      this.presentToast("Tutor removed from event successfully!", "success");
+    }
+    else {
+      this.presentToast("Error removing tutor from event. Please try again.");
+    }
+
+
+    // this.refreshEvents();
+    // this.selectCourse({ detail: { value: this.course } });
+  }
 
 }
