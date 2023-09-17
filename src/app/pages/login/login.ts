@@ -37,6 +37,11 @@ export class LoginPage {
     public storage: Storage,
   ) { }
 
+  async ionViewWillEnter() {
+    if(await this.userData.isLoggedIn()) {
+      this.router.navigateByUrl('/account');
+    }
+  }
   async onLogin(form: NgForm) {
     try {
       this.submitted = true;
