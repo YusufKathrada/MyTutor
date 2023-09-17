@@ -31,26 +31,35 @@ const routes: Routes = [
   {
     path: 'schedule',
     loadChildren: () => import('./pages/schedule/schedule.module').then(m => m.ScheduleModule)
-  },  {
+  },
+  {
     path: 'upload-times',
-    loadChildren: () => import('./pages/upload-times/upload-times.module').then( m => m.UploadTimesPageModule)
+    loadChildren: () => import('./pages/upload-times/upload-times.module').then(m => m.UploadTimesPageModule)
   },
   {
     path: 'select-times',
-    loadChildren: () => import('./pages/select-times/select-times.module').then( m => m.SelectTimesPageModule)
+    loadChildren: () => import('./pages/select-times/select-times.module').then(m => m.SelectTimesPageModule)
   },
   {
     path: 'apply-for-tutor',
-    loadChildren: () => import('./pages/apply-for-tutor/apply-for-tutor.module').then( m => m.ApplyForTutorPageModule)
+    loadChildren: () => import('./pages/apply-for-tutor/apply-for-tutor.module').then(m => m.ApplyForTutorPageModule)
   },
   {
     path: 'admin-allocate-tutors',
-    loadChildren: () => import('./pages/admin-allocate-tutors/admin-allocate-tutors.module').then( m => m.AdminAllocateTutorsPageModule)
+    loadChildren: () => import('./pages/admin-allocate-tutors/admin-allocate-tutors.module').then(m => m.AdminAllocateTutorsPageModule)
   },
   {
     path: 'admin-review-applications',
-    loadChildren: () => import('./pages/admin-review-applications/admin-review-applications.module').then( m => m.AdminReviewApplicationsPageModule)
-  }
+    loadChildren: () => import('./pages/admin-review-applications/admin-review-applications.module').then(m => m.AdminReviewApplicationsPageModule)
+  },
+  {
+    path: 'view-application-status',
+    loadChildren: () => import('./pages/view-application-status/view-application-status.module').then(m => m.ViewApplicationStatusPageModule)
+  },
+  {
+    path: 'tutor-events',
+    loadChildren: () => import('./pages/tutor-events/tutor-events.module').then(m => m.TutorEventsPageModule)
+  },
 
 ];
 

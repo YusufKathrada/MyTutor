@@ -25,6 +25,7 @@ export class TA extends UserData {
 
   async applyForTA(taApplication: any) {
     let status: any = await this.supabaseService.getStatusIdByDescription('Pending');
+    const userId = await this.storage.get('userId');
 
     const tutorApplicationData: any = {
       statusId: status[0].id,
@@ -37,8 +38,31 @@ export class TA extends UserData {
       average: null,
       preferredCourse: taApplication.desired_course,
       qualification: taApplication.degree_completed,
+      userId: userId
     }
 
     return await this.supabaseService.postApplication(tutorApplicationData);
+  }
+
+  async getTAApplication() {
+    const userId = await this.storage.get('userId');
+    return await this.supabaseService.getApplicationByUserId(userId);
+  }
+
+  async updateApplicationResponse(response: any, applicationType: any) {
+    const userId = await this.storage.get('userId');
+
+    if(applicationType === 'Tutor' && response === 'accept'){
+      await this.supabaseService.updateRole(userId, 'tutor');
+    }
+    else if(applicationType === 'TA' && response === 'accept'){
+      await this.supabaseService.updateRole(userId, 'ta');
+    }
+    return await this.supabaseService.updateApplicationResponse(userId, response);
+  }
+
+  async getTACourseAssigned() {
+    const userId = await this.storage.get('userId');
+    return await this.supabaseService.getTACourseAssignedByUserId(userId);
   }
 }

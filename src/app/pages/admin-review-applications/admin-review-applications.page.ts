@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Admin } from '../../providers/admin';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { stat } from 'fs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-admin-review-applications',
@@ -11,12 +11,28 @@ import { stat } from 'fs';
 export class AdminReviewApplicationsPage implements OnInit {
 
   public segment: string = '';
+  public filterOption: string = 'all';
 
-  tutorApplications: any = [];
-  taApplications: any = [];
-  applicationStatus: any = [];
+  fullTutorApplications: any = [];
+  fullTAApplications: any = [];
+
+  formattedTutorApplications: any = [];
+  formattedTAApplications: any = [];
+
+  acceptedTutors: any = [];
+  pendingTutors: any = [];
+  rejectedTutors: any = [];
+
+  acceptedTAs: any = [];
+  pendingTAs: any = [];
+  rejectedTAs: any = [];
+
+  applicationStatuses: any = [];
   statusMap: any;
+  revStatusMap: any = [];
 
+  // displayedTutors: any = [];
+  // displayedTAs: any = [];
 
   constructor(
     public admin: Admin,
@@ -27,16 +43,55 @@ export class AdminReviewApplicationsPage implements OnInit {
   async ngOnInit() {
     await this.presentLoading();
 
-    this.segment = 'tutor';
+    this.applicationStatuses = await this.admin.getStatuses();
 
-    this.applicationStatus = await this.admin.getStatuses();
-    this.statusMap = this.applicationStatus.reduce((map, obj) => {
+    this.statusMap = this.applicationStatuses.reduce((map, obj) => {
       map[obj.description] = obj.id;
       return map;
     }, {});
-    console.log('applicationStatus: ', this.applicationStatus);
+
+    this.revStatusMap = this.applicationStatuses.reduce((map, obj) => {
+      map[obj.id] = obj.description;
+      return map;
+    }, {});
+
+
+
+    console.log('statusMap: ', this.statusMap);
+
+    console.log('RevstatusMap: ', this.revStatusMap);
+
+    this.segment = 'tutor';
+
+    this.fullTutorApplications = await this.admin.getTutorApplications();
+    this.fullTAApplications = await this.admin.getTAApplications();
+
+
 
     await this.getAndFormatApplications();
+
+    // this.displayedTutors = await this.getDisplayedTutors();
+    // this.displayedTAs = await this.getDisplayedTAs();
+
+    console.log('fullTutorApps', this.fullTutorApplications);
+    console.log('fullTAAplications', this.fullTAApplications);
+
+
+    console.log('formattedTutorApplications: ', this.formattedTutorApplications);
+    console.log('formattedTAApplications: ', this.formattedTAApplications);
+
+    // console.log('displayedTutors: ', this.displayedTutors);
+    // console.log('displayedTAs: ', this.displayedTAs);
+
+
+    console.log('acceptedTutors: ', this.acceptedTutors);
+    console.log('pendingTutors: ', this.pendingTutors);
+    console.log('rejectedTutors: ', this.rejectedTutors);
+
+    console.log('acceptedTAs: ', this.acceptedTAs);
+    console.log('pendingTAs: ', this.pendingTAs);
+    console.log('rejectedTAs: ', this.rejectedTAs);
+
 
     await this.loadingCtrl.dismiss();
   }
@@ -58,9 +113,8 @@ export class AdminReviewApplicationsPage implements OnInit {
   }
 
   async getAndFormatApplications(){
-    let [tutorApps, taApps] = await this.admin.getApplications();
 
-    this.tutorApplications = tutorApps.map((application) => {
+    this.formattedTutorApplications = this.fullTutorApplications.map((application) => {
       return {
         id: application.id,
         studentName: `${application.name} ${application.surname}`,
@@ -68,29 +122,43 @@ export class AdminReviewApplicationsPage implements OnInit {
         degree: application.degree,
         yearOfStudy: application.yearOfStudy,
         average: application.average,
-        status: application.statusId
+        status: application.statusId,
+        userId: application.userId
       };
     });
 
-    this.taApplications = taApps.map((application) => {
+    this.rejectedTutors = this.formattedTutorApplications.filter((application) => application.status === 0);
+    this.pendingTutors = this.formattedTutorApplications.filter((application) => application.status === 1);
+    this.acceptedTutors = this.formattedTutorApplications.filter((application) => application.status === 2);
+
+
+    this.formattedTAApplications = this.fullTAApplications.map((application) => {
       return {
         id: application.id,
         name: `${application.name} ${application.surname}`,
         email: application.email,
         qualification: application.qualification,
         desiredCourse: application.preferredCourse,
-        status: application.statusId
+        status: application.statusId,
+        userId: application.userId,
+        adminRights: application.adminRights && application.statusId === 2 ? true : false,
+        checkboxEnabled: this.isCheckboxEnabled(this.revStatusMap[application.status])
       };
     });
+
+    this.rejectedTAs = this.formattedTAApplications.filter((application) => application.status === 0);
+    this.pendingTAs = this.formattedTAApplications.filter((application) => application.status === 1);
+    this.acceptedTAs = this.formattedTAApplications.filter((application) => application.status === 2);
+
   }
 
   async updateTutors(){
-    console.log('tutorApplications: ', this.tutorApplications)
+    console.log('tutorApplications: ', this.formattedTutorApplications)
 
     this.presentLoading();
     let success: boolean = true;
-    for (const application of this.tutorApplications) {
-      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status]);
+    for (const application of this.formattedTutorApplications) {
+      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId);
       if (res !== 204) {
         success = false;
         break;
@@ -103,15 +171,21 @@ export class AdminReviewApplicationsPage implements OnInit {
     } else {
       this.presentToast('Failed to update applications', 'danger');
     }
+
+    this.filterOption = 'all';
+    this.ngOnInit();
   }
 
+
   async updateTAs(){
-    console.log('taApplications: ', this.taApplications)
+    console.log('taApplications: ', this.formattedTAApplications)
 
     this.presentLoading();
     let success: boolean = true;
-    for (const application of this.taApplications) {
-      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status]);
+    for (const application of this.formattedTAApplications) {
+
+    console.log('application: ', application);
+      let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, application.adminRights);
       if (res !== 204) {
         success = false;
         break;
@@ -125,5 +199,85 @@ export class AdminReviewApplicationsPage implements OnInit {
     else {
       this.presentToast('Failed to update applications', 'danger');
     }
+
+    this.filterOption = 'all';
+    this.ngOnInit();
+  }
+
+  isCheckboxEnabled(status: string): boolean {
+    return status === 'Accepted';
+  }
+
+  async applyTutorFilter(){
+    this.getAndFormatApplications();
+
+    switch (this.filterOption) {
+      case 'all':
+        this.getAndFormatApplications();
+        break;
+      case 'accepted':
+        this.formattedTutorApplications = this.acceptedTutors;
+        break;
+      case 'pending':
+        this.formattedTutorApplications = this.pendingTutors;
+        break;
+      case 'rejected':
+        this.formattedTutorApplications = this.rejectedTutors;
+        break;
+      default:
+        break;
+    }
+  }
+
+
+  async applyTAFilter(){
+    this.getAndFormatApplications();
+
+    switch (this.filterOption) {
+      case 'all':
+        this.getAndFormatApplications();
+        break;
+      case 'accepted':
+        this.formattedTAApplications = this.acceptedTAs;
+        break;
+      case 'pending':
+        this.formattedTAApplications = this.pendingTAs;
+        break;
+      case 'rejected':
+        this.formattedTAApplications = this.rejectedTAs;
+        break;
+      default:
+        break;
+    }
+  }
+
+  viewTranscript(userId){
+    const url = `${environment.supabaseUrl}/storage/v1/object/public/transcripts/${userId}/doc.pdf`;
+    window.open(url, '_blank');
   }
 }
+
+  // async getDisplayedTutors(){
+  //   const pendingTutors: any = [];
+  //   //Only want to displayed pending applications
+  //   for (const application of this.tutorApplications) {
+  //     console.log(this.revStatusMap[application.status]);
+  //     if (application.status !== 0 && application.status !== 2) {
+  //       pendingTutors.push(application);
+  //     }
+  //   }
+  //   return pendingTutors;
+  // }
+
+  // async getDisplayedTAs(){
+
+  //   const pendingTAs: any = [];
+  //   //Only want to displayed pending applications
+  //   for (const application of this.taApplications) {
+  //     if (application.status !== 0 && application.status !== 2) {
+  //       pendingTAs.push(application);
+  //     }
+  //   }
+  //   return pendingTAs;
+  // }
+

@@ -103,6 +103,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'view-application-status',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../view-application-status/view-application-status.module').then(m => m.ViewApplicationStatusPageModule)
+          }
+        ]
+      },
+      {
+        path: 'tutor-events',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../tutor-events/tutor-events.module').then(m => m.TutorEventsPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'

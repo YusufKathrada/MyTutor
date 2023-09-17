@@ -74,6 +74,23 @@ export class Admin extends UserData {
     return [allEvents, courses];
   }
 
+  async deleteEvent(eventId: number){
+    return await this.supabase.deleteEvent(eventId);
+  }
+
+  async deleteTutorFromEvent(eventId: number, userId: string){
+    return await this.supabase.deleteTutorFromEvent(eventId, userId);
+  }
+
+
+  async getAllEventsFromEventsTable(){
+    return await this.supabase.getAllEventsFromEventsTable();
+  }
+
+  async getAllTutorsToEvents(){
+    return await this.supabase.getAllTutorsToEvents();
+  }
+
   async getApplications(){
     let applications = await this.supabase.getAllApplications();
     let tutorApplications = applications.filter((application) => { return application.qualification === null });
@@ -82,16 +99,39 @@ export class Admin extends UserData {
     return [tutorApplications, taApplications];
   }
 
+  async getTutorApplications(){
+    return await this.supabase.getTutorApplications();
+  }
+
+  async getTAApplications(){
+    return await this.supabase.getTAApplications();
+  }
+
+  async getTutorNameFromApplication(userId: string){
+    return await this.supabase.getTutorNameFromApplication(userId);
+  }
+
+  async getTutorsFromEventId(eventId: string) {
+    return await this.supabase.getTutorsFromEventId(eventId);
+  } 
+
   async getStatuses(){
     return await this.supabase.getAllStatuses();
   }
 
-  async updateApplicationStatus(applicationId: number, statusId: number){
+  async updateApplicationStatus(applicationId: number, statusId: number, userId: string, adminRights: boolean = false){
+    await this.supabase.updateAdminRights(userId, adminRights);
+
+    // Update status of application
     return await this.supabase.updateApplication(applicationId, statusId);
   }
 
   async getAcceptedTutors(){
     return await this.supabase.getAllAcceptedTutors();
+  }
+
+  async getAcceptedTAs(){
+    return await this.supabase.getAllAcceptedTAs();
   }
 
   async getCourses(){
@@ -100,5 +140,21 @@ export class Admin extends UserData {
 
   async updateTutorAllocations(tutorId: string, courseId: number, assignedStatus: boolean){
     return await this.supabase.postAssignedTutors(tutorId, courseId, assignedStatus);
+  }
+
+  async updateTAAllocations(taId: string, courseId: number, assignedStatus: boolean){
+    return await this.supabase.postAssignedTAs(taId, courseId, assignedStatus);
+  }
+
+  async getTutorAllocations(){
+    return await this.supabase.getAllAssignedTutors();
+  }
+
+  async getTAAllocations(){
+    return await this.supabase.getAllAssignedTAs();
+  }
+
+  async getAllSessions(){
+    return await this.supabase.getAllSessionTypes();
   }
 }

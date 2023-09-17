@@ -1,48 +1,131 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Allocate Tutors</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Allocate Courses</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-grid>
 
-    <!-- Headings -->
-    <ion-row style="text-align: center; font-weight: bold;">
-      <ion-col> Student Name </ion-col>
-      <ion-col> Student Number </ion-col>
-      <ion-col> Assign Course </ion-col>
-      <ion-col> Assigned </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-segment [(ngModel)]="segment">
+    <ion-segment-button value="tutor">
+      <ion-label>Tutor</ion-label>
+    </ion-segment-button>
 
+    <ion-segment-button value="TA">
+      <ion-label>TA</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
-  <ion-grid>
-    <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let a of displayedTutors">
-      <ion-col> {{a.tutorName}} </ion-col>
+  <div [ngSwitch]="segment">
 
-      <ion-col> {{a.tutorNum}} </ion-col>
+    <div *ngSwitchCase="'tutor'">
 
-      <ion-col>
-        <ion-list>
-          <ion-select fill="outline" aria-label="Assign Course" interface="popover" placeholder="Select Course"
-            [(ngModel)]="a.assignedCourse">
-            <ion-select-option [value]="c.name" *ngFor="let c of courses">
-              {{c.name}}
-            </ion-select-option>
-          </ion-select>
-        </ion-list>
-      </ion-col>
-
-      <ion-col>
-        <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox>
-      </ion-col>
-    </ion-row>
-
-  </ion-grid>
+      <ion-list>
+        <ion-select class="custom-select" fill="outline" interface="popover" [(ngModel)]="filterOption" (ionChange)="applyTutorFilter()">
+          <ion-select-option value="all">Display All</ion-select-option>
+          <ion-select-option value="assigned">Display Assigned</ion-select-option>
+          <ion-select-option value="unassigned">Display Unassigned</ion-select-option>
+        </ion-select>
+      </ion-list>
 
 
-  <ion-button (click)="updateTutorAllocations()">
-    Update
-  </ion-button>
+      <ion-card mode="ios">
+        <ion-card-content mode="md">
+          <ion-grid>
+            <!-- Headings -->
+            <ion-row style="text-align: center; font-weight: bold;">
+              <ion-col> Student Name </ion-col>
+              <ion-col> Student Number </ion-col>
+              <ion-col> Assign Course </ion-col>
+              <ion-col> Assigned </ion-col>
+            </ion-row>
+          </ion-grid>
+
+
+          <ion-grid>
+            <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let a of displayedTutors">
+              <ion-col> {{a.tutorName}} </ion-col>
+
+              <ion-col> {{a.tutorNum}} </ion-col>
+
+              <ion-col>
+                <ion-list>
+                  <ion-select class="custom-select-course" fill="outline" aria-label="Assign Course" interface="popover" [(ngModel)]="a.assignedCourse">
+                    <ion-select-option [value]="c.name" *ngFor="let c of courses">
+                      {{c.name}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-list>
+              </ion-col>
+
+              <ion-col>
+                <!-- <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox> -->
+                <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
+              </ion-col>
+            </ion-row>
+
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button (click)="updateTutorAllocations()">
+        Update
+      </ion-button>
+    </div>
+
+    <div *ngSwitchCase="'TA'">
+
+      <ion-list>
+        <ion-select class="custom-select" fill="outline" interface="popover" [(ngModel)]="filterOption" (ionChange)="applyTAFilter()">
+          <ion-select-option value="all">Display All</ion-select-option>
+          <ion-select-option value="assigned">Display Assigned</ion-select-option>
+          <ion-select-option value="unassigned">Display Unassigned</ion-select-option>
+        </ion-select>
+      </ion-list>
+
+      <ion-card mode="ios">
+        <ion-card-content mode="md">
+          <ion-grid>
+            <!-- Headings -->
+            <ion-row style="text-align: center; font-weight: bold;">
+              <ion-col> Student Name </ion-col>
+              <ion-col> Assign Course </ion-col>
+              <ion-col> Assigned </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-grid>
+            <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let a of displayedTAs">
+              <ion-col> {{a.taName}} </ion-col>
+
+              <ion-col>
+                <ion-list>
+                  <ion-select class="custom-select-course" fill="outline" aria-label="Assign Course" interface="popover" [(ngModel)]="a.assignedCourse">
+                    <ion-select-option [value]="c.name" *ngFor="let c of courses">
+                      {{c.name}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-list>
+              </ion-col>
+
+              <ion-col>
+                <!-- <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox> -->
+                <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button (click)="updateTAAllocations()">
+        Update
+      </ion-button>
+
+
+    </div>
+  </div>
+
 </ion-content>

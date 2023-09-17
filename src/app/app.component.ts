@@ -22,12 +22,12 @@ export class AppComponent implements OnInit {
 
   adminPages = [
     {
-      title: 'Upload timeslots',
+      title: 'Upload Time Slots',
       url: '/app/tabs/upload-times',
       icon: 'cloud-upload'
     },
     {
-      title: 'Allocate Tutors',
+      title: 'Allocate Courses',
       url: '/app/tabs/admin-allocate-tutors',
       icon: 'people'
     },
@@ -38,11 +38,29 @@ export class AppComponent implements OnInit {
     }
   ];
 
+  taPages = [
+    {
+      title: 'Upload Time Slots',
+      url: '/app/tabs/upload-times',
+      icon: 'cloud-upload'
+    },
+    {
+      title: 'Allocate Courses',
+      url: '/app/tabs/admin-allocate-tutors',
+      icon: 'people'
+    }
+  ];
+
   tutorPages = [
     {
       title: 'Select timeslot',
       url: '/app/tabs/select-times',
       icon: 'calendar'
+    },
+    {
+      title: 'View selected times',
+      url: '/app/tabs/tutor-events',
+      icon: 'documents'
     },
   ];
 
@@ -51,6 +69,11 @@ export class AppComponent implements OnInit {
       title: 'Apply to be a tutor',
       url: '/app/tabs/apply-for-tutor',
       icon: 'person-add'
+    },
+    {
+      title: 'View application status',
+      url: '/app/tabs/view-application-status',
+      icon: 'documents'
     },
   ];
 
@@ -153,6 +176,9 @@ export class AppComponent implements OnInit {
     }
     else if (await this.userData.getRole() == "student") {
       this.appPages = this.studentPages;
+    }
+    else if (await this.userData.getRole() == "ta") {
+      this.appPages = this.taPages;
     }
   }
 
