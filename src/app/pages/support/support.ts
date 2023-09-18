@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
+import { OnInit } from '@angular/core';
+import { UserData } from '../../providers/user-data';
 import { AlertController, ToastController } from '@ionic/angular';
 
 
@@ -9,37 +10,45 @@ import { AlertController, ToastController } from '@ionic/angular';
   templateUrl: 'support.html',
   styleUrls: ['./support.scss'],
 })
-export class SupportPage {
+export class SupportPage implements OnInit{
   submitted = false;
   supportMessage: string;
+  userRole: string;
 
   constructor(
     public alertCtrl: AlertController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public userData: UserData
   ) { }
 
-  async ionViewDidEnter() {
-    const toast = await this.toastCtrl.create({
-      message: 'This does not actually send a support request.',
-      duration: 3000
-    });
-    await toast.present();
+  async ngOnInit() {
+
+    this.userRole = await this.userData.getRole();
+    //console.log('userRole: ', this.userRole);
   }
 
-  async submit(form: NgForm) {
-    this.submitted = true;
+  // async ionViewDidEnter() {
+  //   const toast = await this.toastCtrl.create({
+  //     message: 'This does not actually send a support request.',
+  //     duration: 3000
+  //   });
+  //   await toast.present();
+  // }
 
-    if (form.valid) {
-      this.supportMessage = '';
-      this.submitted = false;
+  // async submit(form: NgForm) {
+  //   this.submitted = true;
 
-      const toast = await this.toastCtrl.create({
-        message: 'Your support request has been sent.',
-        duration: 3000
-      });
-      await toast.present();
-    }
-  }
+  //   if (form.valid) {
+  //     this.supportMessage = '';
+  //     this.submitted = false;
+
+  //     const toast = await this.toastCtrl.create({
+  //       message: 'Your support request has been sent.',
+  //       duration: 3000
+  //     });
+  //     await toast.present();
+  //   }
+  // }
 
   // If the user enters text in the support question and then navigates
   // without submitting first, ask if they meant to leave the page
