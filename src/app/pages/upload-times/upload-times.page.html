@@ -273,6 +273,7 @@
               *ngFor="let sessionCtrl of sessions.controls; let i = index"
               [formGroupName]="i"
             >
+              <hr *ngIf="i === 1" style="border-top: 1px dashed grey" />
               <ion-row>
                 <ion-col class="mobile-header">Event </ion-col>
                 <ion-col>
@@ -382,7 +383,7 @@
                 </ion-col>
               </ion-row>
 
-              <hr style="border-top: 1px dashed grey" />
+              <hr *ngIf="i > 0" style="border-top: 1px dashed grey" />
             </ng-container>
           </div>
         </form>
