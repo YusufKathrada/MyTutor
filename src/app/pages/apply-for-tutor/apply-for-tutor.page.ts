@@ -6,6 +6,7 @@ import { LoadingController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import { SupabaseService } from '../../../services/supabase.service';
 import { Storage } from '@ionic/storage-angular';
+import { Router } from '@angular/router'; // Import Router for navigation
 
 @Component({
   selector: 'app-apply-for-tutor',
@@ -43,10 +44,17 @@ export class ApplyForTutorPage implements OnInit {
     public toastController: ToastController,
     private supabase: SupabaseService,
     private storage: Storage,
+    private router: Router // Inject Router
   ) { }
 
   ngOnInit() {
-    console.log('ngOnInit')
+    console.log('ngOnInit');
+  }
+
+  ionViewDidEnter() {
+    // This method is called when the page has fully entered (navigated back to)
+    // You can trigger a refresh or reload here
+    this.reloadPage();
   }
 
   async presentLoading() {
@@ -67,14 +75,13 @@ export class ApplyForTutorPage implements OnInit {
   }
 
   async onSubmit(form: NgForm) {
-    if(!form.valid) {
+    if (!form.valid) {
       this.presentToast('Please fill in all fields.', 'danger');
       return;
     }
 
     if (form.valid) {
-      // const file = this.tutorApplication.transcript;
-      if(!this.file) {
+      if (!this.file) {
         this.presentToast('Please upload your transcript.', 'danger');
         return;
       }
@@ -85,8 +92,7 @@ export class ApplyForTutorPage implements OnInit {
 
       let res: any;
       if (this.segment === 'tutor') {
-
-        if(!this.validateTutorApplication()) {
+        if (!this.validateTutorApplication()) {
           this.presentToast('Please fill in all fields.', 'danger');
           return;
         }
@@ -95,8 +101,7 @@ export class ApplyForTutorPage implements OnInit {
         await this.supabase.uploadFile(this.file, filePath);
       }
       else if (this.segment === 'TA') {
-
-        if(!this.validateTAApplication()) {
+        if (!this.validateTAApplication()) {
           this.presentToast('Please fill in all fields.', 'danger');
           return;
         }
@@ -134,7 +139,6 @@ export class ApplyForTutorPage implements OnInit {
   }
 
   onFileChangeTutor(event: any) {
-    // const file = event.target.files[0];
     this.file = event.target.files[0];
     if (this.file) {
       this.tutorApplication.transcript = this.file;
@@ -142,10 +146,34 @@ export class ApplyForTutorPage implements OnInit {
   }
 
   onFileChangeTA(event: any) {
-    // const file = event.target.files[0];
     this.file = event.target.files[0];
     if (this.file) {
       this.taApplication.transcript = this.file;
     }
   }
+
+  // Function to simulate a page refresh
+  reloadPage() {
+    // Function to simulate a page refresh
+  // Clear the values in the tutorApplication and taApplication objects
+      this.tutorApplication = {
+      name: '',
+      surname: '',
+      studentNumber: '',
+      degreeOfStudy: '',
+      yearOfStudy: '',
+      averageGrade: '',
+      transcript: null
+    };
+
+    this.taApplication = {
+      name: '',
+      surname: '',
+      email: '',
+      degree_completed: '',
+      desired_course: '',
+      transcript: null
+    };
+  }
 }
+

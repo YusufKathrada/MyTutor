@@ -95,6 +95,13 @@ export class AdminReviewApplicationsPage implements OnInit {
 
     await this.loadingCtrl.dismiss();
   }
+  ionViewDidEnter() {
+    // This method is called when the page has fully entered (navigated back to)
+    // You can trigger a refresh or reload here
+    this.reloadPage();
+    this.filterOption = 'all';
+    this.ngOnInit();
+  }
 
   async presentLoading() {
     const loading = await this.loadingCtrl.create({
@@ -254,6 +261,10 @@ export class AdminReviewApplicationsPage implements OnInit {
   viewTranscript(userId){
     const url = `${environment.supabaseUrl}/storage/v1/object/public/transcripts/${userId}/doc.pdf`;
     window.open(url, '_blank');
+  }
+  reloadPage() {
+    this.formattedTutorApplications = [...this.fullTutorApplications];
+    this.formattedTAApplications = [...this.fullTAApplications];
   }
 }
 
