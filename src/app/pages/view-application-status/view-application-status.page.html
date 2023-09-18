@@ -7,29 +7,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ng-container *ngIf="screenWidth >= 800 else mobileView">
+  <ion-content class="ion-padding">
+    <!-- Headings -->
+    <ion-grid>
+      <ion-row class="ion-align-items-center" style="text-align: center; font-weight: bold;">
+        <ion-col> Application </ion-col>
+        <ion-col> Status </ion-col>
+        <ion-col> Course Assigned </ion-col>
+        <ion-col> Actions </ion-col>
+      </ion-row>
+    </ion-grid>
 
-  <!-- Headings -->
-  <ion-grid>
-    <ion-row class="ion-align-items-center" style="text-align: center">
-      <ion-col> Application </ion-col>
-      <ion-col> Status </ion-col>
-      <ion-col> Course Assigned </ion-col>
-      <ion-col> Actions </ion-col>
-    </ion-row>
-  </ion-grid>
+    <!-- List of applications -->
+    <ion-grid>
+      <ion-row class="ion-align-items-center" style="text-align: center">
+        <ion-col> {{application.type}} </ion-col>
 
-  <!-- List of applications -->
-  <ion-grid>
-    <ion-row class="ion-align-items-center" style="text-align: center">
+        <ion-col> {{application.status}} </ion-col>
 
-      <ion-col> {{application.type}} </ion-col>
+        <ion-col> {{application.courseAssigned}} </ion-col>
 
-      <ion-col> {{application.status}} </ion-col>
-
-      <ion-col> {{application.courseAssigned}} </ion-col>
-
-      <ion-col>
+        <ion-col>
           <ion-list>
             <ion-select
               fill="outline"
@@ -38,15 +37,57 @@
               placeholder="Select Status"
               [(ngModel)]="response"
               [disabled]="application.courseAssigned === 'None'"
-              (ionChange)="updateApplicationResponse()">
+              (ionChange)="updateApplicationResponse()"
+            >
               <ion-select-option value="accept">Accept</ion-select-option>
               <ion-select-option value="reject">Reject</ion-select-option>
             </ion-select>
           </ion-list>
-      </ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ng-container>
 
-    </ion-row>
-  </ion-grid>
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      <ion-grid>
+        <ion-row>
+          <ion-col class="mobile-header">Application</ion-col>
+          <ion-col> {{application.type}} </ion-col>
+        </ion-row>
 
+        <ion-row>
+          <ion-col class="mobile-header">Status</ion-col>
+          <ion-col> {{application.status}} </ion-col>
+        </ion-row>
 
-</ion-content>
+        <ion-row>
+          <ion-col class="mobile-header">Course Assigned</ion-col>
+          <ion-col> {{application.courseAssigned}} </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col class="mobile-header">Actions</ion-col>
+          <ion-col>
+            <ion-list>
+              <ion-select
+                fill="outline"
+                aria-label="Application Status"
+                interface="popover"
+                placeholder="Select Status"
+                [(ngModel)]="response"
+                [disabled]="application.courseAssigned === 'None'"
+                (ionChange)="updateApplicationResponse()"
+              >
+                <ion-select-option value="accept">Accept</ion-select-option>
+                <ion-select-option value="reject">Reject</ion-select-option>
+              </ion-select>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  </ng-template>
+</ng-container>
