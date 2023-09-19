@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Admin } from '../../providers/admin';
+import { Student } from '../../providers/student';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
 
@@ -36,11 +37,16 @@ export class AdminReviewApplicationsPage implements OnInit {
 
   constructor(
     public admin: Admin,
+    public student: Student,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController
   ) { }
 
   async ngOnInit() {
+    
+  }
+
+  async doRefresh(){
     await this.presentLoading();
 
     this.applicationStatuses = await this.admin.getStatuses();
@@ -95,12 +101,13 @@ export class AdminReviewApplicationsPage implements OnInit {
 
     await this.loadingCtrl.dismiss();
   }
+
   ionViewDidEnter() {
     // This method is called when the page has fully entered (navigated back to)
     // You can trigger a refresh or reload here
     this.reloadPage();
     this.filterOption = 'all';
-    this.ngOnInit();
+    this.doRefresh();
   }
 
   async presentLoading() {
@@ -165,6 +172,11 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.presentLoading();
     let success: boolean = true;
     for (const application of this.formattedTutorApplications) {
+
+      await this.student.updateTutorRole(application.userId, application.status);
+      console.log('role', application.userId, application.status);
+
+
       let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId);
       if (res !== 204) {
         success = false;
@@ -180,7 +192,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     }
 
     this.filterOption = 'all';
-    this.ngOnInit();
+    this.doRefresh();
   }
 
 
@@ -191,7 +203,10 @@ export class AdminReviewApplicationsPage implements OnInit {
     let success: boolean = true;
     for (const application of this.formattedTAApplications) {
 
-    console.log('application: ', application);
+      await this.student.updateTARole(application.userId, this.revStatusMap[application.status], application.adminRights);
+      console.log('role', application.userId, this.revStatusMap[application.status], application.adminRights);
+
+      console.log('application: ', application);
       let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, application.adminRights);
       if (res !== 204) {
         success = false;
@@ -208,7 +223,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     }
 
     this.filterOption = 'all';
-    this.ngOnInit();
+    this.doRefresh();
   }
 
   isCheckboxEnabled(status: string): boolean {

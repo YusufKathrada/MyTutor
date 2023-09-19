@@ -68,4 +68,18 @@ export class Student extends UserData {
     }
     return await this.supabaseService.updateApplicationResponse(userId, response);
   }
+
+  async updateTutorRole(userId: string, applicationStatus: string) {
+
+    if(applicationStatus !== 'Accepted'){
+      await this.supabaseService.updateRole(userId, 'student');
+    }
+  }
+
+  async updateTARole(userId: string, applicationStatus: string, adminRights: boolean) {
+      
+      if(applicationStatus !== 'Accepted'){
+        await this.supabaseService.updateRole(userId, 'student');
+      }
+    }
 }
