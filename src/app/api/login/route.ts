@@ -94,48 +94,52 @@ export async function POST(request: NextRequest, res: Response) {
       SAMLResponse: samlResponse
     };
 
-    let {user: res} = await postAssertAsync(identityProvider, { request_body: postBody });
-    console.log("res: ", res)
     // Verify and parse the SAML assertion
-    // const { user: profileInfo }  = await postAssertAsync(identityProvider, { request_body: postBody });
-    // // console.log("profileInfo: ", profileInfo)
-    // if (!profileInfo) {
-    //   // return NextResponse.json({ message: 'User data not found in SAML assertion' }, { status: 401 });
-    //   return NextResponse.redirect('https://my-tutor-lime.vercel.app/login', { headers: corsHeaders, status: 302 });
-    // }
-    // console.log("profileInfo: ", profileInfo)
+    const { user: profileInfo }  = await postAssertAsync(identityProvider, { request_body: postBody });
+    if (!profileInfo) {
+      // return NextResponse.json({ message: 'User data not found in SAML assertion' }, { status: 401 });
+      return NextResponse.redirect('https://my-tutor-lime.vercel.app/login', { headers: corsHeaders, status: 302 });
+    }
+    console.log("profileInfo: ", profileInfo)
 
-    // const user = {
-    //   name_id: profileInfo.name_id,
-    //   session_index: profileInfo.session_index,
-    //   session_not_on_or_after: profileInfo.session_not_on_or_after,
-    //   fname: profileInfo.attributes['urn:oid:2.5.4.42'][0],
-    //   lname: profileInfo.attributes['urn:oid:2.5.4.4'][0],
-    //   email: profileInfo.attributes['urn:oid:1.2.840.113549.1.9.1'][0],
-    //   role: profileInfo.attributes.Role,
-    // };
-    // console.log("user: ", user)
+    let role: string;
+    if(profileInfo.attributes.primaryAffiliation[0] === 'Student')
+      role = 'student';
+    else if(profileInfo.attributes.primaryAffiliation[0] === 'Staff')
+      role = 'admin';
+    else role = 'none';
 
-    // const dbUser = {
-    //   name: user.fname,
-    //   surname: user.lname,
-    //   email: user.email,
-    //   nameId: user.name_id,
-    //   role: 'student',
-    //   session_index: user.session_index,
-    // }
-    // console.log("dbUser: ", dbUser)
+    const user = {
+      name_id: profileInfo.name_id,
+      session_index: profileInfo.session_index,
+      session_not_on_or_after: profileInfo.session_not_on_or_after,
+      fname: profileInfo.attributes['urn:oid:2.5.4.42'][0],
+      lname: profileInfo.attributes['urn:oid:2.5.4.4'][0],
+      email: profileInfo.attributes['urn:oid:1.2.840.113549.1.9.1'][0],
+      role: role,
+    };
 
-    // try {
-    //   const res = await supabase.insertUctUser(dbUser);
-    //   console.log("res: ", res)
-    // } catch (error) {
-    //   console.error("Error inserting user into database:", error);
-    //   NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-    // }
+    const dbUser = {
+      name: user.fname,
+      surname: user.lname,
+      email: user.email,
+      nameId: user.name_id,
+      role: user.role,
+      session_index: user.session_index,
+    }
+    console.log("dbUser: ", dbUser)
+
+    try {
+      const res = await supabase.insertUctUser(dbUser);
+      console.log("res: ", res)
+    } catch (error) {
+      console.error("Error inserting user into database:", error);
+      NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    }
 
     // Respond success
-    return NextResponse.redirect('https://my-tutor-lime.vercel.app/login', { headers: corsHeaders, status: 302 });
+    // return NextResponse.redirect('https://my-tutor-lime.vercel.app/login', { headers: corsHeaders, status: 302 });
+    return NextResponse.redirect('http://localhost:8100/account', { headers: corsHeaders, status: 302 });
   } catch (error) {
     console.error('Error in SAML assertion handling:', error);
     return NextResponse.redirect('https://my-tutor-lime.vercel.app/login', { headers: corsHeaders, status: 302 });
