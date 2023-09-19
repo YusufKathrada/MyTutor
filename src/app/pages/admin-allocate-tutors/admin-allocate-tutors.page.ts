@@ -13,6 +13,7 @@ export class AdminAllocateTutorsPage implements OnInit {
 
   public segment: string = '';
   public filterOption: string = 'all';
+  originalData: any; 
 
   assignedTutors: any = [];
   unassignedTutors: any = [];
@@ -44,51 +45,57 @@ export class AdminAllocateTutorsPage implements OnInit {
   }
 
   async ngOnInit() {
-    await this.presentLoading();
-
+    console.log('AdminAllocateTutorsPage.events.ngOnInit'); 
     this.segment = 'tutor';
+    // await this.presentLoading();
 
-    this.acceptedTutors = await this.admin.getAcceptedTutors();
-    this.acceptedTAs = await this.admin.getAcceptedTAs();
+    
 
-    this.courses = await this.admin.getCourses();
+    // this.acceptedTutors = await this.admin.getAcceptedTutors();
+    // this.acceptedTAs = await this.admin.getAcceptedTAs();
 
-    this.allocatedTutors = await this.admin.getTutorAllocations();
-    this.allocatedTAs = await this.admin.getTAAllocations();
+    // this.courses = await this.admin.getCourses();
 
-    this.courseMap = this.courses.reduce((map, obj) => {
-      map[obj.name] = obj.id;
-      return map;
-    }, {});
-    console.log('courseMap: ', this.courseMap);
+    // this.allocatedTutors = await this.admin.getTutorAllocations();
+    // this.allocatedTAs = await this.admin.getTAAllocations();
 
-    this.tutorsMap = this.allocatedTutors.reduce((map, obj) => {
-      map[obj.userId] = obj.courseId;
-      return map;
-    }, {});
-    console.log('tutorsMap: ', this.tutorsMap);
+    // this.courseMap = this.courses.reduce((map, obj) => {
+    //   map[obj.name] = obj.id;
+    //   return map;
+    // }, {});
+    // console.log('courseMap: ', this.courseMap);
 
-    this.tasMap = this.allocatedTAs.reduce((map, obj) => {
-      map[obj.userId] = obj.courseId;
-      return map;
-    }, {});
-    console.log('tasMap: ', this.tasMap);
+    // this.tutorsMap = this.allocatedTutors.reduce((map, obj) => {
+    //   map[obj.userId] = obj.courseId;
+    //   return map;
+    // }, {});
+    // console.log('tutorsMap: ', this.tutorsMap);
 
-    await this.getAndFormatTutors();
-    await this.getAndFormatTAs();
+    // this.tasMap = this.allocatedTAs.reduce((map, obj) => {
+    //   map[obj.userId] = obj.courseId;
+    //   return map;
+    // }, {});
+    // console.log('tasMap: ', this.tasMap);
+
+    // await this.getAndFormatTutors();
+    // await this.getAndFormatTAs();
 
 
-    console.log('displayedTutors: ', this.displayedTutors);
+    // console.log('displayedTutors: ', this.displayedTutors);
+    // await this.loadingCtrl.dismiss();
+  }
+
+  async ionViewWillEnter() {
+    await this.presentLoading();
+    await this.doRefresh(null);
+    await this.dismissLoading();
+  }
+
+  async dismissLoading() {
     await this.loadingCtrl.dismiss();
   }
 
-  ionViewDidEnter() {
-    // This method is called when the page has fully entered (navigated back to)
-    // You can trigger a refresh or reload here
-    //this.reloadPage();
-    this.filterOption = 'all';
-    this.ngOnInit();
-  }
+
 
 
   async presentLoading() {
@@ -288,8 +295,39 @@ export class AdminAllocateTutorsPage implements OnInit {
   }
 
 
-  reloadPage() {
+  async doRefresh(event) {
+  try {
+    // You can put any data fetching logic here
+    this.acceptedTutors = await this.admin.getAcceptedTutors();
+    this.acceptedTAs = await this.admin.getAcceptedTAs();
+    this.courses = await this.admin.getCourses();
+    this.allocatedTutors = await this.admin.getTutorAllocations();
+    this.allocatedTAs = await this.admin.getTAAllocations();
+
+    // Refresh the displayed data
+    await this.getAndFormatTutors();
+    await this.getAndFormatTAs();
     
+    if (event) {
+      // If an event object is provided, complete the refresh animation
+      event.target.complete();
+    }
+
+    // Display a toast message to indicate the refresh is complete
+    this.presentToast('Data refreshed successfully', 'success');
+  } catch (error) {
+    console.error('Error refreshing data:', error);
+
+    if (event) {
+      // If an event object is provided, complete the refresh animation with an error message
+      event.target.complete();
+    }
+
+    // Display an error toast message
+    this.presentToast('Error refreshing data', 'danger');
   }
+}
+
 
 }
+
