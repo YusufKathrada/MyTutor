@@ -119,7 +119,7 @@ export class LoginPage {
 
   async uctLogin() {
     // Make a GET request to the Vercel serverless function
-    let url = 'http://localhost:3000/api/login';
+    let url = 'https://my-tutor-api.vercel.app/api/login';
     let res: any = await lastValueFrom(this.http.get(url, {
       headers: {
         'Content-Type': 'application/json',
