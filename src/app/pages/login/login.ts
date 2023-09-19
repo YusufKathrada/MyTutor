@@ -15,6 +15,12 @@ import { Storage } from '@ionic/storage-angular';
 
 
 
+
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
+
+
+
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -35,6 +41,9 @@ export class LoginPage {
     public toastCtrl: ToastController,
     public appComponent: AppComponent,
     public storage: Storage,
+
+
+    private http: HttpClient,
   ) { }
 
   async ionViewWillEnter() {
@@ -102,6 +111,24 @@ export class LoginPage {
 
       await this.loadingCtrl.dismiss();
     }
+  }
+
+  // uctLogin(){
+  //   window.location.href = 'https://projsso1.cs.uct.ac.za/auth/realms/uct/protocol/saml/clients/mytutor';
+  // }
+
+  async uctLogin() {
+    // Make a GET request to the Vercel serverless function
+    let url = 'https://my-tutor-api.vercel.app/api/login';
+    let res: any = await lastValueFrom(this.http.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }));
+
+    const redirectUrl = res.login_url;
+    console.log("redirectUrl", redirectUrl);
+    window.location.href = redirectUrl;
   }
 
   onSignup() {

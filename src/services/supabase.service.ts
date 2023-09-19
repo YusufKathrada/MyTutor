@@ -18,21 +18,21 @@ export class SupabaseService {
   private supabase: SupabaseClient
   _session: AuthSession | null = null
 
-  constructor(
-    private toastController: ToastController,
-  ) {
+  constructor() {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey)
   }
 
   // ======================================== Error Handler ========================================
 
   async presentError() {
-    const toast = await this.toastController.create({
-      message: 'Something went wrong, please try again or contact support',
-      duration: 2000,
-      color: 'danger',
-    });
-    toast.present();
+    alert('Something went wrong, please try again or contact support')
+    // let toastController = new ToastController();
+    // const toast = await toastController.create({
+    //   message: 'Something went wrong, please try again or contact support',
+    //   duration: 2000,
+    //   color: 'danger',
+    // });
+    // toast.present();
   }
 
   // ======================================== Auth ========================================
@@ -138,6 +138,23 @@ export class SupabaseService {
         .eq('id', userId)
         .select()
 
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getUserBySession(session_index){
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .select('*')
+        .eq('session_index', session_index)
 
       if (error) throw error
 
@@ -898,6 +915,32 @@ export class SupabaseService {
       await this.presentError();
     }
   }
+
+
+// ======================================== users table (for uct login) ========================================
+
+  async insertUctUser(user: any) {
+    try {
+
+      const { data, error } = await this.supabase
+        .from('users')
+        .upsert(
+          user,
+          { onConflict:'nameId' }
+        );
+        // .upsert(user)
+        // .eq('nameId', user.nameId)
+
+      if (error) throw error
+
+      return data
+
+    } catch (error) {
+      console.log('error', error)
+      throw error;
+    }
+  }
+
 
   // ======================================== Tutors to Events ========================================
   /**
