@@ -5,9 +5,8 @@ import { Admin } from '../../providers/admin';
 import { LoadingController } from '@ionic/angular';
 import { PopoverController } from '@ionic/angular';
 import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-component/timeslots-popover-component.component';
-import { ConnectableObservable } from 'rxjs';
+import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-upload-times',
@@ -16,9 +15,11 @@ import { Router } from '@angular/router';
 })
 export class UploadTimesPage implements OnInit {
 
-  // @Input() deleteTutorEvent(eventId: number, userId: string) { 
+  // @Input() deleteTutorEvent(eventId: number, userId: string) {
   //   this.deleteTutorFromEvent(eventId, userId);
   // }
+
+  screenSize: any = this.platform.width();
 
   public eventForm: FormGroup;
   course: string = '';
@@ -43,9 +44,13 @@ export class UploadTimesPage implements OnInit {
     private loadingCtrl: LoadingController,
     private admin: Admin,
     public popoverController: PopoverController,
-    private router: Router
+    private router: Router,
+    public platform: Platform
   ) {
     this.createForm();
+    this.platform.resize.subscribe(() => {
+      this.screenSize = this.platform.width();
+    });
   }
 
   async ngOnInit() {

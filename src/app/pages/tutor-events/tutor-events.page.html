@@ -7,63 +7,88 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ng-container *ngIf="screenWidth >= 800 else mobileView">
+  <ion-content class="ion-padding">
+    <ion-grid>
+      <!-- Headings -->
+      <ion-row style="text-align: center; font-weight: bold">
+        <ion-col> Course </ion-col>
 
-  <ion-grid>
-    <!-- Headings -->
-    <ion-row style="text-align: center; font-weight: bold;">
+        <ion-col> Event Type </ion-col>
 
-      <ion-col>
-        Course
-      </ion-col>
+        <ion-col> Day </ion-col>
 
-      <ion-col>
-        Event Type
-      </ion-col>
+        <ion-col> Time </ion-col>
 
-      <ion-col>
-        Day
-      </ion-col>
+        <ion-col> Action </ion-col>
+      </ion-row>
+    </ion-grid>
 
-      <ion-col>
-        Time
-      </ion-col>
+    <ion-grid>
+      <ion-row style="text-align: center" *ngFor="let s of sessions">
+        <ion-col> {{s.course}} </ion-col>
 
-      <ion-col>
-        Action
-      </ion-col>
+        <ion-col> {{s.eventType}} </ion-col>
 
-    </ion-row>
-  </ion-grid>
+        <ion-col> {{s.day}} </ion-col>
 
-  <ion-grid>
+        <ion-col> {{s.time}} </ion-col>
 
-    <ion-row style="text-align: center" *ngFor="let s of sessions">
+        <ion-col style="padding-top: 0px">
+          <ion-button
+            id="fullButton"
+            [disabled]="!s.id"
+            (click)="removeEvent(s)"
+          >
+            REMOVE
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ng-container>
 
-      <ion-col>
-        {{s.course}}
-      </ion-col>
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      <ion-grid>
+        <ng-container *ngFor="let s of sessions">
+          <ion-row>
+            <ion-col class="mobile-header">Course</ion-col>
+            <ion-col>{{s.course}}</ion-col>
+          </ion-row>
 
-      <ion-col>
-        {{s.eventType}}
-      </ion-col>
+          <ion-row>
+            <ion-col class="mobile-header">Event Type</ion-col>
+            <ion-col>{{s.eventType}}</ion-col>
+          </ion-row>
 
-      <ion-col>
-        {{s.day}}
-      </ion-col>
+          <ion-row>
+            <ion-col class="mobile-header">Day</ion-col>
+            <ion-col>{{s.day}}</ion-col>
+          </ion-row>
 
-      <ion-col>
-        {{s.time}}
-      </ion-col>
+          <ion-row>
+            <ion-col class="mobile-header">Time</ion-col>
+            <ion-col>{{s.time}}</ion-col>
+          </ion-row>
 
-      <ion-col style="padding-top: 0px;" >
-        <ion-button id="fullButton" [disabled]="!s.id" (click)="removeEvent(s)">
-          REMOVE
-        </ion-button>
-      </ion-col>
+          <ion-row>
+            <ion-col class="mobile-header">Action</ion-col>
+            <ion-col style="padding-top: 0px">
+              <ion-button
+                id="fullButton"
+                [disabled]="!s.id"
+                (click)="removeEvent(s)"
+              >
+                REMOVE
+              </ion-button>
+            </ion-col>
+          </ion-row>
 
-    </ion-row>
-
-  </ion-grid>
-
-</ion-content>
+          <hr style="border-top: 1px dashed grey" />
+        </ng-container>
+      </ion-grid>
+    </ion-content>
+  </ng-template>
+</ng-container>

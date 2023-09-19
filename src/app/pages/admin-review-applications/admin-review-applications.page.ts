@@ -3,6 +3,7 @@ import { Admin } from '../../providers/admin';
 import { Student } from '../../providers/student';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-admin-review-applications',
@@ -10,6 +11,8 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./admin-review-applications.page.scss'],
 })
 export class AdminReviewApplicationsPage implements OnInit {
+
+  screenWidth: number = this.platform.width();
 
   public segment: string = '';
   public filterOption: string = 'all';
@@ -39,8 +42,13 @@ export class AdminReviewApplicationsPage implements OnInit {
     public admin: Admin,
     public student: Student,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController
-  ) { }
+    public toastCtrl: ToastController,
+    public platform: Platform
+  ) {
+    this.platform.resize.subscribe(() => {
+      this.screenWidth = this.platform.width();
+    });
+  }
 
   async ngOnInit() {
     

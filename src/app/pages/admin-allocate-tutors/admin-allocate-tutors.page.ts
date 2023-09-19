@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Admin } from '../../providers/admin';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { assign } from 'cypress/types/lodash';
-
+import { Platform } from '@ionic/angular';
 @Component({
   selector: 'app-admin-allocate-tutors',
   templateUrl: './admin-allocate-tutors.page.html',
@@ -10,13 +9,15 @@ import { assign } from 'cypress/types/lodash';
 })
 export class AdminAllocateTutorsPage implements OnInit {
 
+  screenWidth: number = this.platform.width();
+
   public segment: string = '';
   public filterOption: string = 'all';
 
-  assignedTutors: any = [];   
-  unassignedTutors: any = []; 
-  assignedTAs: any = [];   
-  unassignedTAs: any = []; 
+  assignedTutors: any = [];
+  unassignedTutors: any = [];
+  assignedTAs: any = [];
+  unassignedTAs: any = [];
 
   acceptedTutors: any = [];
   acceptedTAs: any = [];
@@ -35,7 +36,12 @@ export class AdminAllocateTutorsPage implements OnInit {
     public admin: Admin,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
-  ) { }
+    private platform: Platform
+  ) {
+    this.platform.resize.subscribe(() => {
+      this.screenWidth = this.platform.width();
+    });
+  }
 
   async ngOnInit() {
     await this.presentLoading();
@@ -74,6 +80,14 @@ export class AdminAllocateTutorsPage implements OnInit {
 
     console.log('displayedTutors: ', this.displayedTutors);
     await this.loadingCtrl.dismiss();
+  }
+
+  ionViewDidEnter() {
+    // This method is called when the page has fully entered (navigated back to)
+    // You can trigger a refresh or reload here
+    //this.reloadPage();
+    this.filterOption = 'all';
+    this.ngOnInit();
   }
 
 
@@ -176,7 +190,7 @@ export class AdminAllocateTutorsPage implements OnInit {
     } else {
       this.presentToast("Error updating tutor allocations", "danger");
     }
-    
+
     this.ngOnInit();
   }
 
@@ -275,7 +289,7 @@ export class AdminAllocateTutorsPage implements OnInit {
 
 
   reloadPage() {
-    location.reload();
+    
   }
 
 }
