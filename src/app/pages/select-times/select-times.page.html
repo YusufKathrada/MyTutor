@@ -8,143 +8,107 @@
 </ion-header>
 
 <ng-container *ngIf="screenWidth >= 800 else mobileView">
-<ion-content class="ion-padding">
+  <ion-content class="ion-padding">
+    <ion-grid>
+      <!-- Headings -->
+      <ion-row style="text-align: center; font-weight: bold">
+        <ion-col> Event Type </ion-col>
 
-  <ion-grid>
-    <!-- Headings -->
-    <ion-row style="text-align: center; font-weight: bold;">
-      <ion-col>
-        Event Type
-      </ion-col>
+        <ion-col> Day </ion-col>
 
-      <ion-col>
-        Day
-      </ion-col>
+        <ion-col> Time </ion-col>
 
-      <ion-col>
-        Time
-      </ion-col>
+        <ion-col> Tutors Needed </ion-col>
 
-      <ion-col>
-        Tutors Needed
-      </ion-col>
+        <ion-col> Action </ion-col>
+      </ion-row>
+    </ion-grid>
 
-      <ion-col>
-        Action
-      </ion-col>
+    <ion-grid>
+      <ion-row style="text-align: center" *ngFor="let s of sessions">
+        <ion-col> {{s.eventType}} </ion-col>
 
-    </ion-row>
-  </ion-grid>
+        <ion-col> {{s.day}} </ion-col>
 
-  <ion-grid>
+        <ion-col> {{s.time}} </ion-col>
 
-    <ion-row style="text-align: center" *ngFor="let s of sessions">
+        <ion-col> {{s.tutorsNeeded}} </ion-col>
 
-      <ion-col>
-        {{s.eventType}}
-      </ion-col>
+        <ion-col style="padding-top: 0px">
+          <!-- If the tutor has joined the session show joined -->
+          <ng-container *ngIf="s.status === 'Joined'">
+            <ion-button id="fullButton" [disabled]="true"> JOINED </ion-button>
+          </ng-container>
 
-      <ion-col>
-        {{s.day}}
-      </ion-col>
+          <!-- If the tutor has not joined, but is full, show full -->
+          <ng-container *ngIf="s.full && s.status === 'Available'">
+            <ion-button id="fullButton" [disabled]="true"> FULL </ion-button>
+          </ng-container>
 
-      <ion-col>
-        {{s.time}}
-      </ion-col>
-
-      <ion-col>
-        {{s.tutorsNeeded}}
-      </ion-col>
-
-      <ion-col style="padding-top: 0px;">
-
-        <!-- If the tutor has joined the session show joined -->
-        <ng-container *ngIf="s.status === 'Joined'">
-          <ion-button id="fullButton" [disabled] = "true">
-            JOINED
-          </ion-button>
-        </ng-container>
-
-        <!-- If the tutor has not joined, but is full, show full -->
-        <ng-container *ngIf="s.full && s.status === 'Available'">
-          <ion-button id="fullButton" [disabled] = "true">
-            FULL
-          </ion-button>
-        </ng-container>
-
-        <!-- If the tutor has not joined and is not full, show join -->
-        <ng-container *ngIf="!s.full && s.status === 'Available'">
-          <ion-button class="joinButton" (click)="joinEvent(s)">
-            JOIN
-          </ion-button>
-        </ng-container>
-
-      </ion-col>
-
-    </ion-row>
-
-  </ion-grid>
-
-</ion-content>
+          <!-- If the tutor has not joined and is not full, show join -->
+          <ng-container *ngIf="!s.full && s.status === 'Available'">
+            <ion-button class="joinButton" (click)="joinEvent(s)">
+              JOIN
+            </ion-button>
+          </ng-container>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
 </ng-container>
 
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
       <ion-grid>
-
         <ng-container *ngFor="let s of sessions">
+          <ion-row>
+            <ion-col class="mobile-header">Event Type</ion-col>
+            <ion-col>{{s.eventType}}</ion-col>
+          </ion-row>
 
+          <ion-row>
+            <ion-col class="mobile-header">Day</ion-col>
+            <ion-col>{{s.day}}</ion-col>
+          </ion-row>
 
-        <ion-row>
-          <ion-col class="mobile-header">Event Type</ion-col>
-          <ion-col>{{s.eventType}}</ion-col>
-        </ion-row>
+          <ion-row>
+            <ion-col class="mobile-header">Time</ion-col>
+            <ion-col>{{s.time}}</ion-col>
+          </ion-row>
 
-        <ion-row>
-          <ion-col class="mobile-header">Day</ion-col>
-          <ion-col>{{s.day}}</ion-col>
-        </ion-row>
+          <ion-row>
+            <ion-col class="mobile-header">Tutors Needed</ion-col>
+            <ion-col>{{s.tutorsNeeded}}</ion-col>
+          </ion-row>
 
-        <ion-row>
-          <ion-col class="mobile-header">Time</ion-col>
-          <ion-col>{{s.time}}</ion-col>
-        </ion-row>
+          <ion-row>
+            <ion-col class="mobile-header">Action</ion-col>
+            <ion-col style="padding-top: 0px">
+              <!-- If the tutor has joined the session show joined -->
+              <ng-container *ngIf="s.status === 'Joined'">
+                <ion-button id="fullButton" [disabled]="true">
+                  JOINED
+                </ion-button>
+              </ng-container>
 
-        <ion-row>
-          <ion-col class="mobile-header">Tutors Needed</ion-col>
-          <ion-col>{{s.tutorsNeeded}}</ion-col>
-        </ion-row>
+              <!-- If the tutor has not joined, but is full, show full -->
+              <ng-container *ngIf="s.full && s.status === 'Available'">
+                <ion-button id="fullButton" [disabled]="true">
+                  FULL
+                </ion-button>
+              </ng-container>
 
-        <ion-row>
-          <ion-col class="mobile-header">Action</ion-col>
-          <ion-col style="padding-top: 0px;">
+              <!-- If the tutor has not joined and is not full, show join -->
+              <ng-container *ngIf="!s.full && s.status === 'Available'">
+                <ion-button class="joinButton" (click)="joinEvent(s)">
+                  JOIN
+                </ion-button>
+              </ng-container>
+            </ion-col>
+          </ion-row>
 
-        <!-- If the tutor has joined the session show joined -->
-        <ng-container *ngIf="s.status === 'Joined'">
-          <ion-button id="fullButton" [disabled] = "true">
-            JOINED
-          </ion-button>
-        </ng-container>
-
-        <!-- If the tutor has not joined, but is full, show full -->
-        <ng-container *ngIf="s.full && s.status === 'Available'">
-          <ion-button id="fullButton" [disabled] = "true">
-            FULL
-          </ion-button>
-        </ng-container>
-
-        <!-- If the tutor has not joined and is not full, show join -->
-        <ng-container *ngIf="!s.full && s.status === 'Available'">
-          <ion-button class="joinButton" (click)="joinEvent(s)">
-            JOIN
-          </ion-button>
-        </ng-container>
-
-      </ion-col>
-        </ion-row>
-
-        <hr style="border-top: 1px dashed grey" />
+          <hr style="border-top: 1px dashed grey" />
         </ng-container>
       </ion-grid>
     </ion-content>
