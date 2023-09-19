@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Admin } from '../../providers/admin';
-import { Student } from '../../providers/student';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
 import { Platform } from '@ionic/angular';
@@ -16,6 +15,7 @@ export class AdminReviewApplicationsPage implements OnInit {
 
   public segment: string = '';
   public filterOption: string = 'all';
+  minimumMark: number = 0;
 
   fullTutorApplications: any = [];
   fullTAApplications: any = [];
@@ -40,7 +40,6 @@ export class AdminReviewApplicationsPage implements OnInit {
 
   constructor(
     public admin: Admin,
-    public student: Student,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     public platform: Platform
@@ -51,72 +50,72 @@ export class AdminReviewApplicationsPage implements OnInit {
   }
 
   async ngOnInit() {
-    
+    console.log('AdminReviewApplicationsPage.events.ngOnInit');
+
+    // await this.presentLoading();
+
+    //this.applicationStatuses = await this.admin.getStatuses();
+
+    // this.statusMap = this.applicationStatuses.reduce((map, obj) => {
+    //   map[obj.description] = obj.id;
+    //   return map;
+    // }, {});
+
+    // this.revStatusMap = this.applicationStatuses.reduce((map, obj) => {
+    //   map[obj.id] = obj.description;
+    //   return map;
+    // }, {});
+
+
+
+    // console.log('statusMap: ', this.statusMap);
+
+    // console.log('RevstatusMap: ', this.revStatusMap);
+
+     this.segment = 'tutor';
+
+    // this.fullTutorApplications = await this.admin.getTutorApplications();
+    // this.fullTAApplications = await this.admin.getTAApplications();
+
+
+
+    // await this.getAndFormatApplications();
+
+    // // this.displayedTutors = await this.getDisplayedTutors();
+    // // this.displayedTAs = await this.getDisplayedTAs();
+
+    // console.log('fullTutorApps', this.fullTutorApplications);
+    // console.log('fullTAAplications', this.fullTAApplications);
+
+
+    // console.log('formattedTutorApplications: ', this.formattedTutorApplications);
+    // console.log('formattedTAApplications: ', this.formattedTAApplications);
+
+    // // console.log('displayedTutors: ', this.displayedTutors);
+    // // console.log('displayedTAs: ', this.displayedTAs);
+
+
+    // console.log('acceptedTutors: ', this.acceptedTutors);
+    // console.log('pendingTutors: ', this.pendingTutors);
+    // console.log('rejectedTutors: ', this.rejectedTutors);
+
+    // console.log('acceptedTAs: ', this.acceptedTAs);
+    // console.log('pendingTAs: ', this.pendingTAs);
+    // console.log('rejectedTAs: ', this.rejectedTAs);
+
+
+    // await this.loadingCtrl.dismiss();
+  }
+  async ionViewWillEnter() {
+    await this.presentLoading();
+    await this.doRefresh(null);
+    await this.dismissLoading();
   }
 
-  async doRefresh(){
-    await this.presentLoading();
-
-    this.applicationStatuses = await this.admin.getStatuses();
-
-    this.statusMap = this.applicationStatuses.reduce((map, obj) => {
-      map[obj.description] = obj.id;
-      return map;
-    }, {});
-
-    this.revStatusMap = this.applicationStatuses.reduce((map, obj) => {
-      map[obj.id] = obj.description;
-      return map;
-    }, {});
-
-
-
-    console.log('statusMap: ', this.statusMap);
-
-    console.log('RevstatusMap: ', this.revStatusMap);
-
-    this.segment = 'tutor';
-
-    this.fullTutorApplications = await this.admin.getTutorApplications();
-    this.fullTAApplications = await this.admin.getTAApplications();
-
-
-
-    await this.getAndFormatApplications();
-
-    // this.displayedTutors = await this.getDisplayedTutors();
-    // this.displayedTAs = await this.getDisplayedTAs();
-
-    console.log('fullTutorApps', this.fullTutorApplications);
-    console.log('fullTAAplications', this.fullTAApplications);
-
-
-    console.log('formattedTutorApplications: ', this.formattedTutorApplications);
-    console.log('formattedTAApplications: ', this.formattedTAApplications);
-
-    // console.log('displayedTutors: ', this.displayedTutors);
-    // console.log('displayedTAs: ', this.displayedTAs);
-
-
-    console.log('acceptedTutors: ', this.acceptedTutors);
-    console.log('pendingTutors: ', this.pendingTutors);
-    console.log('rejectedTutors: ', this.rejectedTutors);
-
-    console.log('acceptedTAs: ', this.acceptedTAs);
-    console.log('pendingTAs: ', this.pendingTAs);
-    console.log('rejectedTAs: ', this.rejectedTAs);
-
-
+  async dismissLoading() {
     await this.loadingCtrl.dismiss();
   }
 
-  ionViewDidEnter() {
-    // This method is called when the page has fully entered (navigated back to)
-    // You can trigger a refresh or reload here
-    this.reloadPage();
-    this.filterOption = 'all';
-    this.doRefresh();
-  }
 
   async presentLoading() {
     const loading = await this.loadingCtrl.create({
@@ -180,11 +179,6 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.presentLoading();
     let success: boolean = true;
     for (const application of this.formattedTutorApplications) {
-
-      await this.student.updateTutorRole(application.userId, application.status);
-      console.log('role', application.userId, application.status);
-
-
       let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId);
       if (res !== 204) {
         success = false;
@@ -200,7 +194,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     }
 
     this.filterOption = 'all';
-    this.doRefresh();
+    this.ngOnInit();
   }
 
 
@@ -211,10 +205,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     let success: boolean = true;
     for (const application of this.formattedTAApplications) {
 
-      await this.student.updateTARole(application.userId, this.revStatusMap[application.status], application.adminRights);
-      console.log('role', application.userId, this.revStatusMap[application.status], application.adminRights);
-
-      console.log('application: ', application);
+    console.log('application: ', application);
       let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, application.adminRights);
       if (res !== 204) {
         success = false;
@@ -231,7 +222,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     }
 
     this.filterOption = 'all';
-    this.doRefresh();
+    this.ngOnInit();
   }
 
   isCheckboxEnabled(status: string): boolean {
@@ -285,10 +276,72 @@ export class AdminReviewApplicationsPage implements OnInit {
     const url = `${environment.supabaseUrl}/storage/v1/object/public/transcripts/${userId}/doc.pdf`;
     window.open(url, '_blank');
   }
-  reloadPage() {
-    this.formattedTutorApplications = [...this.fullTutorApplications];
-    this.formattedTAApplications = [...this.fullTAApplications];
+  // reloadPage() {
+  //   this.formattedTutorApplications = [...this.fullTutorApplications];
+  //   this.formattedTAApplications = [...this.fullTAApplications];
+  // }
+  async doRefresh(event: any) {
+    try {
+      // Uncomment the code you want to execute during the refresh here
+      // For example:
+  
+      this.applicationStatuses = await this.admin.getStatuses();
+  
+      this.statusMap = this.applicationStatuses.reduce((map, obj) => {
+        map[obj.description] = obj.id;
+        return map;
+      }, {});
+  
+      this.revStatusMap = this.applicationStatuses.reduce((map, obj) => {
+        map[obj.id] = obj.description;
+        return map;
+      }, {});
+  
+      this.segment = 'tutor';
+  
+      this.fullTutorApplications = await this.admin.getTutorApplications();
+      this.fullTAApplications = await this.admin.getTAApplications();
+  
+      await this.getAndFormatApplications();
+  
+      console.log('fullTutorApps', this.fullTutorApplications);
+      console.log('fullTAAplications', this.fullTAApplications);
+  
+      console.log('formattedTutorApplications: ', this.formattedTutorApplications);
+      console.log('formattedTAApplications: ', this.formattedTAApplications);
+  
+      console.log('acceptedTutors: ', this.acceptedTutors);
+      console.log('pendingTutors: ', this.pendingTutors);
+      console.log('rejectedTutors: ', this.rejectedTutors);
+  
+      console.log('acceptedTAs: ', this.acceptedTAs);
+      console.log('pendingTAs: ', this.pendingTAs);
+      console.log('rejectedTAs: ', this.rejectedTAs);
+  
+      // ... (Uncomment any other code you need for refresh)
+  
+      if (event) {
+        // If an event is provided, complete the refresh animation
+        event.target.complete();
+      }
+    } catch (error) {
+      console.error('Error while refreshing:', error);
+  
+      if (event) {
+        // If an event is provided and there was an error, complete the refresh animation with an error message
+        event.target.complete();
+      }
+    }
   }
+  
+  
+
+//   filterApplicationsByMinimumMark() {
+//     // Filter formattedTutorApplications based on the minimum mark
+//     this.formattedTutorApplications = this.formattedTutorApplications.filter(
+//       (application) => application.average >= this.minimumMark
+//     );
+// }
 }
 
   // async getDisplayedTutors(){
@@ -314,4 +367,6 @@ export class AdminReviewApplicationsPage implements OnInit {
   //   }
   //   return pendingTAs;
   // }
+
+
 
