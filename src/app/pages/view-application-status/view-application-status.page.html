@@ -15,7 +15,7 @@
         <ion-col> Application </ion-col>
         <ion-col> Status </ion-col>
         <ion-col> Course Assigned </ion-col>
-        <ion-col> Actions </ion-col>
+        <ion-col *ngIf="application.status !== 'Rejected'"> Actions </ion-col>
       </ion-row>
     </ion-grid>
 
@@ -28,7 +28,7 @@
 
         <ion-col> {{application.courseAssigned}} </ion-col>
 
-        <ion-col>
+        <ion-col *ngIf="application.status !== 'Rejected'">
           <ion-list>
             <ion-select
               fill="outline"
@@ -68,7 +68,7 @@
           <ion-col> {{application.courseAssigned}} </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row *ngIf="application.status !== 'Rejected'">
           <ion-col class="mobile-header">Actions</ion-col>
           <ion-col>
             <ion-list>
