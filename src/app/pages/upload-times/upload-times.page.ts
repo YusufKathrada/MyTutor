@@ -6,6 +6,7 @@ import { LoadingController } from '@ionic/angular';
 import { PopoverController } from '@ionic/angular';
 import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-component/timeslots-popover-component.component';
 import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-times',
@@ -43,6 +44,7 @@ export class UploadTimesPage implements OnInit {
     private loadingCtrl: LoadingController,
     private admin: Admin,
     public popoverController: PopoverController,
+    private router: Router,
     public platform: Platform
   ) {
     this.createForm();
@@ -241,6 +243,7 @@ export class UploadTimesPage implements OnInit {
 
   async presentPopover(e: any) {
     let res = await this.admin.getTutorsFromEventId(e.id);
+    console.log("res: ", res);
 
     if (res.length === 0) {
       res = [{
@@ -256,6 +259,7 @@ export class UploadTimesPage implements OnInit {
       cssClass: 'popover-width-large',
       componentProps: {
         showCourseEvents: res,
+        eventId: e.id,
       }
     });
 
@@ -280,29 +284,8 @@ export class UploadTimesPage implements OnInit {
       this.presentToast("Error removing event. Please try again.");
     }
     this.refreshEvents();
-    //this.selectCourse({ detail: { value: this.course } });
-  }
+    location.reload();
 
-  async deleteTutorFromEvent(eventId: number, userId: string) {
-    let load = await this.loadingCtrl.create({
-      message: 'Removing tutor from event...',
-    });
-    load.present();
-
-    console.log("eventId: ", eventId);
-    console.log("tutorId: ", userId);
-    let res = await this.admin.deleteTutorFromEvent(eventId, userId);
-
-    load.dismiss();
-
-    if (res === 204) {
-      this.presentToast("Tutor removed from event successfully!", "success");
-    }
-    else {
-      this.presentToast("Error removing tutor from event. Please try again.");
-    }
-    this.refreshEvents();
-    //this.selectCourse({ detail: { value: this.course } });
   }
   reloadPage() {
     this.eventForm.reset(); // Reset the form
@@ -312,6 +295,13 @@ export class UploadTimesPage implements OnInit {
     this.showCourseEvents = []; // Clear the displayed course events
     this.refreshEvents(); // Refresh events data
   }
+
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+}
 
 }
 
