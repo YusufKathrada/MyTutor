@@ -20,10 +20,21 @@ ion-checkbox {
     padding: 8px; /* Add padding for better spacing */
 }
 
-  
+
 
 .custom-select-course {
     width: min-content;
     font-size: 16px; /* Adjust the font size */
 }
-  
+
+
+.mobile-header {
+  font-weight: bold;
+  align-items: center;
+  align-self: center;
+}
+
+.select {
+  --padding-start: 0px;
+}
+
