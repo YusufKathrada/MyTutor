@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
 
   studentPages = [
     {
-      title: 'Apply to be a tutor',
+      title: 'Apply for a role',
       url: '/app/tabs/apply-for-tutor',
       icon: 'person-add'
     },
@@ -109,7 +109,7 @@ export class AppComponent implements OnInit {
       icon: 'calendar'
     },
     {
-      title: 'Apply to be a tutor',
+      title: 'Apply for a role',
       url: '/app/tabs/apply-for-tutor',
       icon: 'person-add'
     },
