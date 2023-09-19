@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { Tutor } from '../../providers/tutor';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-tutor-events',
@@ -9,6 +9,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
   styleUrls: ['./tutor-events.page.scss'],
 })
 export class TutorEventsPage implements OnInit {
+  screenWidth: number = this.platform.width();
 
   private userId: string;
   sessions: any[] = []
@@ -18,7 +19,12 @@ export class TutorEventsPage implements OnInit {
     private tutor: Tutor,
     private loadingController: LoadingController,
     private toastController: ToastController,
-  ) { }
+    private platform: Platform,
+  ) {
+    this.platform.resize.subscribe(() => {
+      this.screenWidth = this.platform.width();
+    });
+   }
 
   async ngOnInit() {
     console.log('tutor.events.ngOnInit');

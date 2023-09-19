@@ -7,219 +7,485 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ng-container *ngIf="screenSize >= 800 else mobileView">
+  <!-- <ng-container *ngIf="true"> -->
 
-  <ion-grid>
-    <ion-row>
+  <ion-content class="ion-padding">
+    <ion-grid>
+      <ion-row>
+        <ion-list>
+          <ion-select
+            class="custom-select-course"
+            placeholder="Select Course"
+            fill="outline"
+            aria-label="Course"
+            interface="popover"
+            [(ngModel)]="course"
+            (ionChange)="setCourse($event)"
+          >
+            <ion-select-option [value]="a.name" *ngFor="let a of allCourses">
+              {{a.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-list>
 
-      <ion-list>
-        <ion-select class="custom-select-course"  placeholder="Select Course" fill="outline" aria-label="Course" interface="popover" [(ngModel)]="course" (ionChange)="setCourse($event)">
-          <ion-select-option [value]="a.name" *ngFor="let a of allCourses">
-            {{a.name}}
-          </ion-select-option>
-        </ion-select>
-      </ion-list>
+        <ion-col size="8"></ion-col>
+      </ion-row>
 
-      <ion-col size="8"></ion-col>
+      <br /><br />
 
-    </ion-row>
+      <!-- Headings -->
+      <ion-row style="text-align: center; font-weight: bold">
+        <ion-col> Event </ion-col>
 
-    <br><br>
+        <ion-col> Day </ion-col>
 
-    <!-- Headings -->
-    <ion-row style="text-align: center; font-weight: bold;">
-      <ion-col>
-        Event
-      </ion-col>
+        <ion-col> Start Time </ion-col>
 
-      <ion-col>
-        Day
-      </ion-col>
+        <ion-col> End Time </ion-col>
 
-      <ion-col>
-        Start Time
-      </ion-col>
+        <ion-col> Tutors Needed </ion-col>
 
-      <ion-col>
-        End Time
-      </ion-col>
+        <ion-col> Venue </ion-col>
+      </ion-row>
+    </ion-grid>
 
-      <ion-col>
-        Tutors Needed
-      </ion-col>
+    <!-- Inputs -->
+    <ion-grid style="padding-top: 0px">
+      <form [formGroup]="eventForm">
+        <div formArrayName="sessions">
+          <ion-row
+            *ngFor="let sessionCtrl of sessions.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <ion-col>
+              <ion-list>
+                <ion-select
+                  class="custom-select"
+                  fill="outline"
+                  interface="popover"
+                  formControlName="eventType"
+                  placeholder="Select Event"
+                >
+                  <ion-select-option
+                    [value]="s.description"
+                    *ngFor="let s of sessionTypes"
+                  >
+                    {{s.description}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-list>
+            </ion-col>
 
-      <ion-col>
-        Venue
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+            <ion-col>
+              <ion-list>
+                <ion-select
+                  class="custom-select"
+                  fill="outline"
+                  interface="popover"
+                  formControlName="day"
+                  placeholder="Select Day"
+                >
+                  <ion-select-option [value]="d" *ngFor="let d of days">
+                    {{d}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-list>
+            </ion-col>
 
-  <!-- Inputs -->
-  <ion-grid style="padding-top: 0px;">
-    <form [formGroup]="eventForm">
-      <div formArrayName="sessions">
-        <ion-row *ngFor="let sessionCtrl of sessions.controls; let i = index" [formGroupName]="i">
+            <ion-col>
+              <!-- Updated Start Time ion-datetime-button and ion-datetime -->
+              <ion-datetime-button
+                [attr.datetime]="'datetimeStart' + i"
+                class="custom-datetime"
+              ></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime
+                    [id]="'datetimeStart' + i"
+                    presentation="time"
+                    formControlName="startTime"
+                    hourCycle="h23"
+                  ></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ion-col>
 
-          <ion-col>
-            <ion-list>
-              <ion-select class="custom-select" fill="outline" interface="popover" formControlName="eventType" placeholder="Select Event">
-                <ion-select-option [value]="s.description" *ngFor="let s of sessionTypes">
-                  {{s.description}}
-                </ion-select-option>
-              </ion-select>
-            </ion-list>
-          </ion-col>
+            <ion-col>
+              <!-- Updated End Time ion-datetime-button and ion-datetime -->
+              <ion-datetime-button
+                [attr.datetime]="'datetimeEnd' + i"
+                class="custom-datetime"
+              ></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime
+                    [id]="'datetimeEnd' + i"
+                    presentation="time"
+                    showDefaultButtons="true"
+                    hourCycle="h23"
+                    formControlName="endTime"
+                  ></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ion-col>
 
-          <ion-col>
-            <ion-list>
-              <ion-select class="custom-select" fill="outline" interface="popover" formControlName="day" placeholder="Select Day">
-                <ion-select-option [value]="d" *ngFor="let d of days">
-                  {{d}}
-                </ion-select-option>
-              </ion-select>
-            </ion-list>
-          </ion-col>
+            <ion-col>
+              <ion-input
+                aria-label="Tutors Needed"
+                placeholder="Tutors Needed"
+                fill="outline"
+                formControlName="tutorsNeeded"
+                class="custom-input"
+              ></ion-input>
+            </ion-col>
 
-          <ion-col>
-            <!-- Updated Start Time ion-datetime-button and ion-datetime -->
-            <ion-datetime-button [attr.datetime]="'datetimeStart' + i" class="custom-datetime"></ion-datetime-button>
-            <ion-modal [keepContentsMounted]="true">
-              <ng-template>
-                <ion-datetime [id]="'datetimeStart' + i" presentation="time" formControlName="startTime" hourCycle="h23"></ion-datetime>
-              </ng-template>
-            </ion-modal>
-          </ion-col>
+            <ion-col>
+              <ion-input
+                aria-label="Venue"
+                placeholder="Venue"
+                fill="outline"
+                formControlName="venue"
+              ></ion-input>
+            </ion-col>
+          </ion-row>
+        </div>
+      </form>
+    </ion-grid>
 
-          <ion-col>
-            <!-- Updated End Time ion-datetime-button and ion-datetime -->
-            <ion-datetime-button [attr.datetime]="'datetimeEnd' + i" class="custom-datetime"></ion-datetime-button>
-            <ion-modal [keepContentsMounted]="true">
-              <ng-template>
-                <ion-datetime [id]="'datetimeEnd' + i" presentation="time" showDefaultButtons="true" hourCycle="h23" formControlName="endTime"></ion-datetime>
-              </ng-template>
-            </ion-modal>
-          </ion-col>
-
-          <ion-col>
-            <ion-input
-              aria-label="Tutors Needed"
-              placeholder="Tutors Needed"
-              fill="outline"
-              formControlName="tutorsNeeded"
-              class="custom-input"
-            ></ion-input>
-          </ion-col>
-
-          <ion-col>
-            <ion-input
-              aria-label="Venue"
-              placeholder="Venue"
-              fill="outline"
-              formControlName="venue"
-            ></ion-input>
-          </ion-col>
-
-        </ion-row>
+    <div style="display: flex; justify-content: space-between; font-size: 10px">
+      <div>
+        <ion-button fill="clear" (click)="addItem()" style="font-size: 10px">
+          Add an event
+          <ion-icon slot="end" name="add-outline"></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="clear"
+          (click)="removeLastSession()"
+          style="font-size: 10px"
+        >
+          Remove last event
+          <ion-icon slot="end" name="remove-outline"></ion-icon>
+        </ion-button>
       </div>
-    </form>
-  </ion-grid>
 
-  <div style="display: flex; justify-content: space-between; font-size:10px">
-    <div>
-      <ion-button fill="clear" (click)="addItem()" style="font-size: 10px;">
-        Add an event
-        <ion-icon slot="end" name="add-outline"></ion-icon>
-      </ion-button>
-      <ion-button fill="clear" (click)="removeLastSession()" style="font-size: 10px;">
-        Remove last event
-        <ion-icon slot="end" name="remove-outline"></ion-icon>
-      </ion-button>
+      <ion-button class="submit-button" (click)="validate()">Submit</ion-button>
     </div>
 
-    <ion-button class="submit-button" (click)="validate()">Submit</ion-button>
-  </div>
+    <!-- <br><br> -->
 
-  <!-- <br><br> -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4" style="padding-left: 8px; font-weight: bold">
+          View Events
+        </ion-col>
+      </ion-row>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="4" style="padding-left: 8px; font-weight: bold;">
-        View Events
-      </ion-col>
-    </ion-row>
+      <ion-row>
+        <ion-list>
+          <ion-select
+            class="custom-select-course"
+            fill="outline"
+            interface="popover"
+            placeholder="Course"
+            (ionChange)="selectCourse($event)"
+          >
+            <ion-select-option *ngFor="let course of courses" [value]="course">
+              {{course}}
+            </ion-select-option>
+          </ion-select>
+        </ion-list>
+      </ion-row>
 
-    <ion-row>
-      <ion-list>
-        <ion-select class="custom-select-course" fill="outline" interface="popover" placeholder="Course" (ionChange)="selectCourse($event)">
-          <ion-select-option *ngFor="let course of courses" [value]="course">
-            {{course}}
-          </ion-select-option>
-        </ion-select>
-      </ion-list>
-    </ion-row>
+      <ion-row style="text-align: center; font-weight: bold">
+        <ion-col> Event </ion-col>
 
-    <ion-row style="text-align: center; font-weight: bold;">
-      <ion-col>
-        Event
-      </ion-col>
+        <ion-col> Day </ion-col>
 
-      <ion-col>
-        Day
-      </ion-col>
+        <ion-col> Times </ion-col>
 
-      <ion-col>
-        Times
-      </ion-col>
+        <ion-col> Tutors Needed </ion-col>
 
-      <ion-col>
-        Tutors Needed
-      </ion-col>
+        <ion-col> Venue </ion-col>
 
-      <ion-col>
-        Venue
-      </ion-col>
+        <ion-col> View </ion-col>
 
-      <ion-col>
-        View
-      </ion-col>
+        <ion-col> Actions </ion-col>
+      </ion-row>
 
-      <ion-col>
-        <!-- remove -->
-      </ion-col>
+      <ion-row
+        *ngFor="let event of showCourseEvents"
+        style="text-align: center"
+      >
+        <ion-col> {{event.description}} </ion-col>
 
-    </ion-row>
+        <ion-col> {{event.day}} </ion-col>
 
-    <ion-row *ngFor="let event of showCourseEvents" style="text-align: center;">
-      <ion-col>
-        {{event.description}}
-      </ion-col>
+        <ion-col>
+          {{formatTime(event.startTime)}} - {{formatTime(event.endTime)}}
+        </ion-col>
 
-      <ion-col>
-        {{event.day}}
-      </ion-col>
+        <ion-col> {{event.tutorsNeeded}} </ion-col>
 
-      <ion-col>
-        {{formatTime(event.startTime)}} - {{formatTime(event.endTime)}}
-      </ion-col>
+        <ion-col> {{event.venue}} </ion-col>
 
-      <ion-col>
-        {{event.tutorsNeeded}}
-      </ion-col>
+        <ion-col>
+          <ion-button (click)="presentPopover(event)">Tutors</ion-button>
+        </ion-col>
 
-      <ion-col>
-        {{event.venue}}
-      </ion-col>
+        <ion-col>
+          <ion-button color="danger" (click)="deleteEvent(event.id)">
+            Remove
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ng-container>
 
-      <ion-col>
-        <ion-button (click)="presentPopover(event)">Tutors</ion-button>
-      </ion-col>
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      <ion-grid>
+        <ion-row>
+          <ion-list>
+            <ion-select
+              class="custom-select-course"
+              placeholder="Select Course"
+              fill="outline"
+              aria-label="Course"
+              interface="popover"
+              [(ngModel)]="course"
+              (ionChange)="setCourse($event)"
+            >
+              <ion-select-option [value]="a.name" *ngFor="let a of allCourses">
+                {{a.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-list>
 
-      <ion-col>
-        <ion-button color="danger" (click)="deleteEvent(event.id)">
-          Remove
-        </ion-button>
-      </ion-col>
+          <ion-col size="8"></ion-col>
+        </ion-row>
 
-    </ion-row>
-  </ion-grid>
-</ion-content>
+        <form [formGroup]="eventForm">
+          <div formArrayName="sessions">
+            <ng-container
+              *ngFor="let sessionCtrl of sessions.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <hr *ngIf="i === 1" style="border-top: 1px dashed grey" />
+              <ion-row>
+                <ion-col class="mobile-header">Event </ion-col>
+                <ion-col>
+                  <ion-list>
+                    <ion-select
+                      class="custom-select"
+                      fill="outline"
+                      interface="popover"
+                      formControlName="eventType"
+                      placeholder="Select Event"
+                    >
+                      <ion-select-option
+                        [value]="s.description"
+                        *ngFor="let s of sessionTypes"
+                      >
+                        {{s.description}}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">Day </ion-col>
+                <ion-col>
+                  <ion-list>
+                    <ion-select
+                      class="custom-select"
+                      fill="outline"
+                      interface="popover"
+                      formControlName="day"
+                      placeholder="Select Day"
+                    >
+                      <ion-select-option [value]="d" *ngFor="let d of days">
+                        {{d}}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">Start Time </ion-col>
+                <ion-col>
+                  <!-- Updated Start Time ion-datetime-button and ion-datetime -->
+                  <ion-datetime-button
+                    [attr.datetime]="'datetimeStart' + i"
+                    class="custom-datetime"
+                  ></ion-datetime-button>
+                  <ion-modal [keepContentsMounted]="true">
+                    <ng-template>
+                      <ion-datetime
+                        [id]="'datetimeStart' + i"
+                        presentation="time"
+                        formControlName="startTime"
+                        hourCycle="h23"
+                      ></ion-datetime>
+                    </ng-template>
+                  </ion-modal>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">End Time </ion-col>
+                <ion-col>
+                  <!-- Updated End Time ion-datetime-button and ion-datetime -->
+                  <ion-datetime-button
+                    [attr.datetime]="'datetimeEnd' + i"
+                    class="custom-datetime"
+                  ></ion-datetime-button>
+                  <ion-modal [keepContentsMounted]="true">
+                    <ng-template>
+                      <ion-datetime
+                        [id]="'datetimeEnd' + i"
+                        presentation="time"
+                        showDefaultButtons="true"
+                        hourCycle="h23"
+                        formControlName="endTime"
+                      ></ion-datetime>
+                    </ng-template>
+                  </ion-modal>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">Tutors Needed </ion-col>
+                <ion-col>
+                  <ion-input
+                    aria-label="Tutors Needed"
+                    placeholder="Tutors Needed"
+                    fill="outline"
+                    formControlName="tutorsNeeded"
+                    class="custom-input"
+                  ></ion-input>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">Venue </ion-col>
+                <ion-col>
+                  <ion-input
+                    aria-label="Venue"
+                    placeholder="Venue"
+                    fill="outline"
+                    formControlName="venue"
+                  ></ion-input>
+                </ion-col>
+              </ion-row>
+
+              <hr *ngIf="i > 0" style="border-top: 1px dashed grey" />
+            </ng-container>
+          </div>
+        </form>
+      </ion-grid>
+
+      <!-- Buttons -->
+      <div>
+        <div>
+          <ion-button fill="clear" (click)="addItem()" style="font-size: 15px">
+            Add an event
+            <ion-icon slot="end" name="add-outline"></ion-icon>
+          </ion-button>
+          <ion-button
+            fill="clear"
+            (click)="removeLastSession()"
+            style="font-size: 15px"
+          >
+            Remove last event
+            <ion-icon slot="end" name="remove-outline"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div>
+          <ion-button class="submit-button-mobile" (click)="validate()">
+            Submit
+          </ion-button>
+        </div>
+      </div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4" style="padding-left: 8px; font-weight: bold">
+            View Events
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-list>
+            <ion-select
+              class="custom-select-course"
+              fill="outline"
+              interface="popover"
+              placeholder="Course"
+              (ionChange)="selectCourse($event)"
+            >
+              <ion-select-option
+                *ngFor="let course of courses"
+                [value]="course"
+              >
+                {{course}}
+              </ion-select-option>
+            </ion-select>
+          </ion-list>
+        </ion-row>
+
+        <ng-container *ngFor="let event of showCourseEvents">
+          <ion-row>
+            <ion-col class="mobile-header">Event</ion-col>
+            <ion-col> {{event.description}} </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Day</ion-col>
+            <ion-col> {{event.day}} </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Times</ion-col>
+            <ion-col>
+              {{formatTime(event.startTime)}} - {{formatTime(event.endTime)}}
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Tutors Needed</ion-col>
+            <ion-col> {{event.tutorsNeeded}} </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Venue</ion-col>
+            <ion-col> {{event.venue}} </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">View</ion-col>
+            <ion-col>
+              <ion-button (click)="presentPopover(event)">Tutors</ion-button>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Actions</ion-col>
+            <ion-col>
+              <ion-button color="danger" (click)="deleteEvent(event.id)">
+                Remove
+              </ion-button>
+            </ion-col>
+          </ion-row>
+
+          <hr style="border-top: 1px dashed grey" />
+        </ng-container>
+      </ion-grid>
+    </ion-content>
+  </ng-template>
+</ng-container>
