@@ -1,9 +1,127 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>allocate-conveners</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Allocate Conveners</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ng-container *ngIf="screenWidth >= 800 else mobileView">
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-select
+        class="custom-select"
+        fill="outline"
+        interface="popover"
+        [(ngModel)]="filterOption"
+        (ionChange)="applyFilter()"
+      >
+        <ion-select-option value="all">Display All</ion-select-option>
+        <ion-select-option value="assigned">Display Assigned</ion-select-option>
+        <ion-select-option value="unassigned"
+          >Display Unassigned</ion-select-option
+        >
+      </ion-select>
+    </ion-list>
 
-</ion-content>
+    <ion-grid>
+      <!-- Headings -->
+      <ion-row style="text-align: center; font-weight: bold">
+        <ion-col> Name </ion-col>
+        <ion-col> Email </ion-col>
+        <ion-col> Assign Course </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row
+        class="ion-align-items-center"
+        style="text-align: center"
+        *ngFor="let a of displayedCCs"
+      >
+        <ion-col> {{a.name}} </ion-col>
+
+        <ion-col> {{a.email}} </ion-col>
+
+        <ion-col>
+          <ion-list>
+            <ion-select
+              class="custom-select-course"
+              fill="outline"
+              aria-label="Assign Course"
+              interface="popover"
+              [(ngModel)]="a.course"
+            >
+              <ion-select-option [value]="c.name" *ngFor="let c of courses">
+                {{c.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-button (click)="updateConveners()"> Update </ion-button>
+  </ion-content>
+</ng-container>
+
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      <ion-list>
+        <ion-select
+          class="custom-select"
+          fill="outline"
+          interface="popover"
+          [(ngModel)]="filterOption"
+          (ionChange)="applyFilter()"
+        >
+          <ion-select-option value="all">Display All</ion-select-option>
+          <ion-select-option value="assigned"
+            >Display Assigned</ion-select-option
+          >
+          <ion-select-option value="unassigned"
+            >Display Unassigned</ion-select-option
+          >
+        </ion-select>
+      </ion-list>
+
+      <ion-grid>
+        <ng-container *ngFor="let a of displayedCCs">
+          <ion-row>
+            <ion-col class="mobile-header">Name</ion-col>
+            <ion-col> <ion-col> {{a.name}} </ion-col> </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Email</ion-col>
+            <ion-col> {{a.email}} </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Assign Course</ion-col>
+            <ion-col>
+              <ion-list>
+                <ion-select
+                  fill="outline"
+                  aria-label="Assign Course"
+                  interface="popover"
+                  [(ngModel)]="a.course"
+                  class="select"
+                >
+                  <ion-select-option [value]="c.name" *ngFor="let c of courses">
+                    {{c.name}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+
+          <hr style="border-top: 1px dashed grey" />
+        </ng-container>
+      </ion-grid>
+      <ion-button (click)="updateConveners()"> Update </ion-button>
+    </ion-content>
+  </ng-template>
+</ng-container>
