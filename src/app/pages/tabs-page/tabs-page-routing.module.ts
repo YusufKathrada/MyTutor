@@ -121,6 +121,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'allocate-conveners',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../allocate-conveners/allocate-conveners.module').then(m => m.AllocateConvenersPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'

@@ -29,12 +29,17 @@ export class AppComponent implements OnInit {
     {
       title: 'Allocate Courses',
       url: '/app/tabs/admin-allocate-tutors',
-      icon: 'people'
+      icon: 'book'
     },
     {
       title: 'Review Applications',
       url: '/app/tabs/admin-review-applications',
       icon: 'documents'
+    },
+    {
+      title: 'Allocate Conveners',
+      url: '/app/tabs/allocate-conveners',
+      icon: 'people'
     }
   ];
 
