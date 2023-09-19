@@ -149,6 +149,23 @@ export class SupabaseService {
     }
   }
 
+  async getUserBySession(session_index){
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .select('*')
+        .eq('session_index', session_index)
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 
 
   /**
