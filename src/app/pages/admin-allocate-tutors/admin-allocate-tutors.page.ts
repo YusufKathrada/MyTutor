@@ -76,6 +76,14 @@ export class AdminAllocateTutorsPage implements OnInit {
     await this.loadingCtrl.dismiss();
   }
 
+  ionViewDidEnter() {
+    // This method is called when the page has fully entered (navigated back to)
+    // You can trigger a refresh or reload here
+    //this.reloadPage();
+    this.filterOption = 'all';
+    this.ngOnInit();
+  }
+
 
   async presentLoading() {
     const loading = await this.loadingCtrl.create({
@@ -275,7 +283,7 @@ export class AdminAllocateTutorsPage implements OnInit {
 
 
   reloadPage() {
-    location.reload();
+    
   }
 
 }
