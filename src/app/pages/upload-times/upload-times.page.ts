@@ -5,8 +5,7 @@ import { Admin } from '../../providers/admin';
 import { LoadingController } from '@ionic/angular';
 import { PopoverController } from '@ionic/angular';
 import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-component/timeslots-popover-component.component';
-import { ConnectableObservable } from 'rxjs';
-
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-upload-times',
@@ -15,9 +14,11 @@ import { ConnectableObservable } from 'rxjs';
 })
 export class UploadTimesPage implements OnInit {
 
-  // @Input() deleteTutorEvent(eventId: number, userId: string) { 
+  // @Input() deleteTutorEvent(eventId: number, userId: string) {
   //   this.deleteTutorFromEvent(eventId, userId);
   // }
+
+  screenSize: any = this.platform.width();
 
   public eventForm: FormGroup;
   course: string = '';
@@ -41,9 +42,13 @@ export class UploadTimesPage implements OnInit {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private admin: Admin,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    public platform: Platform
   ) {
     this.createForm();
+    this.platform.resize.subscribe(() => {
+      this.screenSize = this.platform.width();
+    });
   }
 
   async ngOnInit() {
@@ -61,6 +66,12 @@ export class UploadTimesPage implements OnInit {
     console.log("allTutorsToEvents: ", this.allTutorsToEvents);
 
     await this.formatTutorsToEvents();
+  }
+
+  ionViewDidEnter() {
+    // This method is called when the page has fully entered (navigated back to)
+    // You can trigger a refresh or reload here
+    this.reloadPage();
   }
 
   createForm() {
@@ -292,6 +303,14 @@ export class UploadTimesPage implements OnInit {
     }
     this.refreshEvents();
     //this.selectCourse({ detail: { value: this.course } });
+  }
+  reloadPage() {
+    this.eventForm.reset(); // Reset the form
+    this.sessions.clear(); // Clear form array
+    this.addSession(); // Add an initial session
+    this.course = ''; // Clear the course selection
+    this.showCourseEvents = []; // Clear the displayed course events
+    this.refreshEvents(); // Refresh events data
   }
 
 }

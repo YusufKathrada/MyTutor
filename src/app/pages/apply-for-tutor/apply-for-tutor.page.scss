@@ -13,14 +13,6 @@ ion-content {
     color: #090000;
   }
 
-  ion-card {
-    max-width: 1000px;
-    width: 100%;
-    padding: 16px;
-    background-color: #f2f2f2;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-
   ion-card-header {
     background-color: #3985e1;
     color: #fff;
@@ -34,30 +26,5 @@ ion-content {
     font-size: 24px;
     color: #f2f2f2;
     font-weight: 600;
-  }
-
-  ion-list {
-    margin-bottom: 16px;
-  }
-
-  ion-item {
-    padding: 8px 16px;
-    margin-bottom: 8px;
-    border: 1px solid #3985e1;
-    border-radius: 4px;
-  }
-
-  ion-input {
-    border: none;
-    padding-left: 8px;
-  }
-
-  ion-button {
-    font-weight: 600;
-    background-color: #3985e1;
-    color: #fff;
-    width: 100%;
-    border-radius: 4px;
-    text-transform: uppercase;
   }
 

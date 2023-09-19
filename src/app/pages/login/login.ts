@@ -46,6 +46,11 @@ export class LoginPage {
     private http: HttpClient,
   ) { }
 
+  async ionViewWillEnter() {
+    if(await this.userData.isLoggedIn()) {
+      this.router.navigateByUrl('/account');
+    }
+  }
   async onLogin(form: NgForm) {
     try {
       this.submitted = true;

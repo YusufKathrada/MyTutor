@@ -7,137 +7,391 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ng-container *ngIf="screenWidth >= 800 else mobileView">
+  <ion-content class="ion-padding">
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button value="tutor">
+        <ion-label>Tutor</ion-label>
+      </ion-segment-button>
 
-  <ion-segment [(ngModel)]="segment">
-    <ion-segment-button value="tutor">
-      <ion-label>Tutor</ion-label>
-    </ion-segment-button>
+      <ion-segment-button value="TA">
+        <ion-label>TA</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-    <ion-segment-button value="TA">
-      <ion-label>TA</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+    <div [ngSwitch]="segment">
+      <div *ngSwitchCase="'tutor'">
+        <ion-list>
+          <ion-select
+            class="custom-select"
+            fill="outline"
+            interface="popover"
+            [(ngModel)]="filterOption"
+            (ionChange)="applyTutorFilter()"
+          >
+            <ion-select-option value="all">Display All</ion-select-option>
+            <ion-select-option value="accepted"
+              >Display Accepted</ion-select-option
+            >
+            <ion-select-option value="pending"
+              >Display Pending</ion-select-option
+            >
+            <ion-select-option value="rejected"
+              >Display Rejected</ion-select-option
+            >
+          </ion-select>
+        </ion-list>
 
-  <div [ngSwitch]="segment">
+        <ion-grid>
+          <!-- Headings -->
+          <ion-row style="text-align: center; font-weight: bold">
+            <ion-col> Student Name </ion-col>
+            <ion-col> Student Number </ion-col>
+            <ion-col> Degree </ion-col>
+            <ion-col> Year of Study </ion-col>
+            <ion-col> Average </ion-col>
+            <ion-col> Transcript </ion-col>
+            <ion-col> Status </ion-col>
+          </ion-row>
+        </ion-grid>
 
-    <div *ngSwitchCase="'tutor'">
+        <ion-grid>
+          <ion-row
+            class="ion-align-items-center"
+            style="text-align: center"
+            *ngFor="let d of formattedTutorApplications"
+          >
+            <ion-col> {{d.studentName}} </ion-col>
 
-      <ion-list>
-        <ion-select class="custom-select" fill="outline" interface="popover" [(ngModel)]="filterOption" (ionChange)="applyTutorFilter()">
-          <ion-select-option value="all">Display All</ion-select-option>
-          <ion-select-option value="accepted">Display Accepted</ion-select-option>
-          <ion-select-option value="pending">Display Pending</ion-select-option>
-          <ion-select-option value="rejected">Display Rejected</ion-select-option>
-        </ion-select>
-      </ion-list>
+            <ion-col> {{d.stuNum}} </ion-col>
 
+            <ion-col> {{d.degree}} </ion-col>
 
-      <ion-grid>
-        <!-- Headings -->
-        <ion-row style="text-align: center; font-weight: bold;">
-          <ion-col> Student Name </ion-col>
-          <ion-col> Student Number </ion-col>
-          <ion-col> Degree </ion-col>
-          <ion-col> Year of Study </ion-col>
-          <ion-col> Average </ion-col>
-          <ion-col> Transcript </ion-col>
-          <ion-col> Status </ion-col>
-        </ion-row>
-      </ion-grid>
+            <ion-col> {{d.yearOfStudy}} </ion-col>
 
-      <ion-grid>
-        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let d of formattedTutorApplications">
-          <ion-col> {{d.studentName}} </ion-col>
+            <ion-col> {{d.average}} </ion-col>
 
-          <ion-col> {{d.stuNum}} </ion-col>
+            <ion-col>
+              <a
+                (click)="viewTranscript(d.userId)"
+                style="color: blue; cursor: pointer"
+                >View</a
+              >
+            </ion-col>
 
-          <ion-col> {{d.degree}} </ion-col>
+            <ion-col>
+              <ion-list>
+                <ion-select
+                  fill="outline"
+                  aria-label="Application Status"
+                  interface="popover"
+                  [placeholder]="this.revStatusMap[d.status]"
+                  [(ngModel)]="d.status"
+                >
+                  <ion-select-option
+                    [value]="a.description"
+                    *ngFor="let a of applicationStatuses"
+                  >
+                    {{a.description}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
 
-          <ion-col> {{d.yearOfStudy}} </ion-col>
+        <ion-button (click)="updateTutors()"> Update </ion-button>
+      </div>
 
-          <ion-col> {{d.average}} </ion-col>
+      <div *ngSwitchCase="'TA'">
+        <ion-list>
+          <ion-select
+            class="custom-select"
+            fill="outline"
+            interface="popover"
+            [(ngModel)]="filterOption"
+            (ionChange)="applyTAFilter()"
+          >
+            <ion-select-option value="all">Display All</ion-select-option>
+            <ion-select-option value="accepted"
+              >Display Accepted</ion-select-option
+            >
+            <ion-select-option value="pending"
+              >Display Pending</ion-select-option
+            >
+            <ion-select-option value="rejected"
+              >Display Rejected</ion-select-option
+            >
+          </ion-select>
+        </ion-list>
 
-          <ion-col>
-            <a (click)="viewTranscript(t.userId)" style="color: blue; cursor: pointer;">View</a>
-          </ion-col>
+        <ion-grid>
+          <!-- Headings -->
+          <ion-row style="text-align: center; font-weight: bold">
+            <ion-col> Name </ion-col>
+            <ion-col> Email </ion-col>
+            <ion-col> Qualification </ion-col>
+            <ion-col> Desired Course </ion-col>
+            <ion-col> Transcript </ion-col>
+            <ion-col> Status </ion-col>
+            <ion-col> Admin Right </ion-col>
+          </ion-row>
+        </ion-grid>
 
-          <ion-col>
-            <ion-list>
-              <ion-select fill="outline" aria-label="Application Status" interface="popover" [placeholder]="this.revStatusMap[d.status]" [(ngModel)]="d.status">
-                <ion-select-option [value]="a.description" *ngFor="let a of applicationStatuses">
-                  {{a.description}}
-                </ion-select-option>
-              </ion-select>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+        <ion-grid>
+          <ion-row
+            class="ion-align-items-center"
+            style="text-align: center"
+            *ngFor="let d of formattedTAApplications"
+          >
+            <ion-col> {{d.name}} </ion-col>
 
-      <ion-button (click)="updateTutors()">
-        Update
-      </ion-button>
+            <ion-col> {{d.email}} </ion-col>
 
+            <ion-col> {{d.qualification}} </ion-col>
+
+            <ion-col> {{d.desiredCourse}} </ion-col>
+
+            <ion-col>
+              <a
+                (click)="viewTranscript(d.userId)"
+                style="color: blue; cursor: pointer"
+                >View</a
+              >
+            </ion-col>
+
+            <ion-col>
+              <ion-list>
+                <ion-select
+                  fill="outline"
+                  aria-label="Application Status"
+                  interface="popover"
+                  [placeholder]="this.revStatusMap[d.status]"
+                  [(ngModel)]="d.status"
+                >
+                  <ion-select-option
+                    [value]="a.description"
+                    *ngFor="let a of applicationStatuses"
+                  >
+                    {{a.description}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-list>
+            </ion-col>
+
+            <ion-col>
+              <ion-checkbox
+                [disabled]="!isCheckboxEnabled(d.status)"
+                [(ngModel)]="d.adminRights"
+                [checked]="d.adminRights"
+              ></ion-checkbox>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-button (click)="updateTAs()"> Update </ion-button>
+      </div>
     </div>
+  </ion-content>
+</ng-container>
 
-    <div *ngSwitchCase="'TA'">
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      <ion-segment [(ngModel)]="segment">
+        <ion-segment-button value="tutor">
+          <ion-label>Tutor</ion-label>
+        </ion-segment-button>
 
-      <ion-list>
-        <ion-select class="custom-select" fill="outline" interface="popover" [(ngModel)]="filterOption" (ionChange)="applyTAFilter()">
-          <ion-select-option value="all">Display All</ion-select-option>
-          <ion-select-option value="accepted">Display Accepted</ion-select-option>
-          <ion-select-option value="pending">Display Pending</ion-select-option>
-          <ion-select-option value="rejected">Display Rejected</ion-select-option>
-        </ion-select>
-      </ion-list>
+        <ion-segment-button value="TA">
+          <ion-label>TA</ion-label>
+        </ion-segment-button>
+      </ion-segment>
 
+      <div [ngSwitch]="segment">
+        <div *ngSwitchCase="'tutor'">
+          <ion-list>
+            <ion-select
+              class="custom-select"
+              fill="outline"
+              interface="popover"
+              [(ngModel)]="filterOption"
+              (ionChange)="applyTutorFilter()"
+            >
+              <ion-select-option value="all">Display All</ion-select-option>
+              <ion-select-option value="accepted"
+                >Display Accepted</ion-select-option
+              >
+              <ion-select-option value="pending"
+                >Display Pending</ion-select-option
+              >
+              <ion-select-option value="rejected"
+                >Display Rejected</ion-select-option
+              >
+            </ion-select>
+          </ion-list>
+          <ion-grid>
+            <ng-container *ngFor="let d of formattedTutorApplications">
+              <ion-row>
+                <ion-col class="mobile-header">Student Name</ion-col>
+                <ion-col> {{d.studentName}} </ion-col>
+              </ion-row>
 
-      <ion-grid>
-        <!-- Headings -->
-        <ion-row style="text-align: center; font-weight: bold;">
-          <ion-col> Name </ion-col>
-          <ion-col> Email </ion-col>
-          <ion-col> Qualification </ion-col>
-          <ion-col> Desired Course </ion-col>
-          <ion-col> Status </ion-col>
-          <ion-col> Admin Right </ion-col>
+              <ion-row>
+                <ion-col class="mobile-header">Student Number</ion-col>
+                <ion-col> {{d.stuNum}} </ion-col>
+              </ion-row>
 
-        </ion-row>
-      </ion-grid>
+              <ion-row>
+                <ion-col class="mobile-header">Degree</ion-col>
+                <ion-col> {{d.degree}} </ion-col>
+              </ion-row>
 
-      <ion-grid>
-        <ion-row class="ion-align-items-center" style="text-align: center" *ngFor="let d of formattedTAApplications">
-          <ion-col> {{d.name}} </ion-col>
+              <ion-row>
+                <ion-col class="mobile-header">Year of study</ion-col>
+                <ion-col> {{d.yearOfStudy}} </ion-col>
+              </ion-row>
 
-          <ion-col> {{d.email}} </ion-col>
+              <ion-row>
+                <ion-col class="mobile-header">Average</ion-col>
+                <ion-col> {{d.average}} </ion-col>
+              </ion-row>
 
-          <ion-col> {{d.qualification}} </ion-col>
+              <ion-row>
+                <ion-col class="mobile-header">Transcript</ion-col>
+                <ion-col>
+                  <a
+                    (click)="viewTranscript(d.userId)"
+                    style="color: blue; cursor: pointer"
+                    >View</a
+                  >
+                </ion-col>
+              </ion-row>
 
-          <ion-col> {{d.desiredCourse}} </ion-col>
+              <ion-row>
+                <ion-col class="mobile-header">Status</ion-col>
+                <ion-col>
+                  <ion-list>
+                    <ion-select
+                      fill="outline"
+                      aria-label="Application Status"
+                      interface="popover"
+                      [placeholder]="this.revStatusMap[d.status]"
+                      [(ngModel)]="d.status"
+                    >
+                      <ion-select-option
+                        [value]="a.description"
+                        *ngFor="let a of applicationStatuses"
+                      >
+                        {{a.description}}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
 
+              <hr style="border-top: 1px dashed grey" />
+            </ng-container>
+          </ion-grid>
 
-          <ion-col>
-            <ion-list>
-              <ion-select fill="outline" aria-label="Application Status" interface="popover" [placeholder]="this.revStatusMap[d.status]" [(ngModel)]="d.status">
-                <ion-select-option [value]="a.description" *ngFor="let a of applicationStatuses">
-                  {{a.description}}
-                </ion-select-option>
-              </ion-select>
-            </ion-list>
-          </ion-col>
+          <ion-button (click)="updateTutors()"> Update </ion-button>
+        </div>
 
-          <ion-col>
-            <ion-checkbox [disabled]="!isCheckboxEnabled(d.status)" [(ngModel)]="d.adminRights" [checked]="d.adminRights"></ion-checkbox>
-          </ion-col>
+        <div *ngSwitchCase="'TA'">
+          <ion-list>
+            <ion-select
+              class="custom-select"
+              fill="outline"
+              interface="popover"
+              [(ngModel)]="filterOption"
+              (ionChange)="applyTAFilter()"
+            >
+              <ion-select-option value="all">Display All</ion-select-option>
+              <ion-select-option value="accepted"
+                >Display Accepted</ion-select-option
+              >
+              <ion-select-option value="pending"
+                >Display Pending</ion-select-option
+              >
+              <ion-select-option value="rejected"
+                >Display Rejected</ion-select-option
+              >
+            </ion-select>
+          </ion-list>
 
-        </ion-row>
-      </ion-grid>
+          <ion-grid>
+            <ng-container *ngFor="let d of formattedTAApplications">
+              <ion-row>
+                <ion-col class="mobile-header">Name</ion-col>
+                <ion-col> {{d.name}} </ion-col>
+              </ion-row>
 
-      <ion-button (click)="updateTAs()">
-        Update
-      </ion-button>
+              <ion-row>
+                <ion-col class="mobile-header">Email</ion-col>
+                <ion-col> {{d.email}} </ion-col>
+              </ion-row>
 
-    </div>
-  </div>
+              <ion-row>
+                <ion-col class="mobile-header">Qualification</ion-col>
+                <ion-col> {{d.qualification}} </ion-col>
+              </ion-row>
 
-</ion-content>
+              <ion-row>
+                <ion-col class="mobile-header">Desired Course</ion-col>
+                <ion-col> {{d.desiredCourse}} </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">Transcript</ion-col>
+                <ion-col>
+                  <a
+                    (click)="viewTranscript(d.userId)"
+                    style="color: blue; cursor: pointer"
+                    >View</a
+                  >
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">Status</ion-col>
+                <ion-col>
+                  <ion-list>
+                    <ion-select
+                      fill="outline"
+                      aria-label="Application Status"
+                      interface="popover"
+                      [placeholder]="this.revStatusMap[d.status]"
+                      [(ngModel)]="d.status"
+                    >
+                      <ion-select-option
+                        [value]="a.description"
+                        *ngFor="let a of applicationStatuses"
+                      >
+                        {{a.description}}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">Admin Right</ion-col>
+                <ion-col>
+                  <ion-checkbox
+                    [disabled]="!isCheckboxEnabled(d.status)"
+                    [(ngModel)]="d.adminRights"
+                    [checked]="d.adminRights"
+                  ></ion-checkbox>
+                </ion-col>
+              </ion-row>
+
+              <hr style="border-top: 1px dashed grey" />
+            </ng-container>
+          </ion-grid>
+
+          <ion-button (click)="updateTAs()"> Update </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ng-container>

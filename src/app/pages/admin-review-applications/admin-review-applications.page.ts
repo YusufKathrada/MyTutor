@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Admin } from '../../providers/admin';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-admin-review-applications',
@@ -9,6 +10,8 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./admin-review-applications.page.scss'],
 })
 export class AdminReviewApplicationsPage implements OnInit {
+
+  screenWidth: number = this.platform.width();
 
   public segment: string = '';
   public filterOption: string = 'all';
@@ -37,8 +40,13 @@ export class AdminReviewApplicationsPage implements OnInit {
   constructor(
     public admin: Admin,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController
-  ) { }
+    public toastCtrl: ToastController,
+    public platform: Platform
+  ) {
+    this.platform.resize.subscribe(() => {
+      this.screenWidth = this.platform.width();
+    });
+  }
 
   async ngOnInit() {
     await this.presentLoading();
@@ -94,6 +102,13 @@ export class AdminReviewApplicationsPage implements OnInit {
 
 
     await this.loadingCtrl.dismiss();
+  }
+  ionViewDidEnter() {
+    // This method is called when the page has fully entered (navigated back to)
+    // You can trigger a refresh or reload here
+    this.reloadPage();
+    this.filterOption = 'all';
+    this.ngOnInit();
   }
 
   async presentLoading() {
@@ -254,6 +269,10 @@ export class AdminReviewApplicationsPage implements OnInit {
   viewTranscript(userId){
     const url = `${environment.supabaseUrl}/storage/v1/object/public/transcripts/${userId}/doc.pdf`;
     window.open(url, '_blank');
+  }
+  reloadPage() {
+    this.formattedTutorApplications = [...this.fullTutorApplications];
+    this.formattedTAApplications = [...this.fullTAApplications];
   }
 }
 

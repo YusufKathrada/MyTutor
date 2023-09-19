@@ -3,6 +3,7 @@ import { Student } from '../../providers/student';
 import { TA } from '../../providers/ta';
 import { LoadingController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-view-application-status',
@@ -10,6 +11,8 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./view-application-status.page.scss'],
 })
 export class ViewApplicationStatusPage implements OnInit {
+
+  screenWidth: number = this.platform.width();
 
   application: any = {
     type: '',
@@ -23,7 +26,12 @@ export class ViewApplicationStatusPage implements OnInit {
     private ta: TA,
     private loadingController: LoadingController,
     private toastController: ToastController,
-  ) { }
+    private platform: Platform,
+  ) {
+    this.platform.resize.subscribe(() => {
+      this.screenWidth = this.platform.width();
+    });
+   }
 
   async ngOnInit() {
     await this.presentLoading();
