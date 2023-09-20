@@ -43,6 +43,31 @@
           </ion-select>
         </ion-list>
 
+        <ion-button (click)="openFilterInput()" expand="full">
+          {{ showFilterInput ? 'Close Filter' : 'Filter Students by Mark' }}
+        </ion-button>
+  
+        <!-- Filter Input (Hidden by default) -->
+        <div *ngIf="showFilterInput">
+          <ion-item>
+            <ion-label position="stacked">Enter the Minimum Mark</ion-label>
+            <ion-input type="number" [(ngModel)]="minimumMark"></ion-input>
+          </ion-item>
+  
+          <!-- Confirm Button -->
+          <ion-button (click)="filterMark()" expand="full">
+            Confirm
+          </ion-button>
+        </div> 
+        
+        
+        <!-- <ion-item>
+          <ion-label position="floating">Please enter a minimum mark for acceptance</ion-label>
+          <ion-input [(ngModel)]="minimumMark" type="number"></ion-input>
+          <ion-button (click)="filterMark()">Filter</ion-button>
+        </ion-item> -->
+        
+
         <ion-grid>
           <!-- Headings -->
           <ion-row style="text-align: center; font-weight: bold">
