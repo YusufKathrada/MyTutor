@@ -4,12 +4,39 @@
   align-self: center;
 }
 
+.custom-padding {
+  padding-left: 50px;
+}
+
 .custom-select {
-    width: min-content;
-    font-size: 16px; /* Adjust the font size */
-    border: 2px solid #007bff; /* Add a border with a color of your choice */
-    border-radius: 5px; /* Add border radius for rounded corners */
-    background-color: #007bff; /* Set background color */
-    color: #fff; /* Set text color */
-    padding: 8px; /* Add padding for better spacing */
+  justify-content: center;
+  width: min-content;
+  font-size: 16px; /* Adjust the font size */
+  border-radius: 5px; /* Add border radius for rounded corners */
+  background-color: #007bff; /* Set background color */
+  color: #fff; /* Set text color */
+  text-align: center;
+}
+
+.red-background {
+  background-color: rgba(220, 53, 69);
+  border-radius: 5px; /* Add border radius for rounded corners */
+  color: #fff; /* Set text color */
+  width: 200px;
+  --padding-start: 40px;
+  --padding-end: 10px;
+}
+
+.green-background {
+  background-color: rgb(39, 185, 117);
+  border-radius: 5px; /* Add border radius for rounded corners */
+  color: #fff; /* Set text color */
+  width: 200px;
+  --padding-start: 50px;
+  --padding-end: 10px;
+}
+
+ion-select::part(icon) {
+  color: #ffffff;
+  opacity: 1;
 }

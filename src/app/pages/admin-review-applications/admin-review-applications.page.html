@@ -21,14 +21,15 @@
 
     <div [ngSwitch]="segment">
       <div *ngSwitchCase="'tutor'">
+
         <ion-list>
           <ion-select
             class="custom-select"
             fill="outline"
             interface="popover"
+            [interfaceOptions]="{size: 'auto'}"
             [(ngModel)]="filterOption"
-            (ionChange)="applyTutorFilter()"
-          >
+            (ionChange)="applyTutorFilter()">
             <ion-select-option value="all">Display All</ion-select-option>
             <ion-select-option value="accepted"
               >Display Accepted</ion-select-option
@@ -85,8 +86,9 @@
                   fill="outline"
                   aria-label="Application Status"
                   interface="popover"
-                  [placeholder]="this.revStatusMap[d.status]"
+                  [interfaceOptions]="{size: 'auto'}"
                   [(ngModel)]="d.status"
+                  [class]="getColorClass(d.status)"
                 >
                   <ion-select-option
                     [value]="a.description"
@@ -109,6 +111,7 @@
             class="custom-select"
             fill="outline"
             interface="popover"
+            [interfaceOptions]="{size: 'auto'}"
             [(ngModel)]="filterOption"
             (ionChange)="applyTAFilter()"
           >
@@ -166,8 +169,9 @@
                   fill="outline"
                   aria-label="Application Status"
                   interface="popover"
-                  [placeholder]="this.revStatusMap[d.status]"
+                  [interfaceOptions]="{size: 'auto'}"
                   [(ngModel)]="d.status"
+                  [class]="getColorClass(d.status)"
                 >
                   <ion-select-option
                     [value]="a.description"
@@ -210,11 +214,13 @@
 
       <div [ngSwitch]="segment">
         <div *ngSwitchCase="'tutor'">
+
           <ion-list>
             <ion-select
               class="custom-select"
               fill="outline"
               interface="popover"
+              [interfaceOptions]="{size: 'auto'}"
               [(ngModel)]="filterOption"
               (ionChange)="applyTutorFilter()"
             >
@@ -276,8 +282,9 @@
                       fill="outline"
                       aria-label="Application Status"
                       interface="popover"
-                      [placeholder]="this.revStatusMap[d.status]"
+                      [interfaceOptions]="{size: 'auto'}"
                       [(ngModel)]="d.status"
+                      [class]="getColorClass(d.status)"
                     >
                       <ion-select-option
                         [value]="a.description"
@@ -303,6 +310,7 @@
               class="custom-select"
               fill="outline"
               interface="popover"
+              [interfaceOptions]="{size: 'auto'}"
               [(ngModel)]="filterOption"
               (ionChange)="applyTAFilter()"
             >
@@ -360,8 +368,9 @@
                       fill="outline"
                       aria-label="Application Status"
                       interface="popover"
-                      [placeholder]="this.revStatusMap[d.status]"
+                      [interfaceOptions]="{size: 'auto'}"
                       [(ngModel)]="d.status"
+                      [class]="getColorClass(d.status)"
                     >
                       <ion-select-option
                         [value]="a.description"

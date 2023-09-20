@@ -291,5 +291,9 @@ export class AdminAllocateTutorsPage implements OnInit {
   }
 
 
+  getColorClass(courseName: string): string {
+    return courseName === 'UNASSIGNED' ? 'red-background' : 'green-background';
+  }
+  
 }
 
