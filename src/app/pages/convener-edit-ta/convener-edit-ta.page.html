@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Update TA Privileges</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ng-container *ngIf="screenWidth >= 800 else mobileView">
+  <ion-content class="ion-padding">
+    <ion-grid>
+      <!-- Headings -->
+      <ion-row style="text-align: center; font-weight: bold">
+        <ion-col> Name </ion-col>
+        <ion-col> Email </ion-col>
+        <ion-col> Course </ion-col>
+        <ion-col> Give Convener Rights </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row
+        class="ion-align-items-center"
+        style="text-align: center"
+        *ngFor="let ta of TAs"
+      >
+        <ion-col> {{ta.name}} </ion-col>
+
+        <ion-col> {{ta.email}} </ion-col>
+
+        <ion-col> {{ta.course}} </ion-col>
+
+        <ion-col>
+          <ion-checkbox
+            [(ngModel)]="ta.convenerPrivileges"
+            [checked]="ta.convenerPrivileges"
+          ></ion-checkbox>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-button (click)="updateTAs()"> Update </ion-button>
+  </ion-content>
+</ng-container>
+
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      <ion-grid>
+        <ng-container *ngFor="let ta of TAs">
+          <ion-row>
+            <ion-col class="mobile-header">Name</ion-col>
+            <ion-col> {{ta.name}} </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Email</ion-col>
+            <ion-col> {{ta.email}} </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Course</ion-col>
+            <ion-col> {{ta.course}} </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Give Convener Rights</ion-col>
+            <ion-col>
+              <ion-checkbox
+                [(ngModel)]="ta.convenerPrivileges"
+                [checked]="ta.convenerPrivileges"
+              ></ion-checkbox>
+            </ion-col>
+          </ion-row>
+
+          <hr style="border-top: 1px dashed grey" />
+        </ng-container>
+      </ion-grid>
+
+      <ion-button (click)="updateTAs()"> Update </ion-button>
+    </ion-content>
+  </ng-template>
+</ng-container>

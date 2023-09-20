@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 import { Admin } from '../../providers/admin';
+import { Convenor } from '../../providers/convener';
 import { LoadingController } from '@ionic/angular';
 import { PopoverController } from '@ionic/angular';
 import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-component/timeslots-popover-component.component';
 import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-upload-times',
@@ -17,6 +19,9 @@ import { AlertController } from '@ionic/angular';
 export class UploadTimesPage implements OnInit {
 
   screenSize: any = this.platform.width();
+
+  isConvenor: boolean = false;
+  convenerCourse: any;
 
   public eventForm: FormGroup;
   course: string = '';
@@ -40,10 +45,12 @@ export class UploadTimesPage implements OnInit {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private admin: Admin,
+    private convenor: Convenor,
     public popoverController: PopoverController,
     private router: Router,
     public platform: Platform,
     public alertController: AlertController,
+    public storage: Storage,
   ) {
     this.createForm();
     this.platform.resize.subscribe(() => {
@@ -52,26 +59,64 @@ export class UploadTimesPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.addSession();
-    await this.refreshEvents();
-
     await this.getAllCourses();
 
     this.sessionTypes = await this.admin.getAllSessions();
-
     this.allEventsWithIDs = await this.admin.getAllEventsFromEventsTable();
-    console.log("allEventsWithID: ", this.allEventsWithIDs);
-
     this.allTutorsToEvents = await this.admin.getAllTutorsToEvents();
-    console.log("allTutorsToEvents: ", this.allTutorsToEvents);
-
     await this.formatTutorsToEvents();
+
+    await this.refreshEvents();
+
+    // this.addSession();
+    // await this.refreshEvents();
+
+    // await this.getAllCourses();
+
+    // this.sessionTypes = await this.admin.getAllSessions();
+
+    // this.allEventsWithIDs = await this.admin.getAllEventsFromEventsTable();
+    // console.log("allEventsWithID: ", this.allEventsWithIDs);
+
+    // this.allTutorsToEvents = await this.admin.getAllTutorsToEvents();
+    // console.log("allTutorsToEvents: ", this.allTutorsToEvents);
+
+    // await this.formatTutorsToEvents();
   }
 
-  ionViewDidEnter() {
-    // This method is called when the page has fully entered (navigated back to)
-    // You can trigger a refresh or reload here
-    this.reloadPage();
+  async refreshEvents() {
+    let load = await this.loadingCtrl.create({
+      message: 'Loading events...',
+    });
+    load.present();
+
+    [this.allEvents, this.courses] = await this.admin.getAllEvents();
+
+    this.isConvenor = await this.storage.get('role') === 'courseConvener';
+    if(this.isConvenor){
+      await this.setConvener();
+    }
+
+    load.dismiss();
+  }
+
+  async ionViewWillEnter() {
+    await this.reloadPage();
+  }
+
+  async setConvener(){
+    try {
+        let res: any = await this.convenor.getCourse();
+        this.convenerCourse = res[0].courses.name;
+        this.course = this.convenerCourse;
+        let tempCourse = {
+          detail: { value: this.convenerCourse }
+        }
+        this.selectCourse(tempCourse);
+        console.log("res: ", this.convenerCourse);
+      } catch (error) {
+        console.log('upload-times.page.ts ngOnInit() error: ', error);
+      }
   }
 
   createForm() {
@@ -92,19 +137,6 @@ export class UploadTimesPage implements OnInit {
 
   get sessions(): FormArray {
     return this.eventForm.get('sessions') as FormArray;
-  }
-
-  async refreshEvents() {
-    let load = await this.loadingCtrl.create({
-      message: 'Loading events...',
-    });
-    load.present();
-
-    [this.allEvents, this.courses] = await this.admin.getAllEvents();
-    console.log("allEvents: ", this.allEvents)
-    console.log("courses: ", this.courses)
-
-    load.dismiss();
   }
 
   async presentToast(message: string, color: string = 'danger') {
@@ -295,12 +327,12 @@ export class UploadTimesPage implements OnInit {
       buttons: [
         {
           text: 'OK',
-          role: 'ok'}, 
+          role: 'ok'},
         {
           text: 'Cancel',
           role: 'cancel'}
         ],
-          
+
     });
 
     //If selected 'OK' button then delete event by calling deleteEvent() function
