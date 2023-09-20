@@ -37,9 +37,13 @@ export class Convenor extends UserData {
     for(let ta of TAs){
       if(ta.convenerPrivileges){
         await this.supabaseService.updateRole(ta.id, 'courseConvener');
+        let res: any = await this.supabaseService.getCourseId(ta.course);
+        let courseId = res[0].id;
+        await this.supabaseService.updateCourseConvenerCourse(ta.id, courseId);
       }
       else{
         await this.supabaseService.updateRole(ta.id, 'ta');
+        await this.supabaseService.updateCourseConvenerCourse(ta.id, 0);
       }
     }
   }
