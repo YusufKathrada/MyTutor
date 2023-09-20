@@ -50,8 +50,8 @@ export class AppComponent implements OnInit {
       icon: 'cloud-upload'
     },
     {
-      title: 'Review Applications',
-      url: '/app/tabs/admin-review-applications',
+      title: 'Update TA Privileges',
+      url: '/app/tabs/convener-edit-ta',
       icon: 'documents'
     },
   ];
