@@ -220,6 +220,23 @@ export class SupabaseService {
     }
   }
 
+  async updateCourseConvenerCourse(userId: string, courseId: number) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .update({ courseId: courseId })
+        .eq('id', userId)
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 
 
   /**
