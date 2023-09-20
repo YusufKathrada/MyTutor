@@ -8,6 +8,7 @@ import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-comp
 import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-upload-times',
@@ -17,6 +18,8 @@ import { AlertController } from '@ionic/angular';
 export class UploadTimesPage implements OnInit {
 
   screenSize: any = this.platform.width();
+
+  isConvenor: boolean = false;
 
   public eventForm: FormGroup;
   course: string = '';
@@ -44,6 +47,7 @@ export class UploadTimesPage implements OnInit {
     private router: Router,
     public platform: Platform,
     public alertController: AlertController,
+    public storage: Storage,
   ) {
     this.createForm();
     this.platform.resize.subscribe(() => {
@@ -52,6 +56,12 @@ export class UploadTimesPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.isConvenor = await this.storage.get('role') === 'courseConvener';
+    console.log("isConvenor: ", this.isConvenor);
+
+
+
+
     this.addSession();
     await this.refreshEvents();
 
@@ -295,12 +305,12 @@ export class UploadTimesPage implements OnInit {
       buttons: [
         {
           text: 'OK',
-          role: 'ok'}, 
+          role: 'ok'},
         {
           text: 'Cancel',
           role: 'cancel'}
         ],
-          
+
     });
 
     //If selected 'OK' button then delete event by calling deleteEvent() function

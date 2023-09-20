@@ -79,6 +79,9 @@ export class LoginPage {
           case 'admin':
             await this.admin.setRole('admin');
             break;
+          case 'courseConvener':
+            await this.admin.setRole('courseConvener');
+            break;
           case 'tutor':
             await this.tutor.setRole('tutor');
             break;

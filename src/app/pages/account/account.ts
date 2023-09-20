@@ -46,6 +46,7 @@ export class AccountPage implements AfterViewInit {
 
   async initializeApp() {
     const token = this.cookieService.getAll();
+    console.log('token: ', token)
 
     const loading = await this.loadingCtrl.create({
       message: 'Please wait...',
