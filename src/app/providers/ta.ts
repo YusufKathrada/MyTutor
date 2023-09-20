@@ -36,7 +36,7 @@ export class TA extends UserData {
       degree: null,
       yearOfStudy: null,
       average: null,
-      preferredCourse: taApplication.desired_course,
+      preferredCourse: taApplication.preferredCourse,
       qualification: taApplication.degree_completed,
       userId: userId
     }
