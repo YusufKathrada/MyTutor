@@ -1,12 +1,41 @@
 .custom-select {
-    width: min-content;
-    font-size: 16px; /* Adjust the font size */
-    border: 2px solid #007bff; /* Add a border with a color of your choice */
-    border-radius: 5px; /* Add border radius for rounded corners */
-    background-color: #007bff; /* Set background color */
-    color: #fff; /* Set text color */
-    padding: 8px; /* Add padding for better spacing */
+  justify-content: center;
+  width: min-content;
+  font-size: 16px; /* Adjust the font size */
+  border-radius: 5px; /* Add border radius for rounded corners */
+  background-color: #007bff; /* Set background color */
+  color: #fff; /* Set text color */
+  text-align: center;
 }
+
+.popover-content {
+  width: max-content;
+}
+
+
+.red-background {
+  background-color: rgba(220, 53, 69);
+  border-radius: 5px; /* Add border radius for rounded corners */
+  color: #fff; /* Set text color */
+}
+
+.green-background {
+  background-color: rgb(39, 185, 117);
+  border-radius: 5px; /* Add border radius for rounded corners */
+  color: #fff; /* Set text color */
+}
+
+.orange-background {
+  background-color: rgb(108, 117, 125);
+  border-radius: 5px; /* Add border radius for rounded corners */
+  color: #fff; /* Set text color */
+}
+
+ion-select::part(icon) {
+  color: #ffffff;
+  opacity: 1;
+}
+
 
 .mobile-header {
   font-weight: bold;

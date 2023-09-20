@@ -26,7 +26,7 @@
       <div *ngSwitchCase="'tutor'">
 
         <ion-list>
-          <ion-select class="custom-select" fill="outline" interface="popover"
+          <ion-select class="custom-select" fill="outline" interface="popover" [interfaceOptions]="{size: 'auto'}"
             [(ngModel)]="filterOption" (ionChange)="applyTutorFilter()">
             <ion-select-option value="all">Display All</ion-select-option>
             <ion-select-option value="assigned">Display Assigned</ion-select-option>
@@ -34,15 +34,12 @@
           </ion-select>
         </ion-list>
 
-        <ion-card mode="ios">
-          <ion-card-content mode="md">
             <ion-grid>
               <!-- Headings -->
               <ion-row style="text-align: center; font-weight: bold;">
                 <ion-col> Student Name </ion-col>
                 <ion-col> Student Number </ion-col>
                 <ion-col> Assign Course </ion-col>
-                <ion-col> Assigned </ion-col>
               </ion-row>
             </ion-grid>
 
@@ -54,27 +51,22 @@
                 <ion-col> {{a.tutorNum}} </ion-col>
 
                 <ion-col>
-                  <ion-list>
-                    <ion-select class="custom-select-course" fill="outline"
-                      aria-label="Assign Course" interface="popover"
-                      [(ngModel)]="a.assignedCourse">
+                  <ion-list class="tutor-padding">
+                    <ion-select fill="outline"
+                      aria-label="Assign Course" interface="popover" [interfaceOptions]="{size: 'auto'}"
+                      [(ngModel)]="a.assignedCourse"
+                      [class]="getColorClass(a.assignedCourse)">
                       <ion-select-option [value]="c.name"
-                        *ngFor="let c of courses">
+                        *ngFor="let c of courses" class="centered-text-select">
                         {{c.name}}
                       </ion-select-option>
                     </ion-select>
                   </ion-list>
                 </ion-col>
 
-                <ion-col>
-                  <!-- <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox> -->
-                  <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
-                </ion-col>
               </ion-row>
 
             </ion-grid>
-          </ion-card-content>
-        </ion-card>
 
         <ion-button (click)="updateTutorAllocations()">
           Update
@@ -84,7 +76,7 @@
       <div *ngSwitchCase="'TA'">
 
         <ion-list>
-          <ion-select class="custom-select" fill="outline" interface="popover"
+          <ion-select class="custom-select" fill="outline" interface="popover" [interfaceOptions]="{size: 'auto'}"
             [(ngModel)]="filterOption" (ionChange)="applyTAFilter()">
             <ion-select-option value="all">Display All</ion-select-option>
             <ion-select-option value="assigned">Display Assigned</ion-select-option>
@@ -92,14 +84,12 @@
           </ion-select>
         </ion-list>
 
-        <ion-card mode="ios">
-          <ion-card-content mode="md">
             <ion-grid>
               <!-- Headings -->
               <ion-row style="text-align: center; font-weight: bold;">
                 <ion-col> Student Name </ion-col>
                 <ion-col> Assign Course </ion-col>
-                <ion-col> Assigned </ion-col>
+                <!-- <ion-col> Assigned </ion-col> -->
               </ion-row>
             </ion-grid>
 
@@ -109,10 +99,11 @@
                 <ion-col> {{a.taName}} </ion-col>
 
                 <ion-col>
-                  <ion-list>
-                    <ion-select class="custom-select-course" fill="outline"
-                      aria-label="Assign Course" interface="popover"
-                      [(ngModel)]="a.assignedCourse">
+                  <ion-list class="ta-padding">
+                    <ion-select fill="outline"
+                      aria-label="Assign Course" interface="popover" [interfaceOptions]="{size: 'auto'}"
+                      [(ngModel)]="a.assignedCourse"
+                      >
                       <ion-select-option [value]="c.name"
                         *ngFor="let c of courses">
                         {{c.name}}
@@ -121,14 +112,13 @@
                   </ion-list>
                 </ion-col>
 
-                <ion-col>
-                  <!-- <ion-checkbox [disabled]="true" [checked]="a.assignedStatus"></ion-checkbox> -->
+                <!-- <ion-col>
                   <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
-                </ion-col>
+                </ion-col> -->
+
+                
               </ion-row>
             </ion-grid>
-          </ion-card-content>
-        </ion-card>
 
         <ion-button (click)="updateTAAllocations()">
           Update
@@ -143,6 +133,7 @@
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
+
       <ion-segment [(ngModel)]="segment">
         <ion-segment-button value="tutor">
           <ion-label>Tutor</ion-label>
@@ -158,7 +149,7 @@
         <div *ngSwitchCase="'tutor'">
 
           <ion-list>
-            <ion-select class="custom-select" fill="outline" interface="popover"
+            <ion-select class="custom-select" fill="outline" interface="popover" [interfaceOptions]="{size: 'auto'}"
               [(ngModel)]="filterOption" (ionChange)="applyTutorFilter()">
               <ion-select-option value="all">Display All</ion-select-option>
               <ion-select-option value="assigned">Display Assigned</ion-select-option>
@@ -188,8 +179,9 @@
                       fill="outline"
                       aria-label="Assign Course"
                       interface="popover"
+                      [interfaceOptions]="{size: 'auto'}"
                       [(ngModel)]="a.assignedCourse"
-                      class="select">
+                      [class]="getColorClass(a.assignedCourse)">
 
                       <ion-select-option [value]="c.name"
                         *ngFor="let c of courses">
@@ -198,13 +190,6 @@
 
                     </ion-select>
                   </ion-list>
-                </ion-col>
-              </ion-row>
-
-              <ion-row>
-                <ion-col class="mobile-header">Assigned</ion-col>
-                <ion-col>
-                  <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
                 </ion-col>
               </ion-row>
 
@@ -217,7 +202,7 @@
         <div *ngSwitchCase="'TA'">
 
           <ion-list>
-            <ion-select class="custom-select" fill="outline" interface="popover"
+            <ion-select class="custom-select" fill="outline" interface="popover" [interfaceOptions]="{size: 'auto'}"
               [(ngModel)]="filterOption" (ionChange)="applyTAFilter()">
               <ion-select-option value="all">Display All</ion-select-option>
               <ion-select-option value="assigned">Display Assigned</ion-select-option>
@@ -238,10 +223,11 @@
                 <ion-col>
                   <ion-list>
                     <ion-select
-                      class="select"
+                      [class]="getColorClass(a.assignedCourse)"
                       fill="outline"
                       aria-label="Assign Course"
                       interface="popover"
+                      [interfaceOptions]="{size: 'auto'}"
                       [(ngModel)]="a.assignedCourse">
 
                       <ion-select-option [value]="c.name"
@@ -251,13 +237,6 @@
 
                     </ion-select>
                   </ion-list>
-                </ion-col>
-              </ion-row>
-
-              <ion-row>
-                <ion-col class="mobile-header">Assigned</ion-col>
-                <ion-col>
-                  <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
                 </ion-col>
               </ion-row>
 

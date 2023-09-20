@@ -147,14 +147,14 @@ export class AdminReviewApplicationsPage implements OnInit {
         degree: application.degree,
         yearOfStudy: application.yearOfStudy,
         average: application.average,
-        status: application.statusId,
+        status: this.revStatusMap[application.statusId],
         userId: application.userId
       };
     });
 
-    this.rejectedTutors = this.formattedTutorApplications.filter((application) => application.status === 0);
-    this.pendingTutors = this.formattedTutorApplications.filter((application) => application.status === 1);
-    this.acceptedTutors = this.formattedTutorApplications.filter((application) => application.status === 2);
+    this.rejectedTutors = this.formattedTutorApplications.filter((application) => application.status === 'Rejected');
+    this.pendingTutors = this.formattedTutorApplications.filter((application) => application.status === 'Pending');
+    this.acceptedTutors = this.formattedTutorApplications.filter((application) => application.status === 'Accepted');
 
 
     this.formattedTAApplications = this.fullTAApplications.map((application) => {
@@ -164,16 +164,16 @@ export class AdminReviewApplicationsPage implements OnInit {
         email: application.email,
         qualification: application.qualification,
         desiredCourse: application.preferredCourse,
-        status: application.statusId,
+        status: this.revStatusMap[application.statusId],
         userId: application.userId,
         adminRights: application.adminRights && application.statusId === 2 ? true : false,
         checkboxEnabled: this.isCheckboxEnabled(this.revStatusMap[application.status])
       };
     });
 
-    this.rejectedTAs = this.formattedTAApplications.filter((application) => application.status === 0);
-    this.pendingTAs = this.formattedTAApplications.filter((application) => application.status === 1);
-    this.acceptedTAs = this.formattedTAApplications.filter((application) => application.status === 2);
+    this.rejectedTAs = this.formattedTAApplications.filter((application) => application.status === 'Rejected');
+    this.pendingTAs = this.formattedTAApplications.filter((application) => application.status === 'Pending');
+    this.acceptedTAs = this.formattedTAApplications.filter((application) => application.status === 'Accepted');
 
   }
 
@@ -198,7 +198,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     }
 
     this.filterOption = 'all';
-    this.ngOnInit();
+    this.ionViewWillEnter();
   }
 
 
@@ -226,7 +226,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     }
 
     this.filterOption = 'all';
-    this.ngOnInit();
+    this.ionViewWillEnter();
   }
 
   openFilterInput() {
@@ -402,8 +402,19 @@ if (this.removedApplications.length > 0) {
       }
     }
   }
-  
-  
+
+  getColorClass(status: string): string {
+    switch (status) {
+      case 'Accepted':
+        return 'green-background';
+      case 'Pending':
+        return 'orange-background';
+      case 'Rejected':
+        return 'red-background';
+      default:
+        return '';
+    }
+  }
 
 //   filterApplicationsByMinimumMark() {
 //     // Filter formattedTutorApplications based on the minimum mark
