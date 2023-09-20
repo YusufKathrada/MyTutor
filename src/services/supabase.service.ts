@@ -25,14 +25,14 @@ export class SupabaseService {
   // ======================================== Error Handler ========================================
 
   async presentError() {
-    alert('Something went wrong, please try again or contact support')
-    // let toastController = new ToastController();
-    // const toast = await toastController.create({
-    //   message: 'Something went wrong, please try again or contact support',
-    //   duration: 2000,
-    //   color: 'danger',
-    // });
-    // toast.present();
+    // alert('Something went wrong, please try again or contact support')
+    let toastController = new ToastController();
+    const toast = await toastController.create({
+      message: 'Something went wrong, please try again or contact support',
+      duration: 2000,
+      color: 'danger',
+    });
+    toast.present();
   }
 
   // ======================================== Auth ========================================
@@ -155,6 +155,60 @@ export class SupabaseService {
         .from('Users')
         .select('*')
         .eq('session_index', session_index)
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async updateCourse(userId: string, courseId: number) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .update({ courseId: courseId })
+        .eq('id', userId)
+        .select()
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getConvenerCourse(userId: string) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .select(`
+          courses:courseId (name)
+          `)
+        .eq('id', userId)
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getConvenerCourseId(userId: string) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .select('courseId')
+        .eq('id', userId)
 
       if (error) throw error
 
@@ -514,6 +568,26 @@ export class SupabaseService {
       let { data: AssignedTAs, error } = await this.supabase
         .from('Assigned TAs')
         .select('*')
+
+      if (error) throw error
+
+      return AssignedTAs
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getTAsForCourse(courseId: number) {
+    try {
+      let { data: AssignedTAs, error } = await this.supabase
+        .from('Assigned TAs')
+        .select(`
+          users:userId (id, name, surname, email, role),
+          courses:courseId (name)
+        `)
+        .eq('courseId', courseId)
 
       if (error) throw error
 

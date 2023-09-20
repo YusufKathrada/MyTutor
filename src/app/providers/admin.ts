@@ -113,7 +113,7 @@ export class Admin extends UserData {
 
   async getTutorsFromEventId(eventId: string) {
     return await this.supabase.getTutorsFromEventId(eventId);
-  } 
+  }
 
   async getStatuses(){
     return await this.supabase.getAllStatuses();
@@ -156,5 +156,13 @@ export class Admin extends UserData {
 
   async getAllSessions(){
     return await this.supabase.getAllSessionTypes();
+  }
+
+  async getAllCourseConveners(){
+    return await this.supabase.getAllUsersByRole('courseConvener');
+  }
+
+  async updateCourseConvener(userId: string, courseId: number){
+    return await this.supabase.updateCourse(userId, courseId);
   }
 }

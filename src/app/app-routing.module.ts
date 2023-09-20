@@ -59,7 +59,15 @@ const routes: Routes = [
   {
     path: 'tutor-events',
     loadChildren: () => import('./pages/tutor-events/tutor-events.module').then(m => m.TutorEventsPageModule)
+  },  {
+    path: 'allocate-conveners',
+    loadChildren: () => import('./pages/allocate-conveners/allocate-conveners.module').then( m => m.AllocateConvenersPageModule)
   },
+  {
+    path: 'convener-edit-ta',
+    loadChildren: () => import('./pages/convener-edit-ta/convener-edit-ta.module').then( m => m.ConvenerEditTaPageModule)
+  },
+
 
 ];
 

@@ -13,7 +13,7 @@ export class AdminAllocateTutorsPage implements OnInit {
 
   public segment: string = '';
   public filterOption: string = 'all';
-  originalData: any; 
+  originalData: any;
 
   assignedTutors: any = [];
   unassignedTutors: any = [];
@@ -45,44 +45,8 @@ export class AdminAllocateTutorsPage implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('AdminAllocateTutorsPage.events.ngOnInit'); 
+    console.log('AdminAllocateTutorsPage.events.ngOnInit');
     this.segment = 'tutor';
-    // await this.presentLoading();
-
-    
-
-    // this.acceptedTutors = await this.admin.getAcceptedTutors();
-    // this.acceptedTAs = await this.admin.getAcceptedTAs();
-
-    // this.courses = await this.admin.getCourses();
-
-    // this.allocatedTutors = await this.admin.getTutorAllocations();
-    // this.allocatedTAs = await this.admin.getTAAllocations();
-
-    // this.courseMap = this.courses.reduce((map, obj) => {
-    //   map[obj.name] = obj.id;
-    //   return map;
-    // }, {});
-    // console.log('courseMap: ', this.courseMap);
-
-    // this.tutorsMap = this.allocatedTutors.reduce((map, obj) => {
-    //   map[obj.userId] = obj.courseId;
-    //   return map;
-    // }, {});
-    // console.log('tutorsMap: ', this.tutorsMap);
-
-    // this.tasMap = this.allocatedTAs.reduce((map, obj) => {
-    //   map[obj.userId] = obj.courseId;
-    //   return map;
-    // }, {});
-    // console.log('tasMap: ', this.tasMap);
-
-    // await this.getAndFormatTutors();
-    // await this.getAndFormatTAs();
-
-
-    // console.log('displayedTutors: ', this.displayedTutors);
-    // await this.loadingCtrl.dismiss();
   }
 
   async ionViewWillEnter() {
@@ -94,9 +58,6 @@ export class AdminAllocateTutorsPage implements OnInit {
   async dismissLoading() {
     await this.loadingCtrl.dismiss();
   }
-
-
-
 
   async presentLoading() {
     const loading = await this.loadingCtrl.create({
@@ -296,37 +257,38 @@ export class AdminAllocateTutorsPage implements OnInit {
 
 
   async doRefresh(event) {
-  try {
-    // You can put any data fetching logic here
     this.acceptedTutors = await this.admin.getAcceptedTutors();
     this.acceptedTAs = await this.admin.getAcceptedTAs();
+
     this.courses = await this.admin.getCourses();
+
     this.allocatedTutors = await this.admin.getTutorAllocations();
     this.allocatedTAs = await this.admin.getTAAllocations();
 
-    // Refresh the displayed data
+    this.courseMap = this.courses.reduce((map, obj) => {
+      map[obj.name] = obj.id;
+      return map;
+    }, {});
+    console.log('courseMap: ', this.courseMap);
+
+    this.tutorsMap = this.allocatedTutors.reduce((map, obj) => {
+      map[obj.userId] = obj.courseId;
+      return map;
+    }, {});
+    console.log('tutorsMap: ', this.tutorsMap);
+
+    this.tasMap = this.allocatedTAs.reduce((map, obj) => {
+      map[obj.userId] = obj.courseId;
+      return map;
+    }, {});
+    console.log('tasMap: ', this.tasMap);
+
     await this.getAndFormatTutors();
     await this.getAndFormatTAs();
-    
-    if (event) {
-      // If an event object is provided, complete the refresh animation
-      event.target.complete();
-    }
 
-    // Display a toast message to indicate the refresh is complete
-    this.presentToast('Data refreshed successfully', 'success');
-  } catch (error) {
-    console.error('Error refreshing data:', error);
 
-    if (event) {
-      // If an event object is provided, complete the refresh animation with an error message
-      event.target.complete();
-    }
-
-    // Display an error toast message
-    this.presentToast('Error refreshing data', 'danger');
+    console.log('displayedTutors: ', this.displayedTutors);
   }
-}
 
 
 }

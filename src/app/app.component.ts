@@ -29,13 +29,31 @@ export class AppComponent implements OnInit {
     {
       title: 'Allocate Courses',
       url: '/app/tabs/admin-allocate-tutors',
-      icon: 'people'
+      icon: 'book'
     },
     {
       title: 'Review Applications',
       url: '/app/tabs/admin-review-applications',
       icon: 'documents'
+    },
+    {
+      title: 'Allocate Conveners',
+      url: '/app/tabs/allocate-conveners',
+      icon: 'people'
     }
+  ];
+
+  convenerPages = [
+    {
+      title: 'Upload Time Slots',
+      url: '/app/tabs/upload-times',
+      icon: 'cloud-upload'
+    },
+    {
+      title: 'Update TA Privileges',
+      url: '/app/tabs/convener-edit-ta',
+      icon: 'documents'
+    },
   ];
 
   taPages = [
@@ -170,6 +188,9 @@ export class AppComponent implements OnInit {
   async setMenu() {
     if (await this.userData.getRole() == "admin") {
       this.appPages = this.adminPages;
+    }
+    else if (await this.userData.getRole() == "courseConvener") {
+      this.appPages = this.convenerPages;
     }
     else if (await this.userData.getRole() == "tutor") {
       this.appPages = this.tutorPages;
