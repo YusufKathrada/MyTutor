@@ -25,14 +25,14 @@ export class SupabaseService {
   // ======================================== Error Handler ========================================
 
   async presentError() {
-    alert('Something went wrong, please try again or contact support')
-    // let toastController = new ToastController();
-    // const toast = await toastController.create({
-    //   message: 'Something went wrong, please try again or contact support',
-    //   duration: 2000,
-    //   color: 'danger',
-    // });
-    // toast.present();
+    // alert('Something went wrong, please try again or contact support')
+    let toastController = new ToastController();
+    const toast = await toastController.create({
+      message: 'Something went wrong, please try again or contact support',
+      duration: 2000,
+      color: 'danger',
+    });
+    toast.present();
   }
 
   // ======================================== Auth ========================================
@@ -173,6 +173,25 @@ export class SupabaseService {
         .update({ courseId: courseId })
         .eq('id', userId)
         .select()
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getConvenerCourse(userId: string) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .select(`
+          courses:courseId (name)
+          `)
+        .eq('id', userId)
 
       if (error) throw error
 

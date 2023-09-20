@@ -8,8 +8,6 @@
 </ion-header>
 
 <ng-container *ngIf="screenSize >= 800 else mobileView">
-  <!-- <ng-container *ngIf="true"> -->
-
   <ion-content class="ion-padding">
     <ion-grid>
       <ion-row>
@@ -21,6 +19,7 @@
             aria-label="Course"
             interface="popover"
             [(ngModel)]="course"
+            [disabled]="isConvenor"
             (ionChange)="setCourse($event)"
           >
             <ion-select-option [value]="a.name" *ngFor="let a of allCourses">
@@ -181,7 +180,7 @@
         </ion-col>
       </ion-row>
 
-      <ion-row>
+      <ion-row *ngIf="isConvener">
         <ion-list>
           <ion-select
             class="custom-select-course"
@@ -237,9 +236,9 @@
         <ion-col>
           <ion-button color="danger" (click)="presentAlert(event.id)">
             Remove
-          </ion-button>          
+          </ion-button>
         </ion-col>
-        
+
       </ion-row>
     </ion-grid>
   </ion-content>
@@ -259,6 +258,7 @@
               interface="popover"
               [(ngModel)]="course"
               (ionChange)="setCourse($event)"
+              [disabled]="isConvenor"
             >
               <ion-select-option [value]="a.name" *ngFor="let a of allCourses">
                 {{a.name}}
@@ -422,7 +422,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row *ngIf="isConvener">
           <ion-list>
             <ion-select
               class="custom-select-course"
