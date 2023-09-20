@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { Tutor } from '../../providers/tutor';
 import { LoadingController, ToastController, Platform } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tutor-events',
@@ -20,6 +21,7 @@ export class TutorEventsPage implements OnInit {
     private loadingController: LoadingController,
     private toastController: ToastController,
     private platform: Platform,
+    public alertController: AlertController,
   ) {
     this.platform.resize.subscribe(() => {
       this.screenWidth = this.platform.width();
@@ -118,6 +120,31 @@ export class TutorEventsPage implements OnInit {
       duration: 2000,
     });
     await toast.present();
+  }
+
+
+  async presentAlert(session: any) {
+    const alert = await this.alertController.create({
+      subHeader: 'Are you sure you want to delete this tutor from the event?',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'ok'}, 
+        {
+          text: 'Cancel',
+          role: 'cancel'}
+        ],
+          
+    });
+
+    //If selected 'OK' button then delete tutor from event by calling deleteTutuorFromEvent() function
+    alert.onDidDismiss().then((data) => {
+      if (data.role === 'ok') {
+        this.removeEvent(session);
+      }
+    });
+
+    await alert.present();
   }
 
 }

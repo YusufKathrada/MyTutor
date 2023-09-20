@@ -3,6 +3,7 @@ import { PopoverController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
 import { Admin } from '../providers/admin';
 import { ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class TimeslotsPopoverComponentComponent {
     private loadingCtrl: LoadingController,
     private admin: Admin,
     private toastCtrl: ToastController,
+    public alertController: AlertController,
 
 
   ) { }
@@ -39,6 +41,7 @@ export class TimeslotsPopoverComponentComponent {
   }
 
   async deleteTutorFromEvent(eventId: number, userId: string) {
+    console.log('DELETED')
     let load = await this.loadingCtrl.create({
       message: 'Removing tutor from event...',
     });
@@ -57,10 +60,33 @@ export class TimeslotsPopoverComponentComponent {
     else {
       this.presentToast("Error removing tutor from event. Please try again.");
     }
+    //implement better refresh
     location.reload();
-    // this.refreshEvents();
-    // this.selectCourse({ detail: { value: this.course } });
 
+  }
+
+  async presentAlert(eventId: number, userId: string) {
+    const alert = await this.alertController.create({
+      subHeader: 'Are you sure you want to delete this tutor from the event?',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'ok'}, 
+        {
+          text: 'Cancel',
+          role: 'cancel'}
+        ],
+          
+    });
+
+    //If selected 'OK' button then delete tutor from event by calling deleteTutuorFromEvent() function
+    alert.onDidDismiss().then((data) => {
+      if (data.role === 'ok') {
+        this.deleteTutorFromEvent(eventId, userId);
+      }
+    });
+
+    await alert.present();
   }
 
 }

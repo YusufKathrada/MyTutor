@@ -214,7 +214,7 @@
       </ion-row>
 
       <ion-row
-        *ngFor="let event of showCourseEvents"
+        *ngFor="let event of showCourseEvents; let i = index"
         style="text-align: center"
       >
         <ion-col> {{event.description}} </ion-col>
@@ -233,11 +233,13 @@
           <ion-button (click)="presentPopover(event)">Tutors</ion-button>
         </ion-col>
 
+        <!-- (click)="deleteEvent(event.id) -->
         <ion-col>
-          <ion-button color="danger" (click)="deleteEvent(event.id)">
+          <ion-button color="danger" (click)="presentAlert(event.id)">
             Remove
-          </ion-button>
+          </ion-button>          
         </ion-col>
+        
       </ion-row>
     </ion-grid>
   </ion-content>

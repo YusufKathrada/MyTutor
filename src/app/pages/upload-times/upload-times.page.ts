@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 import { Admin } from '../../providers/admin';
@@ -7,6 +7,7 @@ import { PopoverController } from '@ionic/angular';
 import { TimeslotsPopoverComponentComponent } from '../../timeslots-popover-component/timeslots-popover-component.component';
 import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-upload-times',
@@ -14,10 +15,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./upload-times.page.scss'],
 })
 export class UploadTimesPage implements OnInit {
-
-  // @Input() deleteTutorEvent(eventId: number, userId: string) {
-  //   this.deleteTutorFromEvent(eventId, userId);
-  // }
 
   screenSize: any = this.platform.width();
 
@@ -45,7 +42,8 @@ export class UploadTimesPage implements OnInit {
     private admin: Admin,
     public popoverController: PopoverController,
     private router: Router,
-    public platform: Platform
+    public platform: Platform,
+    public alertController: AlertController,
   ) {
     this.createForm();
     this.platform.resize.subscribe(() => {
@@ -268,6 +266,8 @@ export class UploadTimesPage implements OnInit {
   }
 
   async deleteEvent(eventId: number) {
+
+    console.log('DELETED')
     let load = await this.loadingCtrl.create({
       message: 'Removing event...',
     });
@@ -287,6 +287,33 @@ export class UploadTimesPage implements OnInit {
     location.reload();
 
   }
+
+
+  async presentAlert(eventId: number) {
+    const alert = await this.alertController.create({
+      subHeader: 'Are you sure you want to delete this event?',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'ok'}, 
+        {
+          text: 'Cancel',
+          role: 'cancel'}
+        ],
+          
+    });
+
+    //If selected 'OK' button then delete event by calling deleteEvent() function
+    alert.onDidDismiss().then((data) => {
+      if (data.role === 'ok') {
+        this.deleteEvent(eventId);
+      }
+    });
+
+    await alert.present();
+  }
+
+
   reloadPage() {
     this.eventForm.reset(); // Reset the form
     this.sessions.clear(); // Clear form array
@@ -298,10 +325,10 @@ export class UploadTimesPage implements OnInit {
 
   reloadCurrentRoute() {
     let currentUrl = this.router.url;
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate([currentUrl]);
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
     });
-}
+  }
 
 }
 
