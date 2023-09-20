@@ -39,6 +39,7 @@
               <ion-row style="text-align: center; font-weight: bold;">
                 <ion-col> Student Name </ion-col>
                 <ion-col> Student Number </ion-col>
+                <ion-col> Highest Course Completed </ion-col>
                 <ion-col> Assign Course </ion-col>
               </ion-row>
             </ion-grid>
@@ -50,10 +51,12 @@
 
                 <ion-col> {{a.tutorNum}} </ion-col>
 
+                <ion-col> {{a.highestCSCourse}} </ion-col>
+
                 <ion-col>
                   <ion-list class="tutor-padding">
                     <ion-select fill="outline"
-                      aria-label="Assign Course" interface="popover" [interfaceOptions]="{size: 'auto'}"
+                      aria-label="Assign Course"
                       [(ngModel)]="a.assignedCourse"
                       [class]="getColorClass(a.assignedCourse)">
                       <ion-select-option [value]="c.name"

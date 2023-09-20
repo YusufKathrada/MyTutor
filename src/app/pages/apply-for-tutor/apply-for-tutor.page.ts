@@ -15,6 +15,9 @@ import { Router } from '@angular/router'; // Import Router for navigation
 })
 export class ApplyForTutorPage implements OnInit {
 
+  courses: any = [];
+  courseMap: any = [];
+
   tutorApplication = {
     name: '',
     surname: '',
@@ -22,7 +25,8 @@ export class ApplyForTutorPage implements OnInit {
     degreeOfStudy: '',
     yearOfStudy: '',
     averageGrade: '',
-    transcript: null
+    transcript: null,
+    highestCSCourse: null,
   };
 
   taApplication = {
@@ -47,8 +51,9 @@ export class ApplyForTutorPage implements OnInit {
     private router: Router // Inject Router
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     console.log('ngOnInit');
+
   }
 
   ionViewDidEnter() {
@@ -152,8 +157,15 @@ export class ApplyForTutorPage implements OnInit {
     }
   }
 
+  async getAllCourses() {
+    this.courses = await this.student.getCourses();
+
+    // Removes 'UNASSIGNED' course from the list
+    const unassignedCourse = 0;
+    this.courses = this.courses.filter(course => course.id !== unassignedCourse);
+   }
   // Function to simulate a page refresh
-  reloadPage() {
+  async reloadPage() {
     // Function to simulate a page refresh
   // Clear the values in the tutorApplication and taApplication objects
       this.tutorApplication = {
@@ -163,7 +175,8 @@ export class ApplyForTutorPage implements OnInit {
       degreeOfStudy: '',
       yearOfStudy: '',
       averageGrade: '',
-      transcript: null
+      transcript: null,
+      highestCSCourse: null,
     };
 
     this.taApplication = {
@@ -174,6 +187,14 @@ export class ApplyForTutorPage implements OnInit {
       desired_course: '',
       transcript: null
     };
+
+    this.getAllCourses();
+
+    this.courseMap = this.courses.reduce((map, obj) => {
+      map[obj.name] = obj.id;
+      return map;
+    }, {});
+
   }
 }
 
