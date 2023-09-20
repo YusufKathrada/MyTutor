@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { UserData } from '../../providers/user-data';
 import { CookieService } from 'ngx-cookie-service';
@@ -31,6 +31,7 @@ export class AccountPage implements AfterViewInit {
     public tutor: Tutor,
     public student: Student,
     public toastCtrl: ToastController,
+    private route: ActivatedRoute,
   ) { }
 
   ngAfterViewInit() {
@@ -45,7 +46,7 @@ export class AccountPage implements AfterViewInit {
   }
 
   async initializeApp() {
-    const token = this.cookieService.getAll();
+    const token = this.route.snapshot.queryParams['token'];
 
     const loading = await this.loadingCtrl.create({
       message: 'Please wait...',
@@ -53,7 +54,7 @@ export class AccountPage implements AfterViewInit {
     await loading.present();
 
     try {
-      const res = await this.supabase.getUserBySession(token.token);
+      const res = await this.supabase.getUserBySession(token);
       let user = res[0];
 
       if(!user) {
