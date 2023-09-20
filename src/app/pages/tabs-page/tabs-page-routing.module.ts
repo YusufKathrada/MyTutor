@@ -130,6 +130,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'convener-edit-ta',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../convener-edit-ta/convener-edit-ta.module').then(m => m.ConvenerEditTaPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'
