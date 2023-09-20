@@ -43,6 +43,19 @@ export class AppComponent implements OnInit {
     }
   ];
 
+  convenerPages = [
+    {
+      title: 'Upload Time Slots',
+      url: '/app/tabs/upload-times',
+      icon: 'cloud-upload'
+    },
+    {
+      title: 'Review Applications',
+      url: '/app/tabs/admin-review-applications',
+      icon: 'documents'
+    },
+  ];
+
   taPages = [
     {
       title: 'Upload Time Slots',
@@ -175,6 +188,9 @@ export class AppComponent implements OnInit {
   async setMenu() {
     if (await this.userData.getRole() == "admin") {
       this.appPages = this.adminPages;
+    }
+    else if (await this.userData.getRole() == "courseConvener") {
+      this.appPages = this.convenerPages;
     }
     else if (await this.userData.getRole() == "tutor") {
       this.appPages = this.tutorPages;
