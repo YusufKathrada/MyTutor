@@ -16,6 +16,7 @@ export class AdminReviewApplicationsPage implements OnInit {
   public segment: string = '';
   public filterOption: string = 'all';
   minimumMark: number = 0;
+  showFilterInput = false;
 
   fullTutorApplications: any = [];
   fullTAApplications: any = [];
@@ -34,6 +35,8 @@ export class AdminReviewApplicationsPage implements OnInit {
   applicationStatuses: any = [];
   statusMap: any;
   revStatusMap: any = [];
+
+  removedApplications: any=[];
 
   // displayedTutors: any = [];
   // displayedTAs: any = [];
@@ -123,6 +126,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     });
     await loading.present();
   }
+  
 
   async presentToast(message: string, color: string) {
     const toast = await this.toastCtrl.create({
@@ -225,11 +229,74 @@ export class AdminReviewApplicationsPage implements OnInit {
     this.ngOnInit();
   }
 
+  openFilterInput() {
+    this.minimumMark=0;
+    this.showFilterInput = !this.showFilterInput; // Show the filter input section
+  } 
+
+  async filterMark() {
+    // Validate if minimumMark is a valid number
+    if (isNaN(this.minimumMark) || this.minimumMark < 0 || this.minimumMark > 100 || !Number.isInteger(this.minimumMark)) {
+      this.presentToast('Please enter a valid integer between 0 and 100.', 'danger');
+      console.log("Invalid input, must be an integer between 0 and 100");
+      return;
+    }
+    // Create an array to temporarily store removed applications
+    
+  
+    // Loop through the fullTutorApplications and update average property accordingly
+    for (let i = this.fullTutorApplications.length - 1; i >= 0; i--) {
+      const application = this.fullTutorApplications[i];
+      application.average = parseFloat(application.average); // Ensure average is a numeric value
+  
+      if (application.average < this.minimumMark) {
+        // Remove the application from the fullTutorApplications array and add it to the removedApplications array
+        this.removedApplications.push(this.fullTutorApplications.splice(i, 1)[0]);
+      }
+    }
+    console.log("",this.removedApplications);
+  
+    // Check if applications in removedApplications should be added back based on the new minimumMark
+    // Check if there are removed applications
+if (this.removedApplications.length > 0) {
+  // Loop through the removed applications
+  for (let i = this.removedApplications.length - 1; i >= 0; i--) {
+    const application = this.removedApplications[i];
+    const average = parseFloat(application.average);
+    
+    // Check if the application's average is greater than or equal to the new minimum mark
+    if (average >= this.minimumMark) {
+      // Add the application back to fullTutorApplications
+      this.fullTutorApplications.push(application);
+      // Remove the application from the removedApplications array
+      this.removedApplications.splice(i, 1);
+    }
+  }
+}
+
+  
+  
+    // Update the displayed applicants based on the current filter option
+    this.applyTutorFilter();
+    //this.filterOption = 'all';
+    //this.ngOnInit();
+    //this.showFilterInput = false;
+  
+    // You may want to save the changes to the server here if necessary.
+  }
+  
+  
+  
+  
+  
+  
+
   isCheckboxEnabled(status: string): boolean {
     return status === 'Accepted';
   }
 
-  async applyTutorFilter(){
+  async applyTutorFilter(){ 
+   // console.log('Applying tutor filter');
     this.getAndFormatApplications();
 
     switch (this.filterOption) {
@@ -317,8 +384,10 @@ export class AdminReviewApplicationsPage implements OnInit {
       console.log('acceptedTAs: ', this.acceptedTAs);
       console.log('pendingTAs: ', this.pendingTAs);
       console.log('rejectedTAs: ', this.rejectedTAs);
+
+      this.minimumMark = 0;
+      this.showFilterInput=false;
   
-      // ... (Uncomment any other code you need for refresh)
   
       if (event) {
         // If an event is provided, complete the refresh animation
@@ -367,6 +436,3 @@ export class AdminReviewApplicationsPage implements OnInit {
   //   }
   //   return pendingTAs;
   // }
-
-
-
