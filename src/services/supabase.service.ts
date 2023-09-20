@@ -203,6 +203,23 @@ export class SupabaseService {
     }
   }
 
+  async getConvenerCourseId(userId: string) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .select('courseId')
+        .eq('id', userId)
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 
 
   /**
@@ -551,6 +568,26 @@ export class SupabaseService {
       let { data: AssignedTAs, error } = await this.supabase
         .from('Assigned TAs')
         .select('*')
+
+      if (error) throw error
+
+      return AssignedTAs
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getTAsForCourse(courseId: number) {
+    try {
+      let { data: AssignedTAs, error } = await this.supabase
+        .from('Assigned TAs')
+        .select(`
+          users:userId (id, name, surname, email, role),
+          courses:courseId (name)
+        `)
+        .eq('courseId', courseId)
 
       if (error) throw error
 
