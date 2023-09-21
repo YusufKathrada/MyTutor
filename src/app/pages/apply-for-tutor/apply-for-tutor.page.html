@@ -49,6 +49,16 @@
               <ion-item>
                 <ion-input label="Average: " type="number" [(ngModel)]="tutorApplication.averageGrade" name="averageGrade" required></ion-input>
               </ion-item>
+              <ion-item>
+                Select Highest CSC Course Completed:
+                <!-- <ion-list> -->
+                  <ion-select class="custom-select" fill="outline" aria-label="Highest CSC Course Completed" interface="popover" [interfaceOptions]="{size: 'auto'}" [(ngModel)]="tutorApplication.highestCSCourse" placeholder="Select Course" [ngModelOptions]="{standalone: true}">
+                    <ion-select-option [value]="c.name" *ngFor="let c of courses" class="centered-text-select">
+                      {{c.name}}
+                    </ion-select-option>
+                  </ion-select>
+                <!-- </ion-list> -->
+              </ion-item>
 
               <ion-item>
                 <ion-label>Upload Transcript: </ion-label>

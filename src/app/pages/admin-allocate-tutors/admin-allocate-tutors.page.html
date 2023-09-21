@@ -39,6 +39,7 @@
               <ion-row style="text-align: center; font-weight: bold;">
                 <ion-col> Student Name </ion-col>
                 <ion-col> Student Number </ion-col>
+                <ion-col> Highest Course Completed </ion-col>
                 <ion-col> Assign Course </ion-col>
               </ion-row>
             </ion-grid>
@@ -50,10 +51,14 @@
 
                 <ion-col> {{a.tutorNum}} </ion-col>
 
+                <ion-col> {{a.highestCSCourse}} </ion-col>
+
                 <ion-col>
                   <ion-list class="tutor-padding">
                     <ion-select fill="outline"
-                      aria-label="Assign Course" interface="popover" [interfaceOptions]="{size: 'auto'}"
+                      aria-label="Assign Course"
+                      interface="popover"
+                      [interfaceOptions]="{size: 'auto'}"
                       [(ngModel)]="a.assignedCourse"
                       [class]="getColorClass(a.assignedCourse)">
                       <ion-select-option [value]="c.name"
@@ -88,6 +93,7 @@
               <!-- Headings -->
               <ion-row style="text-align: center; font-weight: bold;">
                 <ion-col> Student Name </ion-col>
+                <ion-col> Preferred Course </ion-col>
                 <ion-col> Assign Course </ion-col>
                 <!-- <ion-col> Assigned </ion-col> -->
               </ion-row>
@@ -98,11 +104,14 @@
                 *ngFor="let a of displayedTAs">
                 <ion-col> {{a.taName}} </ion-col>
 
+                <ion-col> {{a.preferredCourse}} </ion-col>
+
                 <ion-col>
                   <ion-list class="ta-padding">
                     <ion-select fill="outline"
                       aria-label="Assign Course" interface="popover" [interfaceOptions]="{size: 'auto'}"
                       [(ngModel)]="a.assignedCourse"
+                      [class]="getColorClass(a.assignedCourse)"
                       >
                       <ion-select-option [value]="c.name"
                         *ngFor="let c of courses">
@@ -116,7 +125,7 @@
                   <ion-checkbox [disabled]="true" [(ngModel)]="a.assignedStatus"></ion-checkbox>
                 </ion-col> -->
 
-                
+
               </ion-row>
             </ion-grid>
 
@@ -172,6 +181,11 @@
               </ion-row>
 
               <ion-row>
+                <ion-col class="mobile-header">Highest Course Completed</ion-col>
+                <ion-col> {{a.highestCSCourse}} </ion-col>
+              </ion-row>
+
+              <ion-row>
                 <ion-col class="mobile-header">Assign Course</ion-col>
                 <ion-col>
                   <ion-list>
@@ -216,6 +230,11 @@
               <ion-row>
                 <ion-col class="mobile-header">Student Name</ion-col>
                 <ion-col> {{a.taName}} </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="mobile-header">Preferred Course</ion-col>
+                <ion-col> {{a.preferredCourse}} </ion-col>
               </ion-row>
 
               <ion-row>

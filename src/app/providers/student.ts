@@ -36,6 +36,7 @@ export class Student extends UserData {
       degree: tutorApplication.degreeOfStudy,
       yearOfStudy: tutorApplication.yearOfStudy,
       average: tutorApplication.averageGrade,
+      highestCSCourse: tutorApplication.highestCSCourse,
       preferredCourse: null,
       qualification: null,
       userId: userId,
@@ -82,4 +83,8 @@ export class Student extends UserData {
         await this.supabaseService.updateRole(userId, 'student');
       }
     }
+
+  async getCourses(){
+    return await this.supabaseService.getAllCourses();
+  }
 }

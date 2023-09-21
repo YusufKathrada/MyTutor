@@ -88,6 +88,7 @@ export class AdminAllocateTutorsPage implements OnInit {
         tutorNum: tutor.stuNum,
         assignedCourse: this.tutorsMap[tutor.userId] ? this.courses.find((course) => { return course.id === this.tutorsMap[tutor.userId] }).name : 'UNASSIGNED',
         assignedStatus: assignedCourse >=1 && assignedCourse <= 11,
+        highestCSCourse: tutor.highestCSCourse,
       }
     });
 
@@ -106,6 +107,7 @@ export class AdminAllocateTutorsPage implements OnInit {
         taName: `${ta.name} ${ta.surname}`,
         assignedCourse: this.tasMap[ta.userId] ? this.courses.find((course) => { return course.id === this.tasMap[ta.userId] }).name : 'UNASSIGNED',
         assignedStatus: assignedCourse >=1 && assignedCourse <= 11,
+        preferredCourse: ta.preferredCourse,
       }
     });
 
