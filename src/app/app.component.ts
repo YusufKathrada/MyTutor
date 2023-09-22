@@ -54,6 +54,11 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/convener-edit-ta',
       icon: 'documents'
     },
+    {
+      title: 'Attendance Codes',
+      url: '/app/tabs/attendance-codes-generator',
+      icon: 'qr-code'
+    },
   ];
 
   taPages = [
@@ -76,9 +81,14 @@ export class AppComponent implements OnInit {
       icon: 'calendar'
     },
     {
-      title: 'View selected times',
+      title: 'View Selected times',
       url: '/app/tabs/tutor-events',
       icon: 'documents'
+    },
+    {
+      title: 'Attendance',
+      url: '/app/tabs/tutor-attendance',
+      icon: 'checkbox'
     },
   ];
 

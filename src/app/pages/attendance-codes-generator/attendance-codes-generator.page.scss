@@ -1,0 +1,12 @@
+.custom-codes {
+    //Make the codes stand out more but not bold
+    font-weight: 500;
+    color: var(--ion-color-primary);
+    // text-align: center;
+}
+
+.mobile-header {
+    font-weight: bold;
+    align-items: center;
+    align-self: center;
+  }
