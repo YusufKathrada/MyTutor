@@ -851,6 +851,43 @@ export class SupabaseService {
     }
   }
 
+
+  async getEventsForCourseID(courseId: number) {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Events')
+        .select('*')
+        .eq('courseId', courseId)
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
+  async updateEvent(eventId: string, attendanceCode: string) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Events')
+        .update({ attendanceCode: attendanceCode })
+        .eq('id', eventId)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
   async getEventByCourseId(courseId: string) {
     try {
       let { data: Events, error } = await this.supabase

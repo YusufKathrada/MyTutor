@@ -67,6 +67,14 @@ const routes: Routes = [
     path: 'convener-edit-ta',
     loadChildren: () => import('./pages/convener-edit-ta/convener-edit-ta.module').then( m => m.ConvenerEditTaPageModule)
   },
+  {
+    path: 'attendance-codes-generator',
+    loadChildren: () => import('./pages/attendance-codes-generator/attendance-codes-generator.module').then( m => m.AttendanceCodesGeneratorPageModule)
+  },
+  {
+    path: 'tutor-attendance',
+    loadChildren: () => import('./pages/tutor-attendance/tutor-attendance.module').then( m => m.TutorAttendancePageModule)
+  },
 
 
 ];

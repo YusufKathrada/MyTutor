@@ -22,6 +22,30 @@ export class Convenor extends UserData {
     return await this.supabaseService.getConvenerCourse(userId);
   }
 
+  async getCourseId(){
+    const userId = await this.storage.get('userId');
+    let res: any = await this.supabaseService.getConvenerCourseId(userId);
+    return res[0].courseId;
+  }
+
+  async getAllCourses(){
+    return await this.supabaseService.getAllCourses();
+  }
+
+  async getEventsForCourse(courseId: number){
+    return await this.supabaseService.getEventsForCourseID(courseId);
+  }
+
+  async getAllSessions(){
+    return await this.supabaseService.getAllSessionTypes();
+  }
+
+  async updateEvents(events: any){
+    for(let event of events){
+      await this.supabaseService.updateEvent(event.id, event.attendanceCode);
+    }
+  }
+
   async getTAForCourse(){
     const userId = await this.storage.get('userId');
 

@@ -1,0 +1,120 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Attendance Codes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ng-container *ngIf="screenWidth >= 800 else mobileView">
+  <ion-content class="ion-padding">
+
+    <ion-grid>
+      <ion-row style="align-items: center;">
+
+        <ion-col style="font-weight: bolder;" size="4">
+          Showing Events for: {{convenerCourse}}
+        </ion-col>
+
+        <ion-col size="4">
+          <!-- <ion-button color="primary" expand="block" (click)="generateCodes()">Generate Codes</ion-button> -->
+          <ion-button color="primary" (click)="generateCodes()">Generate Codes</ion-button>
+        </ion-col>
+      </ion-row>
+
+      <br>
+
+      <ion-row style="text-align: center; font-weight: bold">
+        <ion-col> Event </ion-col>
+
+        <ion-col> Day </ion-col>
+
+        <ion-col> Times </ion-col>
+
+        <ion-col> Venue </ion-col>
+
+        <ion-col> Attendance Code </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row style="text-align: center" *ngFor="let event of formattedEventsForCourse">
+
+        <ion-col>
+          {{event.description}}
+        </ion-col>
+
+        <ion-col>
+          {{event.day}}
+        </ion-col>
+
+        <ion-col>
+          {{formatTime(event.startTime)}} - {{formatTime(event.endTime)}}
+        </ion-col>
+
+        <ion-col>
+          {{event.venue}}
+        </ion-col>
+
+        <ion-col class="custom-codes">
+          {{event.attendanceCode}}
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+    <ion-button (click)="updateCodes()">Update</ion-button>
+
+
+  </ion-content>
+</ng-container>
+
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      <ion-grid>
+        
+        <ion-row style="align-items: center;">
+          <ion-col style="font-weight: bolder;" size="4">
+            Showing Events for: {{convenerCourse}}
+          </ion-col>
+
+          <ion-col size="4">
+            <!-- <ion-button color="primary" expand="block" (click)="generateCodes()">Generate Codes</ion-button> -->
+            <ion-button color="primary" (click)="generateCodes()">Generate Codes</ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ng-container *ngFor="let event of formattedEventsForCourse">
+
+          <ion-row>
+            <ion-col class="mobile-header">Event</ion-col>
+            <ion-col>{{event.description}}</ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Day</ion-col>
+            <ion-col>{{event.day}}</ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Times</ion-col>
+            <ion-col>{{formatTime(event.startTime)}} - {{formatTime(event.endTime)}}</ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Venue</ion-col>
+            <ion-col>{{event.venue}}</ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Attendance Code</ion-col>
+            <ion-col class="custom-codes">{{event.attendanceCode}}</ion-col>
+          </ion-row>
+
+        </ng-container>
+      </ion-grid>
+
+      <ion-button (click)="updateCodes()">Update</ion-button>
+
+    </ion-content>
+  </ng-template>
+</ng-container>
