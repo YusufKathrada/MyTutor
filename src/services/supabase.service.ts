@@ -1170,7 +1170,7 @@ export class SupabaseService {
       let { data: Events, error } = await this.supabase
         .from('Tutors to Events')
         .select(`
-          events:eventId (id, courses:courseId (name), day, startTime, endTime, typeOfSession:sessionId (description))
+          events:eventId (id, courses:courseId (name), day, startTime, endTime, venue, attendanceCode, typeOfSession:sessionId (description))
         `)
         .eq('userId', userId)
 

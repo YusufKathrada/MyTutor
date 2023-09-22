@@ -1,9 +1,83 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>tutor-attendance</ion-title>
+    <ion-title>Attendance</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  TEST
-</ion-content>
+<ng-container *ngIf="screenWidth >= 800 else mobileView">
+  <ion-content class="ion-padding">
+    <ion-grid>
+      <!-- Headings -->
+      <ion-row style="text-align: center; font-weight: bold">
+
+        <ion-col> Event Type </ion-col>
+
+        <ion-col> Day </ion-col>
+
+        <ion-col> Time </ion-col>
+
+        <ion-col> Venue </ion-col>
+
+        <ion-col> Attendance Code </ion-col>
+
+        <ion-col> </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row style="text-align: center; align-items: center;" *ngFor="let s of sessions">
+
+        <ion-col> {{s.eventType}} </ion-col>
+
+        <ion-col> {{s.day}} </ion-col>
+
+        <ion-col> {{s.time}} </ion-col>
+
+        <ion-col> {{s.venue}} </ion-col>
+
+        <!-- <ion-col> {{s.attendanceCode}} </ion-col> -->
+        <ion-col>
+          <ion-input placeholder="Enter Code" fill="outline" [(ngModel)]="s.attendanceCodeInput"></ion-input>
+        </ion-col>
+
+        <ion-col>
+          <ion-button (click)="checkAttendance(s)">Submit</ion-button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ng-container>
+
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      <ion-grid>
+        <ng-container *ngFor="let s of sessions">
+          <ion-row>
+            <ion-col class="mobile-header">Course</ion-col>
+            <ion-col>{{s.course}}</ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Event Type</ion-col>
+            <ion-col>{{s.eventType}}</ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Day</ion-col>
+            <ion-col>{{s.day}}</ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="mobile-header">Time</ion-col>
+            <ion-col>{{s.time}}</ion-col>
+          </ion-row>
+
+          <hr style="border-top: 1px dashed grey" />
+        </ng-container>
+      </ion-grid>
+    </ion-content>
+  </ng-template>
+</ng-container>
