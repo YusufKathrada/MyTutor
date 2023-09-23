@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { HttpClient } from '@angular/common/http';
 
-import { MenuController, Platform, ToastController } from '@ionic/angular';
+import { MenuController, Platform, ToastController, LoadingController } from '@ionic/angular';
 
 import { StatusBar } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -156,7 +156,8 @@ export class AppComponent implements OnInit {
     private swUpdate: SwUpdate,
     private toastCtrl: ToastController,
     private supabase: SupabaseService,
-    private http: HttpClient
+    private http: HttpClient,
+    private loadingCtrl: LoadingController,
   ) {
     this.initializeApp();
   }
@@ -240,12 +241,24 @@ export class AppComponent implements OnInit {
     });
   }
 
+  async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait...',
+    });
+    await loading.present();
+  }
+
+  async dismissLoading() {
+    await this.loadingCtrl.dismiss();
+  }
+
   async logout() {
+    this.presentLoading();
+
     // const url = 'http://localhost:3000/api/login?type=logout';
     let url = 'https://my-tutor-api.vercel.app/api/login?type=logout';
     const userId = await this.storage.get('userId');
     let res: any = await this.supabase.getSessionTokenAndNameId(userId);
-;
     console.log('signout')
 
     // The user has logged in with UCT SAML and has a session with UCT
@@ -261,8 +274,15 @@ export class AppComponent implements OnInit {
         // const logoutUrl = response.logout_url;
         // console.log('logoutUrl', logoutUrl);
 
+        await this.userData.logout().then(() => {
+          // return this.router.navigateByUrl('/login');
+          window.location.href = 'https://projsso1.cs.uct.ac.za/auth/realms/uct/protocol/openid-connect/logout'
+        });
+
+        this.dismissLoading();
+
         // window.location.href = logoutUrl;
-        window.location.href = 'https://projsso1.cs.uct.ac.za/auth/realms/uct/protocol/openid-connect/logout'
+
       } catch (error) {
         console.log('app.component.ts error', error)
       }
@@ -281,11 +301,14 @@ export class AppComponent implements OnInit {
         toast.present();
         return;
       }
-    }
 
-    this.userData.logout().then(() => {
-      return this.router.navigateByUrl('/login');
-    });
+      await this.userData.logout().then(async () => {
+        await this.router.navigateByUrl('/login');
+        return window.location.reload();
+      });
+
+      this.dismissLoading();
+    }
   }
 
   openTutorial() {

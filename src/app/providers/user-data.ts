@@ -42,11 +42,11 @@ export class UserData {
     });
   }
 
-  logout(): Promise<any> {
-    return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
-      return this.storage.remove('username').then(() => {
-        return this.storage.remove('role').then (() => {
-          return this.storage.remove('userId');
+  async logout(): Promise<any> {
+    return await this.storage.remove(this.HAS_LOGGED_IN).then(async () => {
+      return await this.storage.remove('username').then(async () => {
+        return await this.storage.remove('role').then (async () => {
+          return await this.storage.remove('userId');
         });
       });
     }).then(() => {
