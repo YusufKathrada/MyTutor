@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Announcements</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col style="padding-left: 8px; font-weight: bold">
+        Post An Announcement for {{convenerCourse}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card mode="ios">
+    <ion-card-content>
+
+      <ion-item>
+        <ion-input 
+        label="Title" 
+        label-placement="floating" 
+        type="text" 
+        [clearInput]="true"
+        [(ngModel)]="announcementHeading">
+      </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea
+        fill="solid" 
+        label="Description" 
+        label-placement="floating" 
+        [autoGrow]="true"
+        [(ngModel)]="announcementBody">
+      </ion-textarea>
+      </ion-item>
+
+      <br>
+
+      <ion-button color="primary" (click)="postAnnouncement()">Post Announcement</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+
+  <br>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4" style="padding-left: 8px; font-weight: bold">
+        View Announcements
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card *ngIf="formattedAnnouncements.length === 0" mode="ios">
+    <ion-card-header>
+      <ion-card-title>
+        No Announcements Posted
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card *ngFor="let announcement of formattedAnnouncements" mode="ios">
+
+    <ion-card-header>
+      <ion-card-title> {{announcement.heading}} </ion-card-title>
+      <ion-card-subtitle>{{announcement.date}} {{announcement.time}}</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+     {{announcement.body}} 
+    </ion-card-content>
+  </ion-card>
+  
+</ion-content>
