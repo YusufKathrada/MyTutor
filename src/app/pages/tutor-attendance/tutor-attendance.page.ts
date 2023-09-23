@@ -75,9 +75,11 @@ export class TutorAttendancePage implements OnInit {
         course: event.events.courses.name,
         eventType: event.events.typeOfSession.description,
         day: event.events.day,
+        startTime: event.events.startTime,
+        endTime: event.events.endTime,
         time: this.formatTime(event.events.startTime) + ' - ' + this.formatTime(event.events.endTime),
         venue: event.events.venue,
-        attendanceCode: event.events.attendanceCode,
+        attendanceCode: event.events.attendancecode,
         attendanceCodeInput: '',
       }
       formattedEvents.push(formattedEvent);
@@ -110,14 +112,60 @@ export class TutorAttendancePage implements OnInit {
   }
 
   async checkAttendance(session: any) {
+    // Check if attendance code matches
     if (session.attendanceCode === session.attendanceCodeInput) {
       console.log('Attendance code matched!');
-      this.presentToast('Attendance logged!', 'warning');
+
+      // Check if its the correct time to log attendance
+      if(this.validateAttendancetime(session)){
+        await this.presentLoading('Logging attendance...');
+
+        let status = await this.tutor.updateAttendance(session.id, this.userId);
+
+        await this.dismissLoading();
+        if(status == 204) {
+          this.presentToast('Attendance already logged for this event', 'warning');
+        }
+        else{
+          this.presentToast('Attendance logged!', 'success');
+        }
+      }
+
     } else {
-      console.log('Attendance code does not match.');
-      this.presentToast('Attendance code does not match.', 'danger');
+      console.log('Attendance code does not match');
+      this.presentToast('Incorrect attendance code', 'danger');
     }
   }
-  
 
+  validateAttendancetime(session: any) {
+    const now = new Date();
+    // Get the current day (of the week)
+    const currentDay = now.toLocaleString('en-us', { weekday: 'long' });
+    // Get the current time for UCT+2 (SA Timezone) in terms of seconds
+    const currentTime = (now.getUTCHours()+2) * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+
+    // Check if its the correct day
+    if(session.day !== currentDay) {
+      console.log('Wrong day.');
+      this.presentToast('Attendance unavailable for this day.', 'danger');
+      return false;
+    }
+
+    // Construct Date objects in UTC to compare times
+    const [startHours, startMinutes, startSeconds] = session.startTime.split(':').map(Number);
+    const [endHours, endMinutes, endSeconds] = session.endTime.split(':').map(Number);
+
+    const startTotalSeconds = startHours * 3600 + startMinutes * 60 + startSeconds;
+    const endTotalSeconds = endHours * 3600 + endMinutes * 60 + endSeconds + (10 * 60); // Add 10 minutes to end time
+
+    // Check if its within the correct times
+    if(currentTime < startTotalSeconds) {
+      this.presentToast('Attendance not open', 'danger');
+      return false;
+    } else if(currentTime > endTotalSeconds) {
+      this.presentToast('Attendance closed', 'danger');
+      return false;
+    }
+    return true;
+  }
 }

@@ -67,4 +67,8 @@ export class Tutor extends UserData {
   async updateTutorsToEvent(eventId: string, userId: string) {
     return await this.supabase.insertTutorForEvent(eventId, userId);
   }
+
+  async updateAttendance(eventId: string, userId: string) {
+    return await this.supabase.updateAttendance(eventId, userId);
+  }
 }
