@@ -61,6 +61,11 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/attendance-codes-generator',
       icon: 'qr-code'
     },
+    {
+      title: 'View Attendance',
+      url: '/app/tabs/view-attendance',
+      icon: 'checkbox'
+    },
   ];
 
   taPages = [

@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>View Attendance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ng-container *ngIf="screenWidth >= 800 else mobileView">
+  <ion-content class="ion-padding">
+    desktop
+  </ion-content>
+</ng-container>
+
+<ng-container>
+  <ng-template #mobileView>
+    <ion-content class="ion-padding">
+      mobile
+    </ion-content>
+  </ng-template>
+</ng-container>
