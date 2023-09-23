@@ -28,14 +28,19 @@ export class AttendanceCodesGeneratorPage implements OnInit {
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     private platform: Platform,
-  ) { 
+  ) {
     this.platform.resize.subscribe(() => {
       this.screenWidth = this.platform.width();
     });
   }
 
   async ngOnInit() {
-    this.getConvenorCourse();
+    const load = await this.loadingCtrl.create({
+      message: 'Loading...',
+    })
+    load.present();
+
+    await this.getConvenorCourse();
 
     this.courseID = await this.convenor.getCourseId();
     console.log('courseID', this.courseID);
@@ -45,9 +50,10 @@ export class AttendanceCodesGeneratorPage implements OnInit {
     this.eventsForCourse = await this.convenor.getEventsForCourse(this.courseID);
     console.log('eventsForCourse', this.eventsForCourse);
 
-    this.formatEventsForCourse();
+    await this.formatEventsForCourse();
     console.log('formattedEventsForCourse', this.formattedEventsForCourse);
 
+    load.dismiss();
   }
 
   async getConvenorCourse() {
@@ -57,7 +63,7 @@ export class AttendanceCodesGeneratorPage implements OnInit {
   }
 
   async formatEventsForCourse() {
-    
+
     this.formattedEventsForCourse = this.eventsForCourse.map((event) => {
       return {
         id: event.id,
@@ -66,7 +72,8 @@ export class AttendanceCodesGeneratorPage implements OnInit {
         startTime: event.startTime,
         endTime: event.endTime,
         venue: event.venue,
-        attendanceCode: event.attendanceCode
+        attendanceCode: event.attendancecode,
+        createCode: false
       }
     });
   }
@@ -89,7 +96,10 @@ export class AttendanceCodesGeneratorPage implements OnInit {
 
   generateCodes() {
     this.formattedEventsForCourse.forEach((event) => {
-      event.attendanceCode = this.randomCodeGenerator();
+      if(event.createCode)
+        event.attendanceCode = this.randomCodeGenerator();
+      else
+        event.attendanceCode = null;
     });
 
     console.log('Generated attendance codes:', this.formattedEventsForCourse);
@@ -113,16 +123,16 @@ export class AttendanceCodesGeneratorPage implements OnInit {
       let eventsToUpdate = this.formattedEventsForCourse.map((event) => {
         return {
           id: event.id,
-          attendanceCode: event.attendanceCode
+          attendancecode: event.attendanceCode
         }
       });
-  
+
       let res: any = await this.convenor.updateEvents(eventsToUpdate);
       console.log('res', res);
       load.dismiss();
-      
+
       this.presentToast("Attendance Codes Updated Successfully!", "success");
-      
+
     } catch (error) {
       this.presentToast("Error updating Attendance Codes. Please try again.");
       console.error('Error updating attendance codes:', error);

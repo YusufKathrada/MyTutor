@@ -41,9 +41,7 @@ export class Convenor extends UserData {
   }
 
   async updateEvents(events: any){
-    for(let event of events){
-      await this.supabaseService.updateEvent(event.id, event.attendanceCode);
-    }
+    return await this.supabaseService.updateEvents(events);
   }
 
   async getTAForCourse(){

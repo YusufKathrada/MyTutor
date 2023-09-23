@@ -887,16 +887,16 @@ export class SupabaseService {
   }
 
 
-  async updateEvent(eventId: string, attendanceCode: string) {
+  async updateEvents(events: any){
     try {
-      let { status, error } = await this.supabase
+      let { data, error } = await this.supabase
         .from('Events')
-        .update({ attendanceCode: attendanceCode })
-        .eq('id', eventId)
+        .upsert(events)
+        .select()
 
       if (error) throw error
 
-      return status
+      return data
 
     } catch (error) {
       console.log('error', error)
