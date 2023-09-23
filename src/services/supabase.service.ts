@@ -237,6 +237,23 @@ export class SupabaseService {
     }
   }
 
+  async getSessionTokenAndNameId(userId: string) {
+    try {
+      let { data: Users, error } = await this.supabase
+        .from('Users')
+        .select('nameId, session_index')
+        .eq('id', userId)
+
+      if (error) throw error
+
+      return Users
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 
 
   /**

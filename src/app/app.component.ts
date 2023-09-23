@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Inject, Injectable} from '@angular/core';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
+import { HttpClient } from '@angular/common/http';
 
 import { MenuController, Platform, ToastController } from '@ionic/angular';
 
@@ -11,6 +12,7 @@ import { Storage } from '@ionic/storage-angular';
 
 import { UserData } from './providers/user-data';
 import { SupabaseService } from '../services/supabase.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -143,7 +145,8 @@ export class AppComponent implements OnInit {
     private userData: UserData,
     private swUpdate: SwUpdate,
     private toastCtrl: ToastController,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
+    private http: HttpClient
   ) {
     this.initializeApp();
   }
@@ -228,17 +231,46 @@ export class AppComponent implements OnInit {
   }
 
   async logout() {
-    const { error } = await this.supabase.signOut();
+    // const url = 'http://localhost:3000/api/login?type=logout';
+    let url = 'https://my-tutor-api.vercel.app/api/login?type=logout';
+    const userId = await this.storage.get('userId');
+    let res: any = await this.supabase.getSessionTokenAndNameId(userId);
+;
+    console.log('signout')
 
-    if (error) {
-      console.log("error", error);
-      const toast = await this.toastCtrl.create({
-        message: error.message,
-        duration: 3000,
-        position: 'bottom'
-      });
-      toast.present();
-      return;
+    // The user has logged in with UCT SAML and has a session with UCT
+    if(res && res.length && res[0].session_index){
+    // if(false){
+      const body = {
+        name_id: res[0].nameId,
+        session_index: res[0].session_index,
+      };
+
+      try {
+        // let response: any = await lastValueFrom(this.http.post(url, body));
+        // const logoutUrl = response.logout_url;
+        // console.log('logoutUrl', logoutUrl);
+
+        // window.location.href = logoutUrl;
+        window.location.href = 'https://projsso1.cs.uct.ac.za/auth/realms/uct/protocol/openid-connect/logout'
+      } catch (error) {
+        console.log('app.component.ts error', error)
+      }
+    }
+    // The user has logged in with Supabase login
+    else{
+      const { error } = await this.supabase.signOut();
+
+      if (error) {
+        console.log("error", error);
+        const toast = await this.toastCtrl.create({
+          message: error.message,
+          duration: 3000,
+          position: 'bottom'
+        });
+        toast.present();
+        return;
+      }
     }
 
     this.userData.logout().then(() => {
