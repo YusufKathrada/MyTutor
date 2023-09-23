@@ -9,14 +9,115 @@
 
 <ng-container *ngIf="screenWidth >= 800 else mobileView">
   <ion-content class="ion-padding">
-    desktop
+    <ion-accordion-group [multiple]="true">
+      <ng-container *ngFor="let record of userAttendance">
+        <ion-accordion>
+          <ion-item slot="header" color="light">
+            <ion-label>
+              {{record[0].user.name}} {{record[0].user.surname}}</ion-label
+            >
+          </ion-item>
+
+          <div class="ion-padding" slot="content">
+            <ion-grid>
+              <ion-row style="font-weight: bold">
+                <ion-col>Event</ion-col>
+                <ion-col>Day</ion-col>
+                <ion-col>Time</ion-col>
+                <ion-col>Venue</ion-col>
+                <ion-col>Attendance</ion-col>
+              </ion-row>
+
+              <ion-row *ngFor="let item of record">
+                <ion-col>{{item.events.typeOfSession.description}}</ion-col>
+
+                <ion-col>{{item.events.day}}</ion-col>
+
+                <ion-col
+                  >{{formatTime(item.events.startTime)}} -
+                  {{formatTime(item.events.endTime)}}</ion-col
+                >
+
+                <ion-col>{{item.events.venue}}</ion-col>
+
+                <ion-col>
+                  <div class="progress-container">
+                    <ion-progress-bar
+                      [value]="getProgress(item.attendancecount, item.events.occurrences)"
+                    ></ion-progress-bar>
+                    <div class="progress-label">
+                      {{item.attendancecount}} / {{item.events.occurrences}}
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-accordion>
+      </ng-container>
+    </ion-accordion-group>
   </ion-content>
 </ng-container>
 
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
-      mobile
+      <ion-accordion-group [multiple]="true">
+        <ng-container *ngFor="let record of userAttendance">
+          <ion-accordion>
+            <ion-item slot="header" color="light">
+              <ion-label>
+                {{record[0].user.name}} {{record[0].user.surname}}</ion-label
+              >
+            </ion-item>
+
+            <div class="ion-padding" slot="content">
+              <ion-grid>
+                <ng-container *ngFor="let item of record">
+                  <ion-row>
+                    <ion-col>Event</ion-col>
+                    <ion-col>{{item.events.typeOfSession.description}}</ion-col>
+                  </ion-row>
+
+                  <ion-row>
+                    <ion-col>Day</ion-col>
+                    <ion-col>{{item.events.day}}</ion-col>
+                  </ion-row>
+
+                  <ion-row>
+                    <ion-col>Time</ion-col>
+                    <ion-col
+                      >{{formatTime(item.events.startTime)}} -
+                      {{formatTime(item.events.endTime)}}</ion-col
+                    >
+                  </ion-row>
+
+                  <ion-row>
+                    <ion-col>Venue</ion-col>
+                    <ion-col>{{item.events.venue}}</ion-col>
+                  </ion-row>
+
+                  <ion-row>
+                    <ion-col>Attendance</ion-col>
+                    <ion-col>
+                      <div class="progress-container">
+                        <ion-progress-bar
+                          [value]="getProgress(item.attendancecount, item.events.occurrences)"
+                        ></ion-progress-bar>
+                        <div class="progress-label">
+                          {{item.attendancecount}} / {{item.events.occurrences}}
+                        </div>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+
+                  <hr style="border-top: 1px dashed grey" />
+                </ng-container>
+              </ion-grid>
+            </div>
+          </ion-accordion>
+        </ng-container>
+      </ion-accordion-group>
     </ion-content>
   </ng-template>
 </ng-container>

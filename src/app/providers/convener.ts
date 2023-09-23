@@ -70,4 +70,8 @@ export class Convenor extends UserData {
     }
   }
 
+  async getAttendanceRecords(eventIds: any){
+    return await this.supabaseService.getAttendanceRecords(eventIds);
+  }
+
 }

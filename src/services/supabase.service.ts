@@ -1316,4 +1316,25 @@ export class SupabaseService {
     }
   }
 
+  async getAttendanceRecords(eventIds: any){
+    try {
+      let { data, error } = await this.supabase
+        .from('Attendance Records')
+        .select(`
+          *,
+          events:eventId (id, day, startTime, endTime, venue, occurrences, typeOfSession:sessionId (description)),
+          user:userId (id, name, surname, email)`
+          )
+        .in('eventId', eventIds)
+
+      if (error) throw error
+
+      return data
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 }
