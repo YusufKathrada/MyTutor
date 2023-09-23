@@ -868,6 +868,43 @@ export class SupabaseService {
     }
   }
 
+
+  async getEventsForCourseID(courseId: number) {
+    try {
+      let { data: Events, error } = await this.supabase
+        .from('Events')
+        .select('*')
+        .eq('courseId', courseId)
+
+      if (error) throw error
+
+      return Events
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
+  async updateEvent(eventId: string, attendanceCode: string) {
+    try {
+      let { status, error } = await this.supabase
+        .from('Events')
+        .update({ attendanceCode: attendanceCode })
+        .eq('id', eventId)
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+
   async getEventByCourseId(courseId: string) {
     try {
       let { data: Events, error } = await this.supabase
@@ -1150,7 +1187,7 @@ export class SupabaseService {
       let { data: Events, error } = await this.supabase
         .from('Tutors to Events')
         .select(`
-          events:eventId (id, courses:courseId (name), day, startTime, endTime, typeOfSession:sessionId (description))
+          events:eventId (id, courses:courseId (name), day, startTime, endTime, venue, attendanceCode, typeOfSession:sessionId (description))
         `)
         .eq('userId', userId)
 

@@ -139,6 +139,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'attendance-codes-generator',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../attendance-codes-generator/attendance-codes-generator.module').then(m => m.AttendanceCodesGeneratorPageModule)
+          }
+        ]
+      },
+      {
+        path: 'tutor-attendance',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../tutor-attendance/tutor-attendance.module').then(m => m.TutorAttendancePageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'
