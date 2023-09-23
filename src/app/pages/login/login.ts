@@ -13,9 +13,6 @@ import { UserOptions } from '../../interfaces/user-options';
 import { AppComponent } from '../../app.component';
 import { Storage } from '@ionic/storage-angular';
 
-
-
-
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
@@ -116,11 +113,11 @@ export class LoginPage {
     }
   }
 
-  // uctLogin(){
-  //   window.location.href = 'https://projsso1.cs.uct.ac.za/auth/realms/uct/protocol/saml/clients/mytutor';
-  // }
-
   async uctLogin() {
+    const loading = await this.loadingCtrl.create({
+          message: 'Please wait...',
+        });
+    await loading.present();
     // Make a GET request to the Vercel serverless function
     let url = 'https://my-tutor-api.vercel.app/api/login';
     let res: any = await lastValueFrom(this.http.get(url, {
@@ -132,6 +129,7 @@ export class LoginPage {
     const redirectUrl = res.login_url;
     console.log("redirectUrl", redirectUrl);
     window.location.href = redirectUrl;
+    await loading.dismiss();
   }
 
   onSignup() {
