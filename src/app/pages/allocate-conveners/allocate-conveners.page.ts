@@ -66,6 +66,7 @@ export class AllocateConvenersPage implements OnInit {
     if (event) {
       event.target.complete();
     }
+    this.filterOption = 'all';
   }
 
   async dismissLoading() {
