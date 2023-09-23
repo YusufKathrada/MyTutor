@@ -15,7 +15,7 @@ import { Student } from '../../providers/student';
   templateUrl: 'account.html',
   styleUrls: ['./account.scss'],
 })
-export class AccountPage implements AfterViewInit {
+export class AccountPage implements OnInit {
   username: string;
 
   constructor(
@@ -34,16 +34,24 @@ export class AccountPage implements AfterViewInit {
     private route: ActivatedRoute,
   ) { }
 
-  ngAfterViewInit() {
-    this.getUsername();
-  }
-
-  async ionViewWillEnter() {
+  async ngOnInit(){
     const userId = await this.storage.get('userId');
     if(!userId) {
       await this.initializeApp();
     }
+    this.username = await this.storage.get('username');
   }
+
+  // ngAfterViewInit() {
+  //   this.getUsername();
+  // }
+
+  // async ionViewWillEnter() {
+  //   const userId = await this.storage.get('userId');
+  //   if(!userId) {
+  //     await this.initializeApp();
+  //   }
+  // }
 
   async initializeApp() {
     const token = this.route.snapshot.queryParams['token'];
@@ -131,10 +139,8 @@ export class AccountPage implements AfterViewInit {
     await alert.present();
   }
 
-  getUsername() {
-    this.userData.getUsername().then((username) => {
-      this.username = username;
-    });
+  async getUsername() {
+    this.username = await this.userData.getUsername();
   }
 
   changePassword() {
