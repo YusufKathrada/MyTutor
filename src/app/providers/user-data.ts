@@ -73,6 +73,10 @@ export class UserData {
     });
   }
 
+  async getUserId(): Promise<string> {
+    return await this.storage.get('userId');
+  }
+
   isLoggedIn(): Promise<boolean> {
     return this.storage.get(this.HAS_LOGGED_IN).then((value) => {
       return value === true;
