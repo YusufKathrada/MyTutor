@@ -61,11 +61,17 @@ export class Student extends UserData {
     if(applicationType === 'Tutor' && response === 'accept'){
       await this.supabaseService.updateRole(userId, 'tutor');
     }
+    else if(applicationType === 'Tutor' && response === 'reject'){
+      await this.supabaseService.updateRole(userId, 'student');
+    }
     else if(applicationType === 'TA' && response === 'accept' && adminRights){
       await this.supabaseService.updateRole(userId, 'admin');
     }
     else if(applicationType === 'TA' && response === 'accept' && !adminRights){
       await this.supabaseService.updateRole(userId, 'ta');
+    }
+    else if(applicationType === 'TA' && response === 'reject'){
+      await this.supabaseService.updateRole(userId, 'student');
     }
     return await this.supabaseService.updateApplicationResponse(userId, response);
   }
@@ -78,7 +84,7 @@ export class Student extends UserData {
   }
 
   async updateTARole(userId: string, applicationStatus: string, adminRights: boolean) {
-      
+
       if(applicationStatus !== 'Accepted'){
         await this.supabaseService.updateRole(userId, 'student');
       }

@@ -887,16 +887,16 @@ export class SupabaseService {
   }
 
 
-  async updateEvent(eventId: string, attendanceCode: string) {
+  async updateEvents(events: any){
     try {
-      let { status, error } = await this.supabase
+      let { data, error } = await this.supabase
         .from('Events')
-        .update({ attendanceCode: attendanceCode })
-        .eq('id', eventId)
+        .upsert(events)
+        .select()
 
       if (error) throw error
 
-      return status
+      return data
 
     } catch (error) {
       console.log('error', error)
@@ -1187,7 +1187,7 @@ export class SupabaseService {
       let { data: Events, error } = await this.supabase
         .from('Tutors to Events')
         .select(`
-          events:eventId (id, courses:courseId (name), day, startTime, endTime, venue, attendanceCode, typeOfSession:sessionId (description))
+          events:eventId (id, courses:courseId (name), day, startTime, endTime, venue, attendancecode, typeOfSession:sessionId (description))
         `)
         .eq('userId', userId)
 
@@ -1252,6 +1252,84 @@ export class SupabaseService {
         .upload(filePath, file);
 
         console.log('res', res)
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  // ======================================== Attendance Records ========================================
+  async updateAttendance(eventId: string, userId: string){
+    try {
+      let { data, error } = await this.supabase
+        .from('Attendance Records')
+        .select('*')
+        .eq('eventId', eventId)
+        .eq('userId', userId)
+
+      if (error) throw error
+
+      let attendanceRecord: any = {
+        eventId: eventId,
+        userId: userId,
+        attendancecount: 0,
+      }
+
+      if(data.length){
+        attendanceRecord = data[0];
+
+        const last_updated: any = new Date(attendanceRecord.updated_at);
+        const currentDate: any = new Date();
+
+        // To calculate the time difference of two dates
+        const diffInTime: any = currentDate.getTime() - last_updated.getTime();
+        // To calculate the no. of days between two dates
+        const diffInDays: any = diffInTime / (1000 * 60 * 60 * 24);
+
+        console.log('diffInDays', diffInDays)
+
+        // Do not allow an update if the record has been updated within the last 5 days
+        if(diffInDays <= 5) {
+          console.log('Already logged attendance within the last 5 days')
+          return 204;
+        }
+      }
+
+      const newAttendanceRecord = {
+        eventId: eventId,
+        userId: userId,
+        attendancecount: attendanceRecord.attendancecount + 1,
+      }
+
+      let { status, error: error2 } = await this.supabase
+        .from('Attendance Records')
+        .upsert(newAttendanceRecord)
+
+      if (error2) throw error2
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
+  async getAttendanceRecords(eventIds: any){
+    try {
+      let { data, error } = await this.supabase
+        .from('Attendance Records')
+        .select(`
+          *,
+          events:eventId (id, day, startTime, endTime, venue, occurrences, typeOfSession:sessionId (description)),
+          user:userId (id, name, surname, email)`
+          )
+        .in('eventId', eventIds)
+
+      if (error) throw error
+
+      return data
 
     } catch (error) {
       console.log('error', error)

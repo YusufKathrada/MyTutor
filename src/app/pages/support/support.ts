@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { UserData } from '../../providers/user-data';
 import { AlertController, ToastController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 
 
 @Component({
@@ -18,15 +19,33 @@ export class SupportPage implements OnInit{
   constructor(
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
-    public userData: UserData
+    public userData: UserData,
+    public loadingCtrl: LoadingController
   ) { }
 
   async ngOnInit() {
 
+    await this.presentLoading();
     this.userRole = await this.userData.getRole();
     //console.log('userRole: ', this.userRole);
+
+    // Add a delay of 2 seconds before dismissing the loading
+    setTimeout(async () => {
+      await this.dismissLoading();
+  }, 1500);
   }
 
+  async dismissLoading() {
+    await this.loadingCtrl.dismiss();
+  }
+
+
+  async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait...',
+    });
+    await loading.present();
+  }
   // async ionViewDidEnter() {
   //   const toast = await this.toastCtrl.create({
   //     message: 'This does not actually send a support request.',

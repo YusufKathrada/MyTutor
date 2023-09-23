@@ -244,7 +244,8 @@ export class UploadTimesPage implements OnInit {
     else {
       this.presentToast("Error uploading time slots. Please try again.");
     }
-    this.refreshEvents();
+    await this.reloadPage();
+    this.ngOnInit();
   }
 
   formatTime(time: string) {

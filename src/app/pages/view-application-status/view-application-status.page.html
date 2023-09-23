@@ -37,7 +37,6 @@
               placeholder="Select Status"
               [(ngModel)]="response"
               [disabled]="application.courseAssigned === 'None'"
-              (ionChange)="updateApplicationResponse()"
             >
               <ion-select-option value="accept">Accept</ion-select-option>
               <ion-select-option value="reject">Reject</ion-select-option>
@@ -46,6 +45,8 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+
+    <ion-button (click)="presentAlert()"> Confirm </ion-button>
   </ion-content>
 </ng-container>
 
@@ -79,7 +80,6 @@
                 placeholder="Select Status"
                 [(ngModel)]="response"
                 [disabled]="application.courseAssigned === 'None'"
-                (ionChange)="updateApplicationResponse()"
               >
                 <ion-select-option value="accept">Accept</ion-select-option>
                 <ion-select-option value="reject">Reject</ion-select-option>
@@ -88,6 +88,8 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+
+      <ion-button (click)="presentAlert()"> Confirm </ion-button>
     </ion-content>
   </ng-template>
 </ng-container>

@@ -157,6 +157,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'view-attendance',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../view-attendance/view-attendance.module').then(m => m.ViewAttendancePageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/app/tabs/schedule',
         pathMatch: 'full'
