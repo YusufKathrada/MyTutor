@@ -157,6 +157,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'announcements',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../announcements/announcements.module').then(m => m.AnnouncementsPageModule)
+          }
+        ]
+      },
+      {
+        path: 'tutor-announcements',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../tutor-announcements/tutor-announcements.module').then(m => m.TutorAnnouncementsPageModule)
+          }
+        ]
+      },
+      {
         path: 'view-attendance',
         children: [
           {

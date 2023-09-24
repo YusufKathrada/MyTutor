@@ -36,7 +36,7 @@ export class TA extends UserData {
       degree: null,
       yearOfStudy: null,
       average: null,
-      preferredCourse: taApplication.preferredCourse,
+      preferredCourse: taApplication.desired_course,
       qualification: taApplication.degree_completed,
       userId: userId
     }
@@ -64,5 +64,11 @@ export class TA extends UserData {
   async getTACourseAssigned() {
     const userId = await this.storage.get('userId');
     return await this.supabaseService.getTACourseAssignedByUserId(userId);
+  }
+
+  async getCourseId(){
+    const userId = await this.storage.get('userId');
+    let res: any = await this.supabaseService.getConvenerCourseId(userId);
+    return res[0].courseId;
   }
 }

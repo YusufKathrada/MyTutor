@@ -1259,6 +1259,45 @@ export class SupabaseService {
     }
   }
 
+    // ======================================== Announcements ========================================
+
+    async postAnnouncement(courseId: number, heading: string, body: string, isImportant: boolean) {
+      try {
+        let { status, error } = await this.supabase
+          .from('Announcements')
+          .insert({ courseId: courseId, announcementHeading: heading, announcementBody: body, important: isImportant })
+
+        if (error) throw error
+
+        return status
+
+      } catch (error) {
+        console.log('error', error)
+        await this.presentError();
+      }
+    }
+
+    async getAnnouncements(courseId: number) {
+      try {
+        let { data: Announcements, error } = await this.supabase
+          .from('Announcements')
+          .select('*')
+          .eq('courseId', courseId)
+
+        if (error) throw error
+
+        return Announcements
+
+      } catch (error) {
+        console.log('error', error)
+        await this.presentError();
+      }
+    }
+
+
+    
+
+
   // ======================================== Attendance Records ========================================
   async updateAttendance(eventId: string, userId: string){
     try {

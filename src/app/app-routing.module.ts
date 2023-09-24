@@ -59,7 +59,8 @@ const routes: Routes = [
   {
     path: 'tutor-events',
     loadChildren: () => import('./pages/tutor-events/tutor-events.module').then(m => m.TutorEventsPageModule)
-  },  {
+  },
+  {
     path: 'allocate-conveners',
     loadChildren: () => import('./pages/allocate-conveners/allocate-conveners.module').then( m => m.AllocateConvenersPageModule)
   },
@@ -74,6 +75,14 @@ const routes: Routes = [
   {
     path: 'tutor-attendance',
     loadChildren: () => import('./pages/tutor-attendance/tutor-attendance.module').then( m => m.TutorAttendancePageModule)
+  },
+  {
+    path: 'announcements',
+    loadChildren: () => import('./pages/announcements/announcements.module').then( m => m.AnnouncementsPageModule)
+  },
+  {
+    path: 'tutor-announcements',
+    loadChildren: () => import('./pages/tutor-announcements/tutor-announcements.module').then( m => m.TutorAnnouncementsPageModule)
   },
   {
     path: 'view-attendance',
