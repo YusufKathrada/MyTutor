@@ -13,7 +13,10 @@ import { SupabaseService } from '../../../services/supabase.service';
 })
 export class SignupPage {
   signup: any = {
-    username: '',
+    name: '',
+    surname: '',
+    email: '',
+    nameId: '',
     password: '',
     role: ''
   };
@@ -30,19 +33,23 @@ export class SignupPage {
   async onSignup(form: NgForm) {
     this.submitted = true;
 
-    let role: string = '';
-    if(form.value.role === 'admin' || form.value.role === 'lecturer'){
-      role = 'admin'
-    }
-    else if(form.value.role === 'ta'){
-      role = 'pendingTa'
-    }
-    else{
-      role = form.value.role;
-    }
+    let role: string = 'pendingTa';
+
+    // if(form.value.role === 'admin' || form.value.role === 'lecturer'){
+    //   role = 'admin'
+    // }
+    // else if(form.value.role === 'ta'){
+    //   role = 'pendingTa'
+    // }
+    // else{
+    //   role = form.value.role;
+    // }
 
     const user: any = {
-      username: form.value.username,
+      name: form.value.name,
+      surname: form.value.surname,
+      email: form.value.email,
+      nameId: form.value.nameId,
       password: form.value.password,
       role: role
     }
@@ -56,7 +63,25 @@ export class SignupPage {
         });
         await loading.present();
 
-        const { data, error } = await this.supabase.signUp(user);
+        const { data, error } = await this.supabase.signUp(
+          {
+            email: user.email,
+            password: user.password,
+            role: user.role,
+          }
+        );
+
+        const userId = data.user.id;
+
+        await this.supabase.updateUser({
+          id: userId,
+          name: user.name,
+          surname: user.surname,
+          nameId: user.nameId,
+          email: user.email,
+          role: user.role,
+        });
+
         console.log("data", data);
         console.log("error", error);
 
