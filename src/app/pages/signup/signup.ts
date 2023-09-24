@@ -31,8 +31,11 @@ export class SignupPage {
     this.submitted = true;
 
     let role: string = '';
-    if(form.value.role === 'admin' || form.value.role === 'lecturer' || form.value.role === 'ta'){
+    if(form.value.role === 'admin' || form.value.role === 'lecturer'){
       role = 'admin'
+    }
+    else if(form.value.role === 'ta'){
+      role = 'pendingTa'
     }
     else{
       role = form.value.role;

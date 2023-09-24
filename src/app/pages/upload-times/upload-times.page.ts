@@ -92,7 +92,7 @@ export class UploadTimesPage implements OnInit {
 
     [this.allEvents, this.courses] = await this.admin.getAllEvents();
 
-    this.isConvenor = await this.storage.get('role') === 'courseConvener';
+    this.isConvenor = (await this.storage.get('role') === 'courseConvener' || await this.storage.get('role') === 'taAdmin');
     if(this.isConvenor){
       await this.setConvener();
     }

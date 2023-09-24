@@ -17,7 +17,7 @@
 
     <ion-card-content>
       <ion-segment [(ngModel)]="segment">
-        <ion-segment-button value="tutor">
+        <ion-segment-button value="tutor" *ngIf="role !== 'pendingTa'">
           <ion-label>Tutor</ion-label>
         </ion-segment-button>
 

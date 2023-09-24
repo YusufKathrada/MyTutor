@@ -88,6 +88,12 @@ export class LoginPage {
           case 'ta':
             await this.student.setRole('ta');
             break;
+          case 'pendingTa':
+            await this.student.setRole('pendingTa');
+            break;
+          case 'taAdmin':
+            await this.student.setRole('taAdmin');
+            break;
           default:
             break;
         };
