@@ -44,13 +44,9 @@ export class AnnouncementsPage implements OnInit {
   }
 
   async setConvener(){
-    try {
-        let res: any = await this.convenor.getCourse();
-        this.convenerCourse = res[0].courses.name;
-        console.log("res: ", this.convenerCourse);
-      } catch (error) {
-        console.log('upload-times.page.ts ngOnInit() error: ', error);
-      }
+    let res: any = await this.convenor.getCourse();
+    this.convenerCourse = res[0].courses.name;
+    console.log("res: ", this.convenerCourse);
   }
 
   async validateAnnouncement(){
@@ -76,23 +72,20 @@ export class AnnouncementsPage implements OnInit {
       return;
     }
 
-    try {
-      let res: any = await this.convenor.postAnnouncement(this.courseID, this.announcementHeading, this.announcementBody, this.isImportant);
-      console.log("res: ", res);
-      loading.dismiss();
-      if(res == 201){
-        this.presentToast("Announcement Posted Successfully!", "success");
-      }
-      else {
-        this.presentToast("Error Posting Announcement", "danger");
-      }
-    } catch (error) {
-      console.log('upload-times.page.ts ngOnInit() error: ', error);
+    let res: any = await this.convenor.postAnnouncement(this.courseID, this.announcementHeading, this.announcementBody, this.isImportant);
+    console.log("res: ", res);
+    loading.dismiss();
+    if(res == 201){
+      this.presentToast("Announcement Posted Successfully!", "success");
     }
-
+    else {
+      this.presentToast("Error Posting Announcement", "danger");
+    }
+    
     this.refreshAnnouncements();
   }
 
+  
   async presentToast(message: string, color: string = 'danger') {
     const toast = await this.toastCtrl.create({
       message: message,

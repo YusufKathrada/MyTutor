@@ -24,11 +24,7 @@ export class TutorAnnouncementsPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.setTutuor();
-    console.log("courseId: ", this.courseId);
-    console.log("courseName: ", this.courseName);
-    await this.getAnnouncements();
-    await this.formatAnnouncements();
+    
   }
 
   async ionViewWillEnter() {
@@ -88,6 +84,9 @@ export class TutorAnnouncementsPage implements OnInit {
   }
 
   async refreshAnnouncements(){
+    await this.setTutuor();
+    console.log("courseId: ", this.courseId);
+    console.log("courseName: ", this.courseName);
     await this.getAnnouncements();
     await this.formatAnnouncements();
 }
