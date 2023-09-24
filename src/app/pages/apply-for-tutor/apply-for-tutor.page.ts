@@ -15,6 +15,7 @@ import { Router } from '@angular/router'; // Import Router for navigation
 })
 export class ApplyForTutorPage implements OnInit {
 
+  role: string = '';
   courses: any = [];
   courseMap: any = [];
 
@@ -53,6 +54,7 @@ export class ApplyForTutorPage implements OnInit {
 
   async ngOnInit() {
     console.log('ngOnInit');
+    this.role = await this.storage.get('role');
 
   }
 

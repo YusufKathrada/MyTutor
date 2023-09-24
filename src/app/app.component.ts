@@ -73,17 +73,53 @@ export class AppComponent implements OnInit {
     }
   ];
 
-  taPages = [
+  taAdminPages = [
     {
       title: 'Upload Time Slots',
       url: '/app/tabs/upload-times',
       icon: 'cloud-upload'
     },
     {
-      title: 'Allocate Courses',
-      url: '/app/tabs/admin-allocate-tutors',
-      icon: 'people'
+      title: 'Attendance Codes',
+      url: '/app/tabs/attendance-codes-generator',
+      icon: 'qr-code'
+    },
+    {
+      title: 'View Attendance',
+      url: '/app/tabs/view-attendance',
+      icon: 'checkbox'
+    },
+    {
+      title: 'Announcements',
+      url: '/app/tabs/announcements',
+      icon: 'megaphone'
     }
+  ];
+
+  taPages = [
+    {
+      title: 'Attendance Codes',
+      url: '/app/tabs/attendance-codes-generator',
+      icon: 'qr-code'
+    },
+    {
+      title: 'View Attendance',
+      url: '/app/tabs/view-attendance',
+      icon: 'checkbox'
+    },
+  ];
+
+  pendingTaPages = [
+    {
+      title: 'Apply for a role',
+      url: '/app/tabs/apply-for-tutor',
+      icon: 'person-add'
+    },
+    {
+      title: 'View application status',
+      url: '/app/tabs/view-application-status',
+      icon: 'documents'
+    },
   ];
 
   tutorPages = [
@@ -227,8 +263,14 @@ export class AppComponent implements OnInit {
     else if (await this.userData.getRole() == "student") {
       this.appPages = this.studentPages;
     }
+    else if(await this.userData.getRole() == "taAdmin"){
+      this.appPages = this.taAdminPages;
+    }
     else if (await this.userData.getRole() == "ta") {
       this.appPages = this.taPages;
+    }
+    else if (await this.userData.getRole() == "pendingTa") {
+      this.appPages = this.pendingTaPages;
     }
   }
 

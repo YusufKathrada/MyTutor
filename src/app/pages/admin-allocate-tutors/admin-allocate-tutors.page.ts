@@ -168,7 +168,8 @@ export class AdminAllocateTutorsPage implements OnInit {
   async updateTAAllocations() {
     this.presentLoading();
     let success: boolean = true;
-    const updatePromises = [];
+    const updatePromisesTaToCourse = [];
+    const updatePromisesTaUser = [];
 
     for (const ta of this.displayedTAs) {
       if (!ta.assignedCourse || ta.assignedCourse === "UNASSIGNED") {
@@ -178,25 +179,34 @@ export class AdminAllocateTutorsPage implements OnInit {
       }
 
       // Add each update operation to an array of promises
-      updatePromises.push(
+      updatePromisesTaToCourse.push(
         this.admin.updateTAAllocations(
           ta.userId,
           this.courseMap[ta.assignedCourse],
           ta.assignedStatus
         )
       );
+
+      updatePromisesTaUser.push(
+        this.admin.updateCourseConvener(
+          ta.userId,
+          this.courseMap[ta.assignedCourse],
+        )
+      );
     }
 
     try {
       // Execute all update operations concurrently
-      const results = await Promise.all(updatePromises);
+      const resultsTaToCourse = await Promise.all(updatePromisesTaToCourse);
+      const resultsTaUser = await Promise.all(updatePromisesTaUser);
 
       // Check if any operation returned a non-201 status
-      if (results.some((res) => res !== 201)) {
+      if (resultsTaToCourse.some((res) => res !== 201)) {
         success = false;
       }
 
-      console.log('results', results);
+      console.log('results', resultsTaToCourse);
+      console.log('results', resultsTaUser);
     } catch (error) {
       // Handle any errors that might occur during the bulk update
       success = false;
@@ -296,6 +306,6 @@ export class AdminAllocateTutorsPage implements OnInit {
   getColorClass(courseName: string): string {
     return courseName === 'UNASSIGNED' ? 'red-background' : 'green-background';
   }
-  
+
 }
 

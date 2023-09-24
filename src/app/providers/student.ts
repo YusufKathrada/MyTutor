@@ -65,13 +65,13 @@ export class Student extends UserData {
       await this.supabaseService.updateRole(userId, 'student');
     }
     else if(applicationType === 'TA' && response === 'accept' && adminRights){
-      await this.supabaseService.updateRole(userId, 'admin');
+      await this.supabaseService.updateRole(userId, 'taAdmin');
     }
     else if(applicationType === 'TA' && response === 'accept' && !adminRights){
       await this.supabaseService.updateRole(userId, 'ta');
     }
     else if(applicationType === 'TA' && response === 'reject'){
-      await this.supabaseService.updateRole(userId, 'student');
+      await this.supabaseService.updateRole(userId, 'pendingTa');
     }
     return await this.supabaseService.updateApplicationResponse(userId, response);
   }
