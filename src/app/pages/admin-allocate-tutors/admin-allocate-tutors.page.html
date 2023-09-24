@@ -62,7 +62,7 @@
                       [(ngModel)]="a.assignedCourse"
                       [class]="getColorClass(a.assignedCourse)">
                       <ion-select-option [value]="c.name"
-                        *ngFor="let c of courses" class="centered-text-select">
+                        *ngFor="let c of filterPossibleCourses(courses, a.highestCSCourse)" class="centered-text-select">
                         {{c.name}}
                       </ion-select-option>
                     </ion-select>

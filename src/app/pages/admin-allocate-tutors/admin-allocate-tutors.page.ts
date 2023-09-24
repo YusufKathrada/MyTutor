@@ -302,6 +302,11 @@ export class AdminAllocateTutorsPage implements OnInit {
     console.log('displayedTutors: ', this.displayedTutors);
   }
 
+  filterPossibleCourses(courses: any, highestCSCourse) {
+    const highestCSCourseId = this.courseMap[highestCSCourse];
+    return courses.filter((course) => course.id <= highestCSCourseId);
+  }
+
 
   getColorClass(courseName: string): string {
     return courseName === 'UNASSIGNED' ? 'red-background' : 'green-background';

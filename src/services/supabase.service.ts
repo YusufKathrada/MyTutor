@@ -764,6 +764,7 @@ export class SupabaseService {
       let { data: Courses, error } = await this.supabase
         .from('Courses')
         .select('*')
+        .order('id', { ascending: true })
 
       if (error) throw error
 
@@ -1295,7 +1296,7 @@ export class SupabaseService {
     }
 
 
-    
+
 
 
   // ======================================== Attendance Records ========================================
