@@ -9,14 +9,34 @@
 </ion-header>
 
 <ion-content>
-  <div class="login-logo">
-    <img src="assets/img/UCT_image.png" alt="UCT Image">
-  </div>
+
+
+  <div style="display: flex; width: 100%; justify-content: center; height: 100%">
+  <div style="width: 600px;">
+
+  <ion-grid>
+      <div class="login-logo">
+        <img src="assets/img/UCT_image.png" alt="UCT Image">
+      </div>    
+
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="uctLogin()" expand="block">UCT Login</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <br>
+
+  <ion-row class="custom-font">
+    <hr class="custom-line-left"> or <hr class="custom-line-right">
+  </ion-row>
+  
 
   <div class="login-form">
     <form #loginForm="ngForm" novalidate>
       <ion-input
-        label="Username"
+        label="TA Username"
         labelPlacement="stacked"
         fill="solid"
         [(ngModel)]="login.username"
@@ -30,7 +50,7 @@
       </ion-input>
 
       <ion-input
-        label="Password"
+        label="TA Password"
         labelPlacement="stacked"
         fill="solid"
         [(ngModel)]="login.password"
@@ -43,16 +63,15 @@
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block">Login</ion-button>
+          <ion-button (click)="onLogin(loginForm)" color="light" type="submit" expand="block">Login</ion-button>
         </ion-col>
         <ion-col>
-          <ion-button (click)="uctLogin()" color="light" expand="block">UCT Login</ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button (click)="onSignup()" color="light" expand="block">Signup</ion-button>
+          <ion-button (click)="onSignup()" color="light" expand="block">TA Signup</ion-button>
         </ion-col>
       </ion-row>
     </form>
   </div>
 
+</div>
+</div>
 </ion-content>
