@@ -36,7 +36,7 @@
   <div class="login-form">
     <form #loginForm="ngForm" novalidate>
       <ion-input
-        label="TA Username"
+        label="TA Email"
         labelPlacement="stacked"
         fill="solid"
         [(ngModel)]="login.username"
@@ -45,7 +45,7 @@
         #username="ngModel"
         spellcheck="false"
         autocapitalize="off"
-        errorText="Username is required"
+        errorText="Email is required"
         required>
       </ion-input>
 

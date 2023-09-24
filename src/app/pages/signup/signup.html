@@ -9,6 +9,9 @@
 
 <ion-content>
 
+  <div style="display: flex; width: 100%; justify-content: center; height: 100%">
+    <div style="width: 600px;">
+
   <div class="signup-logo">
     <img src="assets/img/UCT_image.png" alt="Ionic Logo">
   </div>
@@ -16,19 +19,56 @@
   <div class="signup-form">
     <form #signupForm="ngForm" novalidate>
       <ion-input
-        label="Username (UCT email)"
+        label="Name"
         labelPlacement="stacked"
         fill="solid"
-        [(ngModel)]="signup.username"
-        name="username"
+        [(ngModel)]="signup.name"
+        name="name"
         type="text"
-        #username="ngModel"
+        #name="ngModel"
+        errorText="Name is required"
+        required>
+      </ion-input>
+
+      <ion-input
+        label="Surname"
+        labelPlacement="stacked"
+        fill="solid"
+        [(ngModel)]="signup.surname"
+        name="surname"
+        type="text"
+        #surname="ngModel"
+        errorText="Surname is required"
+        required>
+      </ion-input>
+
+      
+      <ion-input
+        label="Email"
+        labelPlacement="stacked"
+        fill="solid"
+        [(ngModel)]="signup.email"
+        name="email"
+        type="email"
+        #email="ngModel"
+        errorText="Email is required"
+        required>
+      </ion-input>
+
+      <ion-input
+        label="Create A Username"
+        labelPlacement="stacked"
+        fill="solid"
+        [(ngModel)]="signup.nameId"
+        name="nameId"
+        type="text"
+        #nameId="ngModel"
         errorText="Username is required"
         required>
       </ion-input>
 
       <ion-input
-        label="Password"
+        label="Create A Password"
         labelPlacement="stacked"
         fill="solid"
         [(ngModel)]="signup.password"
@@ -39,7 +79,7 @@
         required>
       </ion-input>
 
-      <ion-item fill="solid">
+      <!-- <ion-item fill="solid">
         <ion-select
           label="User Role"
           label-placement="stacked"
@@ -53,7 +93,7 @@
           <ion-select-option value="student">Student</ion-select-option>
 
         </ion-select>
-      </ion-item>
+      </ion-item> -->
 
       <div class="ion-padding">
         <ion-button (click)="onSignup(signupForm)" type="submit" expand="block">Sign Up</ion-button>
@@ -62,4 +102,6 @@
     </form>
   </div>
 
+</div>
+</div>
 </ion-content>

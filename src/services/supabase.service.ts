@@ -64,7 +64,7 @@ export class SupabaseService {
   // ======================================== Sign Up ========================================
   async signUp(user: any) {
     return await this.supabase.auth.signUp({
-      email: user.username,
+      email: user.email,
       password: user.password,
       options: {
         data: {
@@ -262,7 +262,7 @@ export class SupabaseService {
    * Needs attributes: name, surname, email, role, stuNum
    */
 
-  async updateUser(user: User) {
+  async updateUser(user: any) {
     try {
       let { data: Users, error } = await this.supabase
         .from('Users')
@@ -271,6 +271,8 @@ export class SupabaseService {
 
       if (error) throw error
 
+
+      console.log('Users', Users)
       return Users
 
 
