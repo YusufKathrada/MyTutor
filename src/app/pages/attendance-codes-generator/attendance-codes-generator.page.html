@@ -37,7 +37,7 @@
       </ion-row>
     </ion-grid>
 
-    <ion-grid>
+    <ion-grid id="makepdfDesktop">
       <ion-row style="text-align: center" *ngFor="let event of formattedEventsForCourse">
 
         <ion-col>
@@ -68,7 +68,7 @@
     </ion-grid>
 
     <ion-button (click)="updateCodes()">Update</ion-button>
-
+    <ion-button (click)="generatePdf('desktop')">Download codes</ion-button>
 
   </ion-content>
 </ng-container>
@@ -89,6 +89,7 @@
           </ion-col>
         </ion-row>
 
+        <div id="makepdfMobile">
         <ng-container *ngFor="let event of formattedEventsForCourse">
 
           <ion-row>
@@ -125,9 +126,11 @@
 
           <hr style="border-top: 1px dashed grey" />
         </ng-container>
+        </div>
       </ion-grid>
 
       <ion-button (click)="updateCodes()">Update</ion-button>
+      <ion-button (click)="generatePdf('mobile')">Download codes</ion-button>
 
     </ion-content>
   </ng-template>

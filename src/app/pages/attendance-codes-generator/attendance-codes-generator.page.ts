@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage-angular';
 import { LoadingController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-attendance-codes-generator',
@@ -139,4 +140,60 @@ export class AttendanceCodesGeneratorPage implements OnInit {
     }
   }
 
+  async generatePdf(type: string){
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading...',
+    })
+    loading.present();
+
+    let element: HTMLElement;
+    if(type === 'desktop'){
+      element = document.getElementById('makepdfDesktop');
+      html2canvas(element).then((canvas) => {
+        // Define the crop dimensions
+        const cropX = 0;
+        const cropY = 0;
+        const cropWidth = canvas.width - (5 * (96 / 2.54)); // Reducing 5cm from the canvas's right side
+        const cropHeight = canvas.height;
+
+        // Create a new canvas element
+        const newCanvas = document.createElement('canvas');
+        newCanvas.width = cropWidth;
+        newCanvas.height = cropHeight;
+
+        // Get the context of the new canvas
+        const ctx = newCanvas.getContext('2d');
+
+        // Draw the original canvas onto the new canvas
+        ctx.drawImage(canvas, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+
+        // Get the image data as a base64-encoded string
+        const imageData = newCanvas.toDataURL("image/png");
+
+        // Create an anchor element and trigger a download action
+        const link = document.createElement("a");
+        link.setAttribute("download", "codes.png");
+        link.setAttribute("href", imageData);
+        link.click();
+
+        loading.dismiss();
+      });
+    }
+    else{
+      element = document.getElementById('makepdfMobile');
+      html2canvas(element).then((canvas) => {
+        // Get the image data as a base64-encoded string
+        const imageData = canvas.toDataURL("image/png");
+
+        // Create an anchor element and trigger a download action
+        const link = document.createElement("a");
+        link.setAttribute("download", "codes.png");
+        link.setAttribute("href", imageData);
+        link.click();
+
+        loading.dismiss();
+      });
+    }
+    loading.dismiss();
+  }
 }
