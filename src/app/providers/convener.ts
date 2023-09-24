@@ -70,8 +70,8 @@ export class Convenor extends UserData {
     }
   }
 
-  async postAnnouncement(courseId: number, heading: string, body: string){
-    return await this.supabaseService.postAnnouncement(courseId, heading, body);
+  async postAnnouncement(courseId: number, heading: string, body: string, isImportant: boolean){
+    return await this.supabaseService.postAnnouncement(courseId, heading, body, isImportant);
   }
 
   async getAnnouncements(courseId: number){

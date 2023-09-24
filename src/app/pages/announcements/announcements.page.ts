@@ -15,6 +15,8 @@ export class AnnouncementsPage implements OnInit {
 
   announcementHeading: string = "";
   announcementBody: string = "";
+  isImportant: boolean = false;
+
   prevAnnouncements: any = [];
   formattedAnnouncements: any = [];
 
@@ -75,7 +77,7 @@ export class AnnouncementsPage implements OnInit {
     }
 
     try {
-      let res: any = await this.convenor.postAnnouncement(this.courseID, this.announcementHeading, this.announcementBody);
+      let res: any = await this.convenor.postAnnouncement(this.courseID, this.announcementHeading, this.announcementBody, this.isImportant);
       console.log("res: ", res);
       loading.dismiss();
       if(res == 201){
@@ -107,7 +109,7 @@ export class AnnouncementsPage implements OnInit {
     this.prevAnnouncements.sort((a: any, b: any) => {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
-    
+
     console.log("prevAnnouncements inside function: ", this.prevAnnouncements);
   }
 
@@ -118,7 +120,9 @@ export class AnnouncementsPage implements OnInit {
         heading: announcement.announcementHeading,
         body: announcement.announcementBody,
         date: announcement.created_at.substring(0, 10),
-        time: announcement.created_at.substring(11, 16)
+        time: announcement.created_at.substring(11, 16),
+        isImportant: announcement.important,
+        color: announcement.important ? "danger" : "light"
       }
     });
 
@@ -127,6 +131,7 @@ export class AnnouncementsPage implements OnInit {
   async refreshAnnouncements(){
     this.announcementHeading = "";
     this.announcementBody = "";
+    this.isImportant = false;
 
     await this.getAnnouncements();
     await this.formatAnnouncements();

@@ -1261,11 +1261,11 @@ export class SupabaseService {
 
     // ======================================== Announcements ========================================
 
-    async postAnnouncement(courseId: number, heading: string, body: string) {
+    async postAnnouncement(courseId: number, heading: string, body: string, isImportant: boolean) {
       try {
         let { status, error } = await this.supabase
           .from('Announcements')
-          .insert({ courseId: courseId, announcementHeading: heading, announcementBody: body })
+          .insert({ courseId: courseId, announcementHeading: heading, announcementBody: body, important: isImportant })
 
         if (error) throw error
 

@@ -81,6 +81,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/announcements/announcements.module').then( m => m.AnnouncementsPageModule)
   },
   {
+    path: 'tutor-announcements',
+    loadChildren: () => import('./pages/tutor-announcements/tutor-announcements.module').then( m => m.TutorAnnouncementsPageModule)
+  },
+  {
     path: 'view-attendance',
     loadChildren: () => import('./pages/view-attendance/view-attendance.module').then( m => m.ViewAttendancePageModule)
   },

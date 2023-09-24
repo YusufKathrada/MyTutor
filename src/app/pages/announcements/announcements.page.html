@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Announcements</ion-title>
+    <ion-title>Announcements for {{convenerCourse}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -9,13 +9,15 @@
   <ion-grid>
     <ion-row>
       <ion-col style="padding-left: 8px; font-weight: bold">
-        Post An Announcement for {{convenerCourse}}
+        Post Announcement
       </ion-col>
     </ion-row>
   </ion-grid>
 
   <ion-card mode="ios">
     <ion-card-content>
+
+      <ion-checkbox [(ngModel)]="isImportant" color="primary" slot="start">Important</ion-checkbox>
 
       <ion-item>
         <ion-input 
@@ -48,7 +50,7 @@
   <br>
   <ion-grid>
     <ion-row>
-      <ion-col size="4" style="padding-left: 8px; font-weight: bold">
+      <ion-col style="padding-left: 8px; font-weight: bold">
         View Announcements
       </ion-col>
     </ion-row>
@@ -62,7 +64,7 @@
     </ion-card-header>
   </ion-card>
 
-  <ion-card *ngFor="let announcement of formattedAnnouncements" mode="ios">
+  <ion-card *ngFor="let announcement of formattedAnnouncements" mode="ios" [color]="announcement.color">
 
     <ion-card-header>
       <ion-card-title> {{announcement.heading}} </ion-card-title>

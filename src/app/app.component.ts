@@ -102,6 +102,11 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/tutor-attendance',
       icon: 'checkbox'
     },
+    {
+      title: 'Announcements',
+      url: '/app/tabs/tutor-announcements',
+      icon: 'megaphone'
+    },
   ];
 
   studentPages = [
