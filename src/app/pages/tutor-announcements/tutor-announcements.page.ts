@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { Tutor } from '../../providers/tutor';
+import { TA } from '../../providers/ta';
 import { LoadingController } from '@ionic/angular';
 
 @Component({
@@ -20,11 +21,12 @@ export class TutorAnnouncementsPage implements OnInit {
   constructor(
     private storage: Storage,
     private tutor: Tutor,
+    private ta: TA,
     public loadingCtrl: LoadingController,
   ) { }
 
   async ngOnInit() {
-    
+    console.log("ngOnInit");
   }
 
   async ionViewWillEnter() {
@@ -46,9 +48,17 @@ export class TutorAnnouncementsPage implements OnInit {
 
   async setTutuor() {
     this.userId = await this.storage.get('userId');
+    let role = await this.storage.get('role');
 
-    let res = await this.tutor.getCourseIDForTutor(this.userId);
-    this.courseId = res[0].courseId;
+    let res: any;
+    if(role === 'tutor') {
+      res = await this.tutor.getCourseIDForTutor(this.userId);
+      this.courseId = res[0].courseId;
+    }
+    else{
+      res = await this.ta.getCourseId();
+      this.courseId = res;
+    }
 
     let courseRes = await this.tutor.getAllCourses();
     this.courseName = courseRes.filter((course: any) => {
@@ -57,19 +67,19 @@ export class TutorAnnouncementsPage implements OnInit {
     )[0].name;
   }
 
-  async getAnnouncements(){ 
+  async getAnnouncements(){
     //sort the announcements by date
     this.prevAnnouncements = await this.tutor.getAnnouncements(this.courseId);
 
     this.prevAnnouncements.sort((a: any, b: any) => {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
-    
+
     console.log("prevAnnouncements inside function: ", this.prevAnnouncements);
   }
 
   async formatAnnouncements(){
-    
+
     this.formattedAnnouncements = this.prevAnnouncements.map((announcement: any) => {
       return {
         heading: announcement.announcementHeading,

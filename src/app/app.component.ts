@@ -107,6 +107,11 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/view-attendance',
       icon: 'checkbox'
     },
+    {
+      title: 'Announcements',
+      url: '/app/tabs/tutor-announcements',
+      icon: 'megaphone'
+    },
   ];
 
   pendingTaPages = [
