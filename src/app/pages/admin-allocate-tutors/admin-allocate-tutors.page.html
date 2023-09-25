@@ -23,7 +23,7 @@
 
     <div [ngSwitch]="segment">
 
-      <div *ngSwitchCase="'tutor'">
+      <div *ngSwitchCase="'tutor'" id="tutorSegment">
 
         <ion-list>
           <ion-select class="custom-select" fill="outline" interface="popover" [interfaceOptions]="{size: 'auto'}"
@@ -78,7 +78,7 @@
         </ion-button>
       </div>
 
-      <div *ngSwitchCase="'TA'">
+      <div *ngSwitchCase="'TA'" id="taSegment">
 
         <ion-list>
           <ion-select class="custom-select" fill="outline" interface="popover" [interfaceOptions]="{size: 'auto'}"
