@@ -1,6 +1,7 @@
-# Link to gitlab
-[Web App repo](https://gitlab.cs.uct.ac.za/vscjae001/mytutor)
-[API repo](https://gitlab.cs.uct.ac.za/vscjae001/my-tutor-api)
+# Links
+* [Web App Gitlab repo](https://gitlab.cs.uct.ac.za/vscjae001/mytutor)
+* [API Gitlab repo](https://gitlab.cs.uct.ac.za/vscjae001/my-tutor-api)
+* [Live website](https://my-tutor-lime.vercel.app/account)
 # MyTutor Application
 
 A Tutor Management Application build using the Ionic Framework and Angular.
