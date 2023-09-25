@@ -36,11 +36,26 @@ export class AttendanceCodesGeneratorPage implements OnInit {
   }
 
   async ngOnInit() {
-    const load = await this.loadingCtrl.create({
-      message: 'Loading...',
-    })
-    load.present();
+  }
 
+  async ionViewWillEnter() {
+    await this.presentLoading();
+    await this.doRefresh();
+    await this.dismissLoading();
+  }
+
+  async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait...',
+    });
+    await loading.present();
+  }
+
+  async dismissLoading() {
+    await this.loadingCtrl.dismiss();
+  }
+
+  async doRefresh() {
     await this.getConvenorCourse();
 
     this.courseID = await this.convenor.getCourseId();
@@ -54,7 +69,6 @@ export class AttendanceCodesGeneratorPage implements OnInit {
     await this.formatEventsForCourse();
     console.log('formattedEventsForCourse', this.formattedEventsForCourse);
 
-    load.dismiss();
   }
 
   async getConvenorCourse() {

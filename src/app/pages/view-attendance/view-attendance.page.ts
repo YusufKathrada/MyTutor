@@ -33,8 +33,28 @@ export class ViewAttendancePage implements OnInit {
    }
 
   async ngOnInit() {
-    await this.presentLoading();
+    
+  }
 
+  async ionViewWillEnter() {
+    await this.presentLoading();
+    await this.doRefresh();
+    await this.dismissLoading();
+  }
+
+  async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait...',
+    });
+    await loading.present();
+  }
+
+  async dismissLoading() {
+    await this.loadingCtrl.dismiss();
+  }
+
+  
+  async doRefresh() {
     await this.getConvenorCourse();
 
     this.courseID = await this.convenor.getCourseId();
@@ -52,9 +72,8 @@ export class ViewAttendancePage implements OnInit {
     console.log('attendanceRecords', this.attendanceRecords);
 
     this.userAttendance = this.formatAttendanceRecords(this.attendanceRecords);
-
-    await this.dismissLoading();
   }
+
 
   async getConvenorCourse() {
     let res: any = await this.convenor.getCourse();
@@ -85,17 +104,6 @@ export class ViewAttendancePage implements OnInit {
 
   getProgress(a: string, b: string){
     return (parseInt(a) / parseInt(b));
-  }
-
-  async presentLoading() {
-    const loadingController = await this.loadingCtrl.create({
-      message: 'Loading...',
-    });
-    await loadingController.present();
-  }
-
-  async dismissLoading() {
-    await this.loadingCtrl.dismiss();
   }
 
   async presentToast(message: string, color: string) {
