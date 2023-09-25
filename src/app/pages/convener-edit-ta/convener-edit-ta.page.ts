@@ -64,6 +64,7 @@ export class ConvenerEditTaPage implements OnInit {
   }
 
   formatTA(TAarr: any) {
+    console.log('TA', TAarr)
     let TAs = [];
     TAarr.forEach((TA) => {
       let TAobj = {
@@ -71,7 +72,7 @@ export class ConvenerEditTaPage implements OnInit {
         name: TA.users.name + " " + TA.users.surname,
         email: TA.users.email,
         course: TA.courses.name,
-        convenerPrivileges: TA.users.role === "courseConvener" ? true : false,
+        convenerPrivileges: TA.users.role === "taAdmin" ? true : false,
       };
       TAs.push(TAobj);
     });
