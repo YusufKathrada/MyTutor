@@ -33,6 +33,7 @@ export class TutorAttendancePage implements OnInit {
     console.log('tutor.events.ngOnInit');
   }
 
+  // refresh the page
   async ionViewWillEnter() {
     await this.presentLoading();
     await this.doRefresh(null);
@@ -45,6 +46,7 @@ export class TutorAttendancePage implements OnInit {
     // Get the 'events' (prac, tut, workshop, etc.) that the tutor has already signed up for
     let events = await this.tutor.getChosenEventsDetails(this.userId);
 
+    // If no events found, display a 'none' message
     if(!events.length) {
       this.sessions = [
         {
@@ -62,11 +64,10 @@ export class TutorAttendancePage implements OnInit {
       return;
     }
 
-    console.log("events", events);
     this.sessions = this.formatEvents(events);
-    console.log('tutor.events.sessions', this.sessions);
   }
 
+  // format the events to display
   formatEvents(events: any) {
     let formattedEvents = [];
     for (let event of events) {
@@ -114,12 +115,12 @@ export class TutorAttendancePage implements OnInit {
   async checkAttendance(session: any) {
     // Check if attendance code matches
     if (session.attendanceCode === session.attendanceCodeInput) {
-      console.log('Attendance code matched!');
 
       // Check if its the correct time to log attendance
       if(this.validateAttendancetime(session)){
         await this.presentLoading('Logging attendance...');
 
+        // Log attendance with session id and user id
         let status = await this.tutor.updateAttendance(session.id, this.userId);
 
         await this.dismissLoading();

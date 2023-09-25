@@ -12,11 +12,14 @@
   <div style="display: flex; width: 100%; justify-content: center; height: 100%">
     <div style="width: 600px;">
 
+  <!-- UCT logo -->
   <div class="signup-logo">
     <img src="assets/img/UCT_image.png" alt="Ionic Logo">
   </div>
 
+  <!-- signup form -->
   <div class="signup-form">
+    <!-- name -->
     <form #signupForm="ngForm" novalidate>
       <ion-input
         label="Name"
@@ -30,6 +33,7 @@
         required>
       </ion-input>
 
+      <!-- surname -->
       <ion-input
         label="Surname"
         labelPlacement="stacked"
@@ -42,7 +46,7 @@
         required>
       </ion-input>
 
-      
+      <!-- email -->
       <ion-input
         label="Email"
         labelPlacement="stacked"
@@ -55,6 +59,7 @@
         required>
       </ion-input>
 
+      <!-- nameId (used for saml) -> but asked as username -->
       <ion-input
         label="Create A Username"
         labelPlacement="stacked"
@@ -67,6 +72,7 @@
         required>
       </ion-input>
 
+      <!-- password -->
       <ion-input
         label="Create A Password"
         labelPlacement="stacked"
@@ -78,22 +84,6 @@
         errorText="Password is required"
         required>
       </ion-input>
-
-      <!-- <ion-item fill="solid">
-        <ion-select
-          label="User Role"
-          label-placement="stacked"
-          (ngModel)="signup.role"
-          name="role">
-
-          <ion-select-option value="admin">Admin</ion-select-option>
-          <ion-select-option value="courseConvener">Course Convener</ion-select-option>
-          <ion-select-option value="ta">TA</ion-select-option>
-          <ion-select-option value="tutor">Tutor</ion-select-option>
-          <ion-select-option value="student">Student</ion-select-option>
-
-        </ion-select>
-      </ion-item> -->
 
       <div class="ion-padding">
         <ion-button (click)="onSignup(signupForm)" type="submit" expand="block">Sign Up</ion-button>

@@ -77,7 +77,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     });
     await loading.present();
   }
-  
+
 
   async presentToast(message: string, color: string) {
     const toast = await this.toastCtrl.create({
@@ -88,6 +88,7 @@ export class AdminReviewApplicationsPage implements OnInit {
     toast.present();
   }
 
+  // Format the application data to be displayed in the table
   async getAndFormatApplications(){
 
     this.formattedTutorApplications = this.fullTutorApplications.map((application) => {
@@ -129,10 +130,10 @@ export class AdminReviewApplicationsPage implements OnInit {
 
 
   async updateTutors(){
-    console.log('tutorApplications: ', this.formattedTutorApplications)
 
     this.presentLoading();
     let success: boolean = true;
+    // Loop through the formattedTutorApplications and update the status of each application
     for (const application of this.formattedTutorApplications) {
       let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId);
       if (res !== 204) {
@@ -154,13 +155,12 @@ export class AdminReviewApplicationsPage implements OnInit {
 
 
   async updateTAs(){
-    console.log('taApplications: ', this.formattedTAApplications)
 
     this.presentLoading();
     let success: boolean = true;
+    // Loop through the formattedTAApplications and update the status of each application
     for (const application of this.formattedTAApplications) {
 
-    console.log('application: ', application);
       let res = await this.admin.updateApplicationStatus(application.id, this.statusMap[application.status], application.userId, application.adminRights);
       if (res !== 204) {
         success = false;
@@ -183,7 +183,7 @@ export class AdminReviewApplicationsPage implements OnInit {
   openFilterInput() {
     this.minimumMark=0;
     this.showFilterInput = !this.showFilterInput; // Show the filter input section
-  } 
+  }
 
   async filterMark() {
     // Validate if minimumMark is a valid number
@@ -193,20 +193,19 @@ export class AdminReviewApplicationsPage implements OnInit {
       return;
     }
     // Create an array to temporarily store removed applications
-    
-  
+
+
     // Loop through the fullTutorApplications and update average property accordingly
     for (let i = this.fullTutorApplications.length - 1; i >= 0; i--) {
       const application = this.fullTutorApplications[i];
       application.average = parseFloat(application.average); // Ensure average is a numeric value
-  
+
       if (application.average < this.minimumMark) {
         // Remove the application from the fullTutorApplications array and add it to the removedApplications array
         this.removedApplications.push(this.fullTutorApplications.splice(i, 1)[0]);
       }
     }
-    console.log("",this.removedApplications);
-  
+
     // Check if applications in removedApplications should be added back based on the new minimumMark
     // Check if there are removed applications
 if (this.removedApplications.length > 0) {
@@ -214,7 +213,7 @@ if (this.removedApplications.length > 0) {
   for (let i = this.removedApplications.length - 1; i >= 0; i--) {
     const application = this.removedApplications[i];
     const average = parseFloat(application.average);
-    
+
     // Check if the application's average is greater than or equal to the new minimum mark
     if (average >= this.minimumMark) {
       // Add the application back to fullTutorApplications
@@ -225,23 +224,23 @@ if (this.removedApplications.length > 0) {
   }
 }
 
-  
-  
+
+
     // Update the displayed applicants based on the current filter option
     this.applyTutorFilter();
     //this.filterOption = 'all';
     //this.ngOnInit();
     //this.showFilterInput = false;
-  
+
     // You may want to save the changes to the server here if necessary.
   }
-  
-  
+
+
   isCheckboxEnabled(status: string): boolean {
     return status === 'Accepted';
   }
 
-  async applyTutorFilter(){ 
+  async applyTutorFilter(){
    // console.log('Applying tutor filter');
     this.getAndFormatApplications();
 
@@ -293,55 +292,43 @@ if (this.removedApplications.length > 0) {
   //   this.formattedTutorApplications = [...this.fullTutorApplications];
   //   this.formattedTAApplications = [...this.fullTAApplications];
   // }
+
+  // refresh the page
   async doRefresh(event: any) {
     try {
       // Uncomment the code you want to execute during the refresh here
       // For example:
-  
+
       this.applicationStatuses = await this.admin.getStatuses();
-  
+
       this.statusMap = this.applicationStatuses.reduce((map, obj) => {
         map[obj.description] = obj.id;
         return map;
       }, {});
-  
+
       this.revStatusMap = this.applicationStatuses.reduce((map, obj) => {
         map[obj.id] = obj.description;
         return map;
       }, {});
-  
+
       this.segment = 'tutor';
-  
+
       this.fullTutorApplications = await this.admin.getTutorApplications();
       this.fullTAApplications = await this.admin.getTAApplications();
-  
+
       await this.getAndFormatApplications();
-  
-      console.log('fullTutorApps', this.fullTutorApplications);
-      console.log('fullTAAplications', this.fullTAApplications);
-  
-      console.log('formattedTutorApplications: ', this.formattedTutorApplications);
-      console.log('formattedTAApplications: ', this.formattedTAApplications);
-  
-      console.log('acceptedTutors: ', this.acceptedTutors);
-      console.log('pendingTutors: ', this.pendingTutors);
-      console.log('rejectedTutors: ', this.rejectedTutors);
-  
-      console.log('acceptedTAs: ', this.acceptedTAs);
-      console.log('pendingTAs: ', this.pendingTAs);
-      console.log('rejectedTAs: ', this.rejectedTAs);
 
       this.minimumMark = 0;
       this.showFilterInput=false;
-  
-  
+
+
       if (event) {
         // If an event is provided, complete the refresh animation
         event.target.complete();
       }
     } catch (error) {
       console.error('Error while refreshing:', error);
-  
+
       if (event) {
         // If an event is provided and there was an error, complete the refresh animation with an error message
         event.target.complete();

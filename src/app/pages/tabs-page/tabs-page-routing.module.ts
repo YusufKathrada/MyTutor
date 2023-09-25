@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs-page';
 
-
+// Configure routes for the app (for redirecting to the correct page)
 const routes: Routes = [
   {
     path: 'tabs',

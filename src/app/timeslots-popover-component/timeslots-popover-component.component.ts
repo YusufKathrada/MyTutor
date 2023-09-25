@@ -41,15 +41,11 @@ export class TimeslotsPopoverComponentComponent {
   }
 
   async deleteTutorFromEvent(eventId: number, userId: string) {
-    console.log('DELETED')
     let load = await this.loadingCtrl.create({
       message: 'Removing tutor from event...',
     });
     load.present();
 
-    console.log('WE ARE HERE')
-    console.log("eventId: ", eventId);
-    console.log("tutorId: ", userId);
     let res = await this.admin.deleteTutorFromEvent(eventId, userId);
 
     load.dismiss();
@@ -71,12 +67,12 @@ export class TimeslotsPopoverComponentComponent {
       buttons: [
         {
           text: 'OK',
-          role: 'ok'}, 
+          role: 'ok'},
         {
           text: 'Cancel',
           role: 'cancel'}
         ],
-          
+
     });
 
     //If selected 'OK' button then delete tutor from event by calling deleteTutuorFromEvent() function

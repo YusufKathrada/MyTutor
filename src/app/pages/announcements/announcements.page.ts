@@ -31,24 +31,23 @@ export class AnnouncementsPage implements OnInit {
     public toastCtrl: ToastController
   ) { }
 
+  // Initial load
   async ngOnInit() {
     this.setConvener();
 
     this.courseID = await this.convenor.getCourseId();
-    console.log('courseID', this.courseID);
 
     await this.getAnnouncements();
 
     await this.formatAnnouncements();
-    console.log("formattedAnnouncements: ", this.formattedAnnouncements);
   }
 
   async setConvener(){
     let res: any = await this.convenor.getCourse();
     this.convenerCourse = res[0].courses.name;
-    console.log("res: ", this.convenerCourse);
   }
 
+  // check if announcement is validly formatted
   async validateAnnouncement(){
     if(this.announcementHeading == ""){
       this.presentToast("Please enter a heading for the announcement", "danger");
@@ -72,8 +71,8 @@ export class AnnouncementsPage implements OnInit {
       return;
     }
 
+    // post announcement
     let res: any = await this.convenor.postAnnouncement(this.courseID, this.announcementHeading, this.announcementBody, this.isImportant);
-    console.log("res: ", res);
     loading.dismiss();
     if(res == 201){
       this.presentToast("Announcement Posted Successfully!", "success");
@@ -81,11 +80,11 @@ export class AnnouncementsPage implements OnInit {
     else {
       this.presentToast("Error Posting Announcement", "danger");
     }
-    
+
     this.refreshAnnouncements();
   }
 
-  
+
   async presentToast(message: string, color: string = 'danger') {
     const toast = await this.toastCtrl.create({
       message: message,
@@ -95,7 +94,7 @@ export class AnnouncementsPage implements OnInit {
     toast.present();
   }
 
-  async getAnnouncements(){ 
+  async getAnnouncements(){
     //sort the announcements by date
     this.prevAnnouncements = await this.convenor.getAnnouncements(this.courseID);
 
@@ -103,11 +102,11 @@ export class AnnouncementsPage implements OnInit {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
-    console.log("prevAnnouncements inside function: ", this.prevAnnouncements);
   }
 
+  // Format the announcements to display in the table
   async formatAnnouncements(){
-    
+
     this.formattedAnnouncements = this.prevAnnouncements.map((announcement: any) => {
       return {
         heading: announcement.announcementHeading,
@@ -129,5 +128,5 @@ export class AnnouncementsPage implements OnInit {
     await this.getAnnouncements();
     await this.formatAnnouncements();
 }
-  
+
 }

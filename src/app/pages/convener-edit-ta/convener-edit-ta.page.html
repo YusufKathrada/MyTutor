@@ -7,6 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Desktop view -->
 <ng-container *ngIf="screenWidth >= 800 else mobileView">
   <ion-content class="ion-padding">
     <ion-grid>
@@ -19,6 +20,7 @@
       </ion-row>
     </ion-grid>
 
+    <!-- show all ta info -->
     <ion-grid>
       <ion-row
         class="ion-align-items-center"
@@ -44,6 +46,7 @@
   </ion-content>
 </ng-container>
 
+<!-- Mobile view -->
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">

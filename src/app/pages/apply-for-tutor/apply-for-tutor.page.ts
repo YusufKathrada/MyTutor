@@ -87,6 +87,7 @@ export class ApplyForTutorPage implements OnInit {
       return;
     }
 
+    // Check if form is valid
     if (form.valid) {
       if (!this.file) {
         this.presentToast('Please upload your transcript.', 'danger');
@@ -94,10 +95,12 @@ export class ApplyForTutorPage implements OnInit {
       }
       this.presentLoading();
 
+      // Get the user id from storage and set the filepath for db
       const userId = await this.storage.get('userId');
       const filePath = `${userId}/doc.pdf`;
 
       let res: any;
+      // Submit the application
       if (this.segment === 'tutor') {
         if (!this.validateTutorApplication()) {
           this.presentToast('Please fill in all fields.', 'danger');
@@ -113,6 +116,7 @@ export class ApplyForTutorPage implements OnInit {
           return;
         }
 
+        // apply for ta
         res = await this.ta.applyForTA(this.taApplication);
         await this.supabase.uploadFile(this.file, filePath);
       }
@@ -145,6 +149,7 @@ export class ApplyForTutorPage implements OnInit {
     return true;
   }
 
+  // get the file
   onFileChangeTutor(event: any) {
     this.file = event.target.files[0];
     if (this.file) {
@@ -152,6 +157,7 @@ export class ApplyForTutorPage implements OnInit {
     }
   }
 
+  // get the file
   onFileChangeTA(event: any) {
     this.file = event.target.files[0];
     if (this.file) {

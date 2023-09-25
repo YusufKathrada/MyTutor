@@ -38,6 +38,7 @@ export class AttendanceCodesGeneratorPage implements OnInit {
   async ngOnInit() {
   }
 
+  // load data on page enter
   async ionViewWillEnter() {
     await this.presentLoading();
     await this.doRefresh();
@@ -55,28 +56,26 @@ export class AttendanceCodesGeneratorPage implements OnInit {
     await this.loadingCtrl.dismiss();
   }
 
+  // refresh page
   async doRefresh() {
     await this.getConvenorCourse();
 
     this.courseID = await this.convenor.getCourseId();
-    console.log('courseID', this.courseID);
 
     this.sessionTypes = await this.convenor.getAllSessions();
 
     this.eventsForCourse = await this.convenor.getEventsForCourse(this.courseID);
-    console.log('eventsForCourse', this.eventsForCourse);
 
     await this.formatEventsForCourse();
-    console.log('formattedEventsForCourse', this.formattedEventsForCourse);
 
   }
 
   async getConvenorCourse() {
     let res: any = await this.convenor.getCourse();
     this.convenerCourse = res[0].courses.name;
-    console.log("ConvenerCourse", this.convenerCourse);
   }
 
+  // format events for course
   async formatEventsForCourse() {
 
     this.formattedEventsForCourse = this.eventsForCourse.map((event) => {
@@ -109,6 +108,7 @@ export class AttendanceCodesGeneratorPage implements OnInit {
     return result;
   }
 
+  // function that generates codes for all events
   generateCodes() {
     this.formattedEventsForCourse.forEach((event) => {
       if(event.createCode)
@@ -117,7 +117,6 @@ export class AttendanceCodesGeneratorPage implements OnInit {
         event.attendanceCode = null;
     });
 
-    console.log('Generated attendance codes:', this.formattedEventsForCourse);
   }
 
   async presentToast(message: string, color: string = 'danger') {
@@ -142,8 +141,8 @@ export class AttendanceCodesGeneratorPage implements OnInit {
         }
       });
 
+      // update attendance codes
       let res: any = await this.convenor.updateEvents(eventsToUpdate);
-      console.log('res', res);
       load.dismiss();
 
       this.presentToast("Attendance Codes Updated Successfully!", "success");
@@ -154,6 +153,7 @@ export class AttendanceCodesGeneratorPage implements OnInit {
     }
   }
 
+  // function that generates a pdf of the attendance codes
   async generatePdf(type: string){
     const loading = await this.loadingCtrl.create({
       message: 'Loading...',

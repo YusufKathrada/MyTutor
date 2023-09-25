@@ -10,6 +10,7 @@
     <ion-grid>
       <ion-row style="align-items: center;">
 
+        <!-- Events for specific course -->
         <ion-col style="font-weight: bolder;" size="4">
           Showing Events for: {{convenerCourse}}
         </ion-col>
@@ -22,6 +23,7 @@
 
       <br>
 
+      <!-- Headings -->
       <ion-row style="text-align: center; font-weight: bold">
         <ion-col> Event </ion-col>
 
@@ -37,6 +39,7 @@
       </ion-row>
     </ion-grid>
 
+    <!-- Show event details -->
     <ion-grid id="makepdfDesktop">
       <ion-row style="text-align: center" *ngFor="let event of formattedEventsForCourse">
 
@@ -73,6 +76,7 @@
   </ion-content>
 </ng-container>
 
+<!-- MOible view -->
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
@@ -83,6 +87,7 @@
             Showing Events for: {{convenerCourse}}
           </ion-col>
 
+          <!-- button to generate codes -->
           <ion-col size="4">
             <!-- <ion-button color="primary" expand="block" (click)="generateCodes()">Generate Codes</ion-button> -->
             <ion-button color="primary" (click)="generateCodes()">Generate Codes</ion-button>
@@ -90,6 +95,7 @@
         </ion-row>
 
         <div id="makepdfMobile">
+          <!-- show events -->
         <ng-container *ngFor="let event of formattedEventsForCourse">
 
           <ion-row>

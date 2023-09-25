@@ -30,20 +30,11 @@ export class SignupPage {
     public toastCtrl: ToastController,
   ) {}
 
+  // signup
   async onSignup(form: NgForm) {
     this.submitted = true;
 
     let role: string = 'pendingTa';
-
-    // if(form.value.role === 'admin' || form.value.role === 'lecturer'){
-    //   role = 'admin'
-    // }
-    // else if(form.value.role === 'ta'){
-    //   role = 'pendingTa'
-    // }
-    // else{
-    //   role = form.value.role;
-    // }
 
     const user: any = {
       name: form.value.name,
@@ -54,8 +45,9 @@ export class SignupPage {
       role: role
     }
 
-    console.log("user", user);
     try {
+
+      // check if form is valid
       if (form.valid) {
 
         const loading = await this.loadingCtrl.create({
@@ -63,6 +55,7 @@ export class SignupPage {
         });
         await loading.present();
 
+        // sign up user with supabase
         const { data, error } = await this.supabase.signUp(
           {
             email: user.email,
@@ -73,6 +66,7 @@ export class SignupPage {
 
         const userId = data.user.id;
 
+        // update user with name, surname, nameId, email, role in the Users table
         await this.supabase.updateUser({
           id: userId,
           name: user.name,
@@ -82,11 +76,10 @@ export class SignupPage {
           role: user.role,
         });
 
-        console.log("data", data);
-        console.log("error", error);
 
         if (error) throw error;
 
+        // signup user locally
         this.userData.signup(user);
 
         await loading.dismiss();

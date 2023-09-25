@@ -33,9 +33,10 @@ export class ViewAttendancePage implements OnInit {
    }
 
   async ngOnInit() {
-    
+
   }
 
+  // refresh the page
   async ionViewWillEnter() {
     await this.presentLoading();
     await this.doRefresh();
@@ -53,32 +54,32 @@ export class ViewAttendancePage implements OnInit {
     await this.loadingCtrl.dismiss();
   }
 
-  
+
   async doRefresh() {
     await this.getConvenorCourse();
 
+    // get the course ID
     this.courseID = await this.convenor.getCourseId();
-    console.log('courseID', this.courseID);
 
+    // get the session types
     this.sessionTypes = await this.convenor.getAllSessions();
-    console.log('sessionTypes', this.sessionTypes);
 
+    // get the events for the course
     this.eventsForCourse = await this.convenor.getEventsForCourse(this.courseID);
-    console.log('eventsForCourse', this.eventsForCourse);
     const eventIds = this.eventsForCourse.map((event: any) => event.id);
-    console.log('eventIds', eventIds);
 
+    // format the events for the course
     this.attendanceRecords = await this.convenor.getAttendanceRecords(eventIds);
-    console.log('attendanceRecords', this.attendanceRecords);
 
+    // format the attendance records
     this.userAttendance = this.formatAttendanceRecords(this.attendanceRecords);
   }
 
 
+  // get the course that the convener is assigned to
   async getConvenorCourse() {
     let res: any = await this.convenor.getCourse();
     this.convenerCourse = res[0].courses.name;
-    console.log("ConvenerCourse", this.convenerCourse);
   }
 
   // Format attendance records for display so that it is per user
@@ -94,7 +95,6 @@ export class ViewAttendancePage implements OnInit {
     }
     // Make it an array
     userAttendance = Object.keys(userAttendance).map((key) => userAttendance[key]);
-    console.log('userAttendance', userAttendance);
     return userAttendance;
   }
 
@@ -102,6 +102,7 @@ export class ViewAttendancePage implements OnInit {
     return time.slice(0, 5);
   }
 
+  // get the progress of the user as a decimal
   getProgress(a: string, b: string){
     return (parseInt(a) / parseInt(b));
   }

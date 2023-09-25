@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { checkTutorialGuard } from './providers/check-tutorial.guard';
 
+// set up the routes for the application
 const routes: Routes = [
   {
     path: '',

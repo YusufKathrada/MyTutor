@@ -23,10 +23,12 @@ export class ConvenerEditTaPage implements OnInit {
     });
   }
 
+  // load initial data
   async ngOnInit() {
     await this.doRefresh();
   }
 
+  // load data on page enter
   async ionViewWillEnter() {
     await this.presentLoading();
     await this.doRefresh();
@@ -63,8 +65,8 @@ export class ConvenerEditTaPage implements OnInit {
     await this.loadingCtrl.dismiss();
   }
 
+  // format TA data for display
   formatTA(TAarr: any) {
-    console.log('TA', TAarr)
     let TAs = [];
     TAarr.forEach((TA) => {
       let TAobj = {
@@ -79,6 +81,7 @@ export class ConvenerEditTaPage implements OnInit {
     return TAs;
   }
 
+  // update TA privileges
   async updateTAs() {
     try {
       await this.presentLoading();

@@ -27,6 +27,7 @@ export class Student extends UserData {
     let status: any = await this.supabaseService.getStatusIdByDescription('Pending');
     const userId = await this.storage.get('userId');
 
+    // set up the data to be sent to the database
     const tutorApplicationData: any = {
       statusId: status[0].id,
       name: tutorApplication.name,
@@ -58,6 +59,7 @@ export class Student extends UserData {
   async updateApplicationResponse(response: any, applicationType: any, adminRights?: boolean) {
     const userId = await this.storage.get('userId');
 
+    // set role based on application type and response and if ta should be gived 'admin rights' (higher permissions)
     if(applicationType === 'Tutor' && response === 'accept'){
       await this.supabaseService.updateRole(userId, 'tutor');
     }

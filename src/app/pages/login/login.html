@@ -14,10 +14,11 @@
   <div style="display: flex; width: 100%; justify-content: center; height: 100%">
   <div style="width: 600px;">
 
+    <!-- UCT image -->
   <ion-grid>
       <div class="login-logo">
         <img src="assets/img/UCT_image.png" alt="UCT Image">
-      </div>    
+      </div>
 
     <ion-row>
       <ion-col>
@@ -31,10 +32,12 @@
   <ion-row class="custom-font">
     <hr class="custom-line-left"> or <hr class="custom-line-right">
   </ion-row>
-  
 
+
+  <!-- login form -->
   <div class="login-form">
     <form #loginForm="ngForm" novalidate>
+      <!-- username -->
       <ion-input
         label="TA Email"
         labelPlacement="stacked"
@@ -49,6 +52,7 @@
         required>
       </ion-input>
 
+      <!-- password -->
       <ion-input
         label="TA Password"
         labelPlacement="stacked"

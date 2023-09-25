@@ -7,6 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Desktop display -->
 <ng-container *ngIf="screenWidth >= 800 else mobileView">
   <ion-content class="ion-padding">
     <ion-segment [(ngModel)]="segment">
@@ -20,11 +21,13 @@
     </ion-segment>
 
     <div [ngSwitch]="segment">
+      <!-- Tutor pages -->
       <div *ngSwitchCase="'tutor'">
 
         <ion-grid>
           <ion-row>
 
+            <!-- Filters -->
             <ion-col size="3">
               <ion-list>
                 <ion-select
@@ -70,6 +73,7 @@
           </ion-row>
         </ion-grid>
 
+        <!-- show applications -->
         <ion-grid>
           <ion-row
             class="ion-align-items-center"
@@ -119,6 +123,7 @@
         <ion-button (click)="updateTutors()"> Update </ion-button>
       </div>
 
+      <!-- TA page -->
       <div *ngSwitchCase="'TA'">
         <ion-list>
           <ion-select
@@ -155,6 +160,7 @@
           </ion-row>
         </ion-grid>
 
+        <!-- Show applications -->
         <ion-grid>
           <ion-row
             class="ion-align-items-center"
@@ -213,9 +219,11 @@
   </ion-content>
 </ng-container>
 
+<!-- Mobile View -->
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
+      <!-- Switch Pages -->
       <ion-segment [(ngModel)]="segment">
         <ion-segment-button value="tutor">
           <ion-label>Tutor</ion-label>
@@ -226,9 +234,11 @@
         </ion-segment-button>
       </ion-segment>
 
+      <!-- Tutor segment -->
       <div [ngSwitch]="segment">
         <div *ngSwitchCase="'tutor'">
 
+          <!-- Filters -->
           <ion-list>
             <ion-select
               class="custom-select"
@@ -251,6 +261,7 @@
             </ion-select>
           </ion-list>
 
+          <!-- Slide filter for min mark -->
           <ion-grid>
             <ion-row>
               <ion-col size="10">
@@ -259,6 +270,7 @@
             </ion-row>
           </ion-grid>
 
+          <!-- show tutors -->
           <ion-grid>
             <ng-container *ngFor="let d of formattedTutorApplications">
               <ion-row>
@@ -327,6 +339,7 @@
           <ion-button (click)="updateTutors()"> Update </ion-button>
         </div>
 
+        <!-- TA page -->
         <div *ngSwitchCase="'TA'">
           <ion-list>
             <ion-select
@@ -350,6 +363,7 @@
             </ion-select>
           </ion-list>
 
+          <!-- show TA applications -->
           <ion-grid>
             <ng-container *ngFor="let d of formattedTAApplications">
               <ion-row>
@@ -383,6 +397,7 @@
                 </ion-col>
               </ion-row>
 
+              <!-- Status select -->
               <ion-row>
                 <ion-col class="mobile-header">Status</ion-col>
                 <ion-col>

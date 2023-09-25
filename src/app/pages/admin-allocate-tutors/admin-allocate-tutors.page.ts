@@ -147,7 +147,6 @@ export class AdminAllocateTutorsPage implements OnInit {
         success = false;
       }
 
-      console.log('results', results);
     } catch (error) {
       // Handle any errors that might occur during the bulk update
       success = false;
@@ -205,8 +204,6 @@ export class AdminAllocateTutorsPage implements OnInit {
         success = false;
       }
 
-      console.log('results', resultsTaToCourse);
-      console.log('results', resultsTaUser);
     } catch (error) {
       // Handle any errors that might occur during the bulk update
       success = false;
@@ -281,25 +278,21 @@ export class AdminAllocateTutorsPage implements OnInit {
       map[obj.name] = obj.id;
       return map;
     }, {});
-    console.log('courseMap: ', this.courseMap);
 
     this.tutorsMap = this.allocatedTutors.reduce((map, obj) => {
       map[obj.userId] = obj.courseId;
       return map;
     }, {});
-    console.log('tutorsMap: ', this.tutorsMap);
 
     this.tasMap = this.allocatedTAs.reduce((map, obj) => {
       map[obj.userId] = obj.courseId;
       return map;
     }, {});
-    console.log('tasMap: ', this.tasMap);
 
     await this.getAndFormatTutors();
     await this.getAndFormatTAs();
 
 
-    console.log('displayedTutors: ', this.displayedTutors);
   }
 
   filterPossibleCourses(courses: any, highestCSCourse) {

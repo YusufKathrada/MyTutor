@@ -50,7 +50,6 @@ export class SelectTimesPage implements OnInit {
       // Get the 'events' (prac, tut, workshop, etc.) that the tutor can sign up for
       let events = await this.tutor.getTutorTimes(this.userId);
       this.sessions = this.formatEvents(events);
-      console.log(this.sessions);
 
       // Sort by tutors needed
       this.sessions.sort((a, b) => (a.tutorsNeeded > b.tutorsNeeded) ? -1 : 1);
@@ -72,9 +71,11 @@ export class SelectTimesPage implements OnInit {
     }
   }
 
+  // format events to display in table
   formatEvents(events: any) {
     let formattedEvents = [];
     for (let event of events) {
+      // Check if event is full
       const full = event.tutorsNeeded <= 0;
       const status = this.chosenSessions.includes(event.id) ? 'Joined' : 'Available';
 
@@ -96,12 +97,12 @@ export class SelectTimesPage implements OnInit {
     return time.slice(0,5);
   }
 
+  // join event
   async joinEvent(session: any) {
     await this.presentLoading('Joining session...');
-    console.log(session);
     try {
+      // Join event with session id and user id
       let res = await this.tutor.joinEvent(session.id, this.userId);
-      console.log('res', res);
       this.doRefresh(null);
 
       await this.presentToast('Joined session', 'success');

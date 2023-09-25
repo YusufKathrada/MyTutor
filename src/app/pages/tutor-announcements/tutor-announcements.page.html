@@ -5,14 +5,8 @@
 </ion-header>
 
 <ion-content>
-  <!-- <ion-grid>
-    <ion-row>
-      <ion-col style="padding-left: 8px; font-weight: bold">
-        View Announcements for {{courseName}}
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
 
+  <!-- if there is no annoucnements show this -->
   <ion-card *ngIf="formattedAnnouncements.length === 0" mode="ios">
     <ion-card-header>
       <ion-card-title>
@@ -21,15 +15,16 @@
     </ion-card-header>
   </ion-card>
 
+  <!-- display annoucnements -->
   <ion-card *ngFor="let announcement of formattedAnnouncements" mode="ios" [color]="announcement.color">
 
     <ion-card-header>
       <ion-card-title> {{announcement.heading}} </ion-card-title>
       <ion-card-subtitle>{{announcement.date}} {{announcement.time}}</ion-card-subtitle>
     </ion-card-header>
-  
+
     <ion-card-content>
-     {{announcement.body}} 
+     {{announcement.body}}
     </ion-card-content>
   </ion-card>
 </ion-content>

@@ -58,6 +58,7 @@ export class UploadTimesPage implements OnInit {
     });
   }
 
+  // initialising the page and data (one time gets)
   async ngOnInit() {
     await this.getAllCourses();
 
@@ -68,30 +69,20 @@ export class UploadTimesPage implements OnInit {
 
     await this.refreshEvents();
 
-    // this.addSession();
-    // await this.refreshEvents();
 
-    // await this.getAllCourses();
-
-    // this.sessionTypes = await this.admin.getAllSessions();
-
-    // this.allEventsWithIDs = await this.admin.getAllEventsFromEventsTable();
-    // console.log("allEventsWithID: ", this.allEventsWithIDs);
-
-    // this.allTutorsToEvents = await this.admin.getAllTutorsToEvents();
-    // console.log("allTutorsToEvents: ", this.allTutorsToEvents);
-
-    // await this.formatTutorsToEvents();
   }
 
+  // refresh the page
   async refreshEvents() {
     let load = await this.loadingCtrl.create({
       message: 'Loading events...',
     });
     load.present();
 
+    // get all events and courses
     [this.allEvents, this.courses] = await this.admin.getAllEvents();
 
+    // check if user is a course convenor
     this.isConvenor = (await this.storage.get('role') === 'courseConvener' || await this.storage.get('role') === 'taAdmin');
     if(this.isConvenor){
       await this.setConvener();
@@ -100,20 +91,23 @@ export class UploadTimesPage implements OnInit {
     load.dismiss();
   }
 
+  // refresh the page
   async ionViewWillEnter() {
     await this.reloadPage();
   }
 
   async setConvener(){
     try {
+      // get the course name for the course convenor
         let res: any = await this.convenor.getCourse();
         this.convenerCourse = res[0].courses.name;
         this.course = this.convenerCourse;
+        // format the course name to be displayed when calling selectCourse()
         let tempCourse = {
           detail: { value: this.convenerCourse }
         }
+        // call selectCourse() to display the events for the course convenor
         this.selectCourse(tempCourse);
-        console.log("res: ", this.convenerCourse);
       } catch (error) {
         console.log('upload-times.page.ts ngOnInit() error: ', error);
       }
@@ -132,9 +126,9 @@ export class UploadTimesPage implements OnInit {
     const unassignedCourse = 0;
     this.allCourses = this.allCourses.filter(course => course.id !== unassignedCourse);
 
-    console.log("allCourses: ", this.allCourses);
   }
 
+  // get the sessions from the form
   get sessions(): FormArray {
     return this.eventForm.get('sessions') as FormArray;
   }
@@ -161,24 +155,19 @@ export class UploadTimesPage implements OnInit {
     this.sessions.push(sessionGroup);
   }
 
+  // add a session to the form
   addItem() {
     const lastSession = this.sessions.at(this.sessions.length - 1);
 
     if (lastSession.valid) {
       this.addSession();
-      console.log("added course", this.course);
-      console.log("added slot", this.eventForm.value);
     } else {
       this.presentToast("Please fill all the fields in the current session before adding a new one.");
     }
   }
 
   selectCourse(ev: any) {
-    // this.showCourseEvents = this.allEvents.filter((event) => { return event.name == ev.detail.value });
-    // console.log("showCourseEvents: ", this.showCourseEvents);
-
     this.showCourseEvents = this.tutorsToEventsMap.filter((event) => { return event.course == ev.detail.value });
-    console.log("showCourseEvents: ", this.showCourseEvents);
   }
 
   removeLastSession() {
@@ -192,10 +181,12 @@ export class UploadTimesPage implements OnInit {
   }
 
 
+  // validate the form and submit the data
   validate() {
     console.log("Validating form", this.eventForm.value);
     let sessions = this.eventForm.value.sessions as Array<any>;
 
+    // remove the last session if it is empty
     if (sessions.length && sessions[sessions.length - 1].tutorialNumber == "") {
       sessions.pop();
     }
@@ -208,6 +199,7 @@ export class UploadTimesPage implements OnInit {
     let valid = true;
     let message = "";
 
+    // check if all fields are filled
     for (let i = 0; i < sessions.length; i++) {
       let session = sessions[i];
       if (session.tutorialNumber == "" || session.day == "" || session.startTime == "" || session.endTime == "" || session.tutorsNeeded == "" || session.venue == "") {
@@ -235,6 +227,7 @@ export class UploadTimesPage implements OnInit {
       form.pop();
     }
 
+    // upload the time slots
     let res: any = await this.admin.uploadTimes(this.course, form);
     load.dismiss();
 
@@ -252,6 +245,7 @@ export class UploadTimesPage implements OnInit {
     return time.slice(0, 5);
   }
 
+  // Format the events to display in the table
   async formatTutorsToEvents() {
 
     this.tutorsToEventsMap = this.allEventsWithIDs.map((event) => {
@@ -269,12 +263,11 @@ export class UploadTimesPage implements OnInit {
       }
     });
 
-    console.log("tutorsToEventsMap: ", this.tutorsToEventsMap);
   }
 
+  // popover to display tutors allocated to event
   async presentPopover(e: any) {
     let res = await this.admin.getTutorsFromEventId(e.id);
-    console.log("res: ", res);
 
     if (res.length === 0) {
       res = [{
@@ -285,6 +278,7 @@ export class UploadTimesPage implements OnInit {
       }]
     }
 
+    // create popover
     const popover = await this.popoverController.create({
       component: TimeslotsPopoverComponentComponent,
       cssClass: 'popover-width-large',
@@ -298,9 +292,9 @@ export class UploadTimesPage implements OnInit {
 
   }
 
+  // delete event
   async deleteEvent(eventId: number) {
 
-    console.log('DELETED')
     let load = await this.loadingCtrl.create({
       message: 'Removing event...',
     });

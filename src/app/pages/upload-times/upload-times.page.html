@@ -7,11 +7,14 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- desktop view -->
 <ng-container *ngIf="screenSize >= 800 else mobileView">
   <ion-content class="ion-padding">
     <ion-grid>
       <ion-row>
         <ion-list>
+          <!-- ist of courses to upload slots -->
+          <!-- disable and only show one course for a convener -->
           <ion-select
             class="custom-select-course"
             placeholder="Select Course"
@@ -54,12 +57,14 @@
     <ion-grid style="padding-top: 0px">
       <form [formGroup]="eventForm">
         <div formArrayName="sessions">
+          <!-- dynamically add rows so that multiple sessions can be uploaded -->
           <ion-row style="text-align: center; align-items: center"
             *ngFor="let sessionCtrl of sessions.controls; let i = index"
             [formGroupName]="i"
           >
             <ion-col>
               <ion-list>
+                <!-- select from a dropdown of event types (tutorial, prac, test, etc) -->
                 <ion-select
                   class="custom-select"
                   fill="outline"
@@ -78,6 +83,7 @@
               </ion-list>
             </ion-col>
 
+            <!-- select a day -->
             <ion-col>
               <ion-list>
                 <ion-select
@@ -133,6 +139,7 @@
               </ion-modal>
             </ion-col>
 
+            <!-- number of tutors needed -->
             <ion-col>
               <ion-input
                 aria-label="Tutors Needed"
@@ -143,6 +150,7 @@
               ></ion-input>
             </ion-col>
 
+            <!-- venue -->
             <ion-col>
               <ion-input
                 aria-label="Venue"
@@ -177,6 +185,7 @@
 
     <!-- <br><br> -->
 
+    <!-- view uplaoded events -->
     <ion-grid>
       <ion-row>
         <ion-col size="4" style="padding-left: 8px; font-weight: bold">
@@ -201,6 +210,7 @@
         </ion-list>
       </ion-row>
 
+      <!-- headings -->
       <ion-row style="text-align: center; font-weight: bold">
         <ion-col> Event </ion-col>
 
@@ -217,6 +227,7 @@
         <ion-col> Actions </ion-col>
       </ion-row>
 
+      <!-- show events -->
       <ion-row
         *ngFor="let event of showCourseEvents; let i = index"
         style="text-align: center; align-items: center"
@@ -249,11 +260,14 @@
   </ion-content>
 </ng-container>
 
+<!-- mobile view -->
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
       <ion-grid>
         <ion-row>
+          <!-- list of courses for which a time can be uploaded -->
+          <!-- disable and only show one course for a convener -->
           <ion-list>
             <ion-select
               class="custom-select-course"
@@ -276,6 +290,7 @@
 
         <form [formGroup]="eventForm">
           <div formArrayName="sessions">
+            <!-- dynamically add rows so that multiple sessions can be uploaded -->
             <ng-container
               *ngFor="let sessionCtrl of sessions.controls; let i = index"
               [formGroupName]="i"
@@ -284,6 +299,7 @@
               <ion-row>
                 <ion-col class="mobile-header">Event </ion-col>
                 <ion-col>
+                  <!-- choose from a list of event types (tutorial, test, prac, etc) -->
                   <ion-list>
                     <ion-select
                       class="custom-select"
@@ -303,6 +319,7 @@
                 </ion-col>
               </ion-row>
 
+              <!-- choose a day -->
               <ion-row>
                 <ion-col class="mobile-header">Day </ion-col>
                 <ion-col>
@@ -365,6 +382,7 @@
                 </ion-col>
               </ion-row>
 
+              <!-- number of tutors needed -->
               <ion-row>
                 <ion-col class="mobile-header">Tutors Needed </ion-col>
                 <ion-col>
@@ -378,6 +396,7 @@
                 </ion-col>
               </ion-row>
 
+              <!-- venue -->
               <ion-row>
                 <ion-col class="mobile-header">Venue </ion-col>
                 <ion-col>
@@ -422,6 +441,7 @@
 
       <ion-grid>
         <ion-row>
+          <!-- view uplaoded events -->
           <ion-col size="4" style="padding-left: 8px; font-weight: bold">
             View Events
           </ion-col>
@@ -446,6 +466,7 @@
           </ion-list>
         </ion-row>
 
+        <!-- event info -->
         <ng-container *ngFor="let event of showCourseEvents">
           <ion-row>
             <ion-col class="mobile-header">Event</ion-col>

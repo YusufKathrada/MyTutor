@@ -32,6 +32,7 @@ export class TutorEventsPage implements OnInit {
     console.log('tutor.events.ngOnInit');
   }
 
+  // refresh the page
   async ionViewWillEnter() {
     await this.presentLoading();
     await this.doRefresh(null);
@@ -44,6 +45,7 @@ export class TutorEventsPage implements OnInit {
     // Get the 'events' (prac, tut, workshop, etc.) that the tutor has already signed up for
     let events = await this.tutor.getChosenEventsDetails(this.userId);
 
+    // If no events found, display a 'none' message
     if(!events.length) {
       this.sessions = [
         {
@@ -61,11 +63,10 @@ export class TutorEventsPage implements OnInit {
       return;
     }
 
-    console.log("events", events);
     this.sessions = this.formatEvents(events);
-    console.log('tutor.events.sessions', this.sessions);
   }
 
+  // Format the events to display in the table
   formatEvents(events: any) {
     let formattedEvents = [];
     for (let event of events) {
@@ -85,12 +86,13 @@ export class TutorEventsPage implements OnInit {
     return time.slice(0,5);
   }
 
+  // Remove the tutor from the event
   async removeEvent(session: any){
     await this.presentLoading('Removing session...');
-    console.log(session);
     try {
+      // Remove the tutor from the event
       let res = await this.tutor.removeEvent(session.id, this.userId);
-      console.log('res', res);
+      // Refresh the page
       this.doRefresh(null);
 
       await this.presentToast('Removed session', 'success');
@@ -123,18 +125,19 @@ export class TutorEventsPage implements OnInit {
   }
 
 
+  // confirm alert to delete tutor from event
   async presentAlert(session: any) {
     const alert = await this.alertController.create({
       subHeader: 'Are you sure you want to delete this tutor from the event?',
       buttons: [
         {
           text: 'OK',
-          role: 'ok'}, 
+          role: 'ok'},
         {
           text: 'Cancel',
           role: 'cancel'}
         ],
-          
+
     });
 
     //If selected 'OK' button then delete tutor from event by calling deleteTutuorFromEvent() function

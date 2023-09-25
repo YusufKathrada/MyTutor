@@ -7,10 +7,12 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- For Desktop View -->
 <ng-container *ngIf="screenWidth >= 800 else mobileView">
 
   <ion-content class="ion-padding">
 
+    <!-- Change pages for tutor and TA -->
     <ion-segment [(ngModel)]="segment">
       <ion-segment-button value="tutor">
         <ion-label>Tutor</ion-label>
@@ -23,6 +25,7 @@
 
     <div [ngSwitch]="segment">
 
+      <!-- Tutor page -->
       <div *ngSwitchCase="'tutor'" id="tutorSegment">
 
         <ion-list>
@@ -44,6 +47,7 @@
               </ion-row>
             </ion-grid>
 
+            <!-- Show tutors -->
             <ion-grid>
               <ion-row class="ion-align-items-center" style="text-align: center"
                 *ngFor="let a of displayedTutors">
@@ -78,6 +82,7 @@
         </ion-button>
       </div>
 
+      <!-- TA page -->
       <div *ngSwitchCase="'TA'" id="taSegment">
 
         <ion-list>
@@ -95,10 +100,10 @@
                 <ion-col> Student Name </ion-col>
                 <ion-col> Preferred Course </ion-col>
                 <ion-col> Assign Course </ion-col>
-                <!-- <ion-col> Assigned </ion-col> -->
               </ion-row>
             </ion-grid>
 
+            <!-- Show TAs -->
             <ion-grid>
               <ion-row class="ion-align-items-center" style="text-align: center"
                 *ngFor="let a of displayedTAs">
@@ -139,10 +144,12 @@
   </ion-content>
 </ng-container>
 
+<!-- Mobile view -->
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
 
+      <!-- Change pages for user -->
       <ion-segment [(ngModel)]="segment">
         <ion-segment-button value="tutor">
           <ion-label>Tutor</ion-label>
@@ -155,8 +162,10 @@
 
       <div [ngSwitch]="segment">
 
+        <!-- Page for tutor -->
         <div *ngSwitchCase="'tutor'">
 
+          <!-- Display filter -->
           <ion-list>
             <ion-select class="custom-select" fill="outline" interface="popover" [interfaceOptions]="{size: 'auto'}"
               [(ngModel)]="filterOption" (ionChange)="applyTutorFilter()">
@@ -168,6 +177,7 @@
 
           <ion-grid>
 
+            <!-- Show tutors -->
             <ng-container *ngFor="let a of displayedTutors">
 
               <ion-row>
@@ -213,6 +223,7 @@
 
         </div>
 
+        <!-- Page for TA -->
         <div *ngSwitchCase="'TA'">
 
           <ion-list>
@@ -224,6 +235,7 @@
             </ion-select>
           </ion-list>
 
+          <!-- Display students -->
           <ion-grid>
             <ng-container *ngFor="let a of displayedTAs">
 

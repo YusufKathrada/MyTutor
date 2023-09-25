@@ -44,7 +44,6 @@ export class Admin extends UserData {
       events.push(eventObj);
     }
 
-    console.log("events: ", events);
     return await this.supabase.insertEvent(events);
   }
 

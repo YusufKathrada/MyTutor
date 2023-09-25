@@ -272,7 +272,6 @@ export class SupabaseService {
       if (error) throw error
 
 
-      console.log('Users', Users)
       return Users
 
 
@@ -705,7 +704,6 @@ export class SupabaseService {
 
       if (error) throw error
 
-      console.log('status', status)
       return status
 
     } catch (error) {
@@ -729,7 +727,6 @@ export class SupabaseService {
 
       if (error) throw error
 
-      console.log('status', status)
       return status
 
     } catch (error) {
@@ -1001,7 +998,6 @@ export class SupabaseService {
 
       if (error) throw error
 
-      console.log('status', status)
       return status
 
     } catch (error) {
@@ -1233,9 +1229,6 @@ export class SupabaseService {
 
       return Tutors
 
-      // console.log('data', Tutors)
-      // console.log('userIds', userIds)
-      // console.log('res', res)
 
     } catch (error) {
       console.log('error', error)
@@ -1248,13 +1241,11 @@ export class SupabaseService {
 
   async uploadFile(file: any, filePath: string) {
     try {
-      console.log('file', file)
       const res = await this.supabase
         .storage
         .from('transcripts')
         .upload(filePath, file);
 
-        console.log('res', res)
 
     } catch (error) {
       console.log('error', error)
@@ -1329,7 +1320,6 @@ export class SupabaseService {
         // To calculate the no. of days between two dates
         const diffInDays: any = diffInTime / (1000 * 60 * 60 * 24);
 
-        console.log('diffInDays', diffInDays)
 
         // Do not allow an update if the record has been updated within the last 5 days
         if(diffInDays <= 5) {
@@ -1384,7 +1374,6 @@ export class SupabaseService {
       //Set the date to 5 days ago in timestamptz format
       const date = new Date();
       date.setDate(date.getDate() - 7);
-      console.log('date', date)
       let { status, error } = await this.supabase
         .from('Attendance Records')
         .upsert({

@@ -42,18 +42,9 @@ export class AccountPage implements OnInit {
     this.username = await this.storage.get('username');
   }
 
-  // ngAfterViewInit() {
-  //   this.getUsername();
-  // }
-
-  // async ionViewWillEnter() {
-  //   const userId = await this.storage.get('userId');
-  //   if(!userId) {
-  //     await this.initializeApp();
-  //   }
-  // }
 
   async initializeApp() {
+    // Get the SAML session_index from the URL
     const token = this.route.snapshot.queryParams['token'];
 
     const loading = await this.loadingCtrl.create({

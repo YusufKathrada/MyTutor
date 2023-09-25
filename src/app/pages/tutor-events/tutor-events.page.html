@@ -7,6 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- desktop view -->
 <ng-container *ngIf="screenWidth >= 800 else mobileView">
   <ion-content class="ion-padding">
     <ion-grid>
@@ -24,6 +25,7 @@
       </ion-row>
     </ion-grid>
 
+    <!-- show events that tutors has signed up for -->
     <ion-grid>
       <ion-row style="text-align: center" *ngFor="let s of sessions">
         <ion-col> {{s.course}} </ion-col>
@@ -48,10 +50,12 @@
   </ion-content>
 </ng-container>
 
+<!-- mobile view -->
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
       <ion-grid>
+        <!-- show tutor selected slots -->
         <ng-container *ngFor="let s of sessions">
           <ion-row>
             <ion-col class="mobile-header">Course</ion-col>

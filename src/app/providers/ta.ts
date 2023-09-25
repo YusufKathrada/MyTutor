@@ -27,6 +27,7 @@ export class TA extends UserData {
     let status: any = await this.supabaseService.getStatusIdByDescription('Pending');
     const userId = await this.storage.get('userId');
 
+    // format the data to be sent to the database
     const tutorApplicationData: any = {
       statusId: status[0].id,
       name: taApplication.name,
@@ -52,6 +53,7 @@ export class TA extends UserData {
   async updateApplicationResponse(response: any, applicationType: any) {
     const userId = await this.storage.get('userId');
 
+    // update the role of the user
     if(applicationType === 'Tutor' && response === 'accept'){
       await this.supabaseService.updateRole(userId, 'tutor');
     }

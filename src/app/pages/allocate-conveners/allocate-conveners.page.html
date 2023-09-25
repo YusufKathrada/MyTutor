@@ -7,8 +7,10 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Desktop -->
 <ng-container *ngIf="screenWidth >= 800 else mobileView">
   <ion-content class="ion-padding">
+    <!-- Filter conveners -->
     <ion-list>
       <ion-select
         class="custom-select"
@@ -35,6 +37,7 @@
       </ion-row>
     </ion-grid>
 
+    <!-- Display conveners -->
     <ion-grid>
       <ion-row
         class="ion-align-items-center"
@@ -69,9 +72,11 @@
   </ion-content>
 </ng-container>
 
+<!-- Mobile screen -->
 <ng-container>
   <ng-template #mobileView>
     <ion-content class="ion-padding">
+      <!-- Filters -->
       <ion-list>
         <ion-select
           class="custom-select"
@@ -91,6 +96,7 @@
         </ion-select>
       </ion-list>
 
+      <!-- Show conveners on mobile -->
       <ion-grid>
         <ng-container *ngFor="let a of displayedCCs">
           <ion-row>

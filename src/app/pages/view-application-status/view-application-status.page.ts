@@ -43,12 +43,14 @@ export class ViewApplicationStatusPage implements OnInit {
     });
    }
 
+  //  initialise the page
   async ngOnInit() {
     await this.presentLoading();
     await this.getCurrentApplication();
     this.dismissLoading();
   }
 
+  // refresh the page
   async ionViewWillEnter() {
     await this.getCurrentApplication();
   }
@@ -64,11 +66,12 @@ export class ViewApplicationStatusPage implements OnInit {
     this.loadingController.dismiss();
   }
 
+  // get the current application
   async getCurrentApplication() {
     let app = await this.student.getTutorApplication();
 
 
-
+    // if no application found, set application to none
     if(!app.length) {
       this.application = {
         type: 'None',
@@ -83,6 +86,7 @@ export class ViewApplicationStatusPage implements OnInit {
 
     let res: any;
     let courseAssigned = 'None';
+    // if application is for TA, get the course assigned (ta application has qualification field)
     if(tempApp.qualification) {
       res = await this.ta.getTACourseAssigned();
     }
@@ -96,8 +100,8 @@ export class ViewApplicationStatusPage implements OnInit {
     this.formatApplication(tempApp, courseAssigned);
   }
 
+  // format the application to display
   formatApplication(application: any, courseAssigned: any) {
-    console.log(application)
     this.application = {
       id: application.id,
       type: application.qualification ? 'TA' : 'Tutor',
@@ -141,7 +145,9 @@ export class ViewApplicationStatusPage implements OnInit {
     await alert.present();
   }
 
+  // update the application response
   async updateApplicationResponse(){
+    // if response is accept or reject, update the application response and set the user role to tutor
     let status = await this.student.updateApplicationResponse(this.response, this.application.type, this.application.adminRights);
 
     if (status == 204 && this.response == 'accept') {
@@ -157,6 +163,7 @@ export class ViewApplicationStatusPage implements OnInit {
     }
   }
 
+  // once an application is accepted, initialise the app to update the user role
   async initializeApp() {
     const loading = await this.loadingController.create({
       message: 'Please wait...',
@@ -165,9 +172,11 @@ export class ViewApplicationStatusPage implements OnInit {
     const userId = await this.userData.getUserId();
 
     try {
+      //  get user by id
       const res = await this.supabase.getUserById(userId);
       let user = res[0];
 
+      // if no user found, display error message
       if(!user) {
         await this.toastController.create({
           message: 'User data not found in SAML assertion',
@@ -177,6 +186,7 @@ export class ViewApplicationStatusPage implements OnInit {
         return;
       }
 
+      // set the user role
       const role = user.role;
       switch (role) {
         case 'admin':
@@ -198,6 +208,7 @@ export class ViewApplicationStatusPage implements OnInit {
           break;
       };
 
+      // set the user data and menu
       this.userData.login(user.nameId);
       await this.appComponent.setMenu();
 
@@ -206,6 +217,7 @@ export class ViewApplicationStatusPage implements OnInit {
     }
 
     await loading.dismiss();
+    // navigate to support page
     window.location.href = '/support';
   }
 

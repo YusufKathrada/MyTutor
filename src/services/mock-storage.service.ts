@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+// used for testing purposes
 @Injectable()
 export class MockStorage {
   private storage = new BehaviorSubject<{ [key: string]: any }>({});

@@ -43,15 +43,18 @@ export class LoginPage {
     private http: HttpClient,
   ) { }
 
+  // refresh page
   async ionViewWillEnter() {
     if(await this.userData.isLoggedIn()) {
       this.router.navigateByUrl('/account');
     }
   }
+  // login and go to account page
   async onLogin(form: NgForm) {
     try {
       this.submitted = true;
 
+      // if form is valid
       if (form.valid) {
 
         const loading = await this.loadingCtrl.create({
@@ -62,9 +65,8 @@ export class LoginPage {
         const email = form.value.username;
         const password = form.value.password;
 
+        // sign in with email and password on supabase
         const { data, error } = await this.supabase.signInWithPassword(email, password,);
-        console.log("data", data);
-        console.log("error", error);
 
         if (error) throw error;
 
@@ -72,6 +74,7 @@ export class LoginPage {
 
         const role = data.user.user_metadata.userrole;
 
+        // set role
         switch (role) {
           case 'admin':
             await this.admin.setRole('admin');
@@ -98,8 +101,10 @@ export class LoginPage {
             break;
         };
 
+        // set user data and menu
         this.userData.login(this.login.username);
         await this.appComponent.setMenu();
+        // navigate to account page
         this.router.navigateByUrl('/account');
         await loading.dismiss();
       }
@@ -119,6 +124,7 @@ export class LoginPage {
     }
   }
 
+  // login with UCT credentials
   async uctLogin() {
     const loading = await this.loadingCtrl.create({
           message: 'Please wait...',
@@ -132,8 +138,8 @@ export class LoginPage {
       },
     }));
 
+    // Redirect to UCT login page
     const redirectUrl = res.login_url;
-    console.log("redirectUrl", redirectUrl);
     window.location.href = redirectUrl;
     await loading.dismiss();
   }

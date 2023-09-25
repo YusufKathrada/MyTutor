@@ -31,8 +31,8 @@ export class AllocateConvenersPage implements OnInit {
     });
    }
 
+  // Get data on first load
   async ngOnInit() {
-    console.log('AllocateConvenersPage.events.ngOnInit');
     this.courses = await this.admin.getCourses();
 
     this.courseMap = this.courses.reduce((map, obj) => {
@@ -46,15 +46,18 @@ export class AllocateConvenersPage implements OnInit {
     }, {});
   }
 
+  // Get data on every page load
   async ionViewWillEnter() {
     await this.presentLoading();
     await this.doRefresh(null);
     await this.dismissLoading();
   }
 
+  // Get data on pull to refresh
   async doRefresh(event) {
     try {
       let res = await this.admin.getAllCourseConveners()
+      // get all conveners and filter
       this.allConveners = res;
       this.assignedConveners = this.allConveners.filter(convener => convener.courseId !== 0);
       this.unassignedConveners = this.allConveners.filter(convener => convener.courseId === 0);
@@ -89,6 +92,7 @@ export class AllocateConvenersPage implements OnInit {
     toast.present();
   }
 
+  // Format the conveners to display in the table
   formatCCs(conveners){
     let formattedCCs = [];
     for(let convener of conveners){
@@ -106,6 +110,7 @@ export class AllocateConvenersPage implements OnInit {
   async updateConveners() {
     await this.presentLoading();
 
+    // Update the conveners and their courses
     for(const convener of this.displayedCCs){
       try {
         await this.admin.updateCourseConvener(convener.id, this.courseMap[convener.course]);

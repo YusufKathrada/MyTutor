@@ -6,21 +6,22 @@
       <ion-col>
         Name
       </ion-col>
-  
+
       <ion-col>
         Surname
       </ion-col>
-  
+
       <ion-col>
         Student Number
       </ion-col>
-  
+
       <ion-col>
         <!-- remove -->
       </ion-col>
     </ion-row>
   </ion-grid>
 
+  <!-- show tutors for events -->
   <ion-grid *ngFor="let event of showCourseEvents">
 
     <ion-row style="text-align: center; align-items: center;">
@@ -28,22 +29,22 @@
       <ion-col>
         {{event.name}}
       </ion-col>
-  
+
       <ion-col>
         {{event.surname}}
       </ion-col>
-  
+
       <ion-col>
         {{event.stuNum}}
       </ion-col>
-  
+
       <ion-col>
         <ion-button [disabled]="event.name === 'none'" color="danger" (click)="presentAlert(eventId, event.userId)">Remove</ion-button>
       </ion-col>
-  
+
     </ion-row>
   </ion-grid>
-    
+
 </ion-content>
 <!-- Make grid
       Add remove button

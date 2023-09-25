@@ -29,6 +29,7 @@ export class TutorAnnouncementsPage implements OnInit {
     console.log("ngOnInit");
   }
 
+// refresh page
   async ionViewWillEnter() {
     await this.presentLoading();
     await this.refreshAnnouncements();
@@ -46,20 +47,24 @@ export class TutorAnnouncementsPage implements OnInit {
     await this.loadingCtrl.dismiss();
   }
 
+  // set the tutor's course id and course name for correct announcements
   async setTutuor() {
     this.userId = await this.storage.get('userId');
     let role = await this.storage.get('role');
 
     let res: any;
     if(role === 'tutor') {
+      // get the tutor's course id
       res = await this.tutor.getCourseIDForTutor(this.userId);
       this.courseId = res[0].courseId;
     }
     else{
+      // get the ta's course id (ta without convener approval)
       res = await this.ta.getCourseId();
       this.courseId = res;
     }
 
+    // get the course name
     let courseRes = await this.tutor.getAllCourses();
     this.courseName = courseRes.filter((course: any) => {
       return course.id == this.courseId;
@@ -75,9 +80,9 @@ export class TutorAnnouncementsPage implements OnInit {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
-    console.log("prevAnnouncements inside function: ", this.prevAnnouncements);
   }
 
+  // format announcements for display
   async formatAnnouncements(){
 
     this.formattedAnnouncements = this.prevAnnouncements.map((announcement: any) => {
@@ -95,8 +100,6 @@ export class TutorAnnouncementsPage implements OnInit {
 
   async refreshAnnouncements(){
     await this.setTutuor();
-    console.log("courseId: ", this.courseId);
-    console.log("courseName: ", this.courseName);
     await this.getAnnouncements();
     await this.formatAnnouncements();
 }

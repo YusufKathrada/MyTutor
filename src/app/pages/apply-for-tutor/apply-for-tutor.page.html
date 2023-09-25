@@ -16,6 +16,7 @@
     </ion-card-header>
 
     <ion-card-content>
+      <!-- Show options for an application -->
       <ion-segment [(ngModel)]="segment">
         <ion-segment-button value="tutor" *ngIf="role !== 'pendingTa'">
           <ion-label>Tutor</ion-label>
@@ -28,8 +29,10 @@
 
       <div [ngSwitch]="segment">
 
+        <!-- tutor application -->
         <div *ngSwitchCase="'tutor'">
           <form #tutorForm="ngForm" (ngSubmit)="onSubmit(tutorForm)">
+            <!-- Form of inputs -->
             <ion-list>
               <ion-item>
                 <ion-input label="Name: " type="text" [(ngModel)]="tutorApplication.name" name="name" required></ion-input>
@@ -69,8 +72,10 @@
           </form>
         </div>
 
+        <!-- ta application -->
         <div *ngSwitchCase="'TA'">
           <form #taForm="ngForm" (ngSubmit)="onSubmit(taForm)">
+            <!-- ta application form -->
             <ion-list>
               <ion-item>
                 <ion-input label="Name: " type="text" [(ngModel)]="taApplication.name" name="name" required></ion-input>

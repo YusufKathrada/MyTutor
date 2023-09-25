@@ -22,6 +22,7 @@ import { lastValueFrom } from 'rxjs';
 })
 export class AppComponent implements OnInit {
 
+  // admin menu
   adminPages = [
     {
       title: 'Upload Time Slots',
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit {
     }
   ];
 
+  // course convener menu
   convenerPages = [
     {
       title: 'Upload Time Slots',
@@ -73,6 +75,7 @@ export class AppComponent implements OnInit {
     }
   ];
 
+  // ta admin menu
   taAdminPages = [
     {
       title: 'Upload Time Slots',
@@ -96,6 +99,7 @@ export class AppComponent implements OnInit {
     }
   ];
 
+  // ta menu
   taPages = [
     {
       title: 'Attendance Codes',
@@ -114,6 +118,7 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  // pending ta menu (applied but not accepted)
   pendingTaPages = [
     {
       title: 'Apply for a role',
@@ -127,6 +132,7 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  // tutor menu
   tutorPages = [
     {
       title: 'Select timeslot',
@@ -150,6 +156,7 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  // student menu
   studentPages = [
     {
       title: 'Apply for a role',
@@ -163,6 +170,7 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  // menu that is shown (set later)
   appPages = [
     {
       title: 'Schedule',
@@ -218,11 +226,14 @@ export class AppComponent implements OnInit {
     this.initializeApp();
   }
 
+  // set up the application
   async ngOnInit() {
+    // Initialize the Ionic Storage Module
     await this.storage.create();
     this.checkLoginStatus();
     this.listenForLoginEvents();
 
+    // check for updates
     this.swUpdate.available.subscribe(async res => {
       const toast = await this.toastCtrl.create({
         message: 'Update available!',
@@ -317,33 +328,20 @@ export class AppComponent implements OnInit {
   async logout() {
     this.presentLoading();
 
-    // const url = 'http://localhost:3000/api/login?type=logout';
-    let url = 'https://my-tutor-api.vercel.app/api/login?type=logout';
     const userId = await this.storage.get('userId');
     let res: any = await this.supabase.getSessionTokenAndNameId(userId);
     console.log('signout')
 
     // The user has logged in with UCT SAML and has a session with UCT
     if(res && res.length && res[0].session_index){
-    // if(false){
-      const body = {
-        name_id: res[0].nameId,
-        session_index: res[0].session_index,
-      };
 
       try {
-        // let response: any = await lastValueFrom(this.http.post(url, body));
-        // const logoutUrl = response.logout_url;
-        // console.log('logoutUrl', logoutUrl);
-
+        // Send a logout request to the UCT SSO
         await this.userData.logout().then(() => {
-          // return this.router.navigateByUrl('/login');
           window.location.href = 'https://projsso1.cs.uct.ac.za/auth/realms/uct/protocol/openid-connect/logout'
         });
 
         this.dismissLoading();
-
-        // window.location.href = logoutUrl;
 
       } catch (error) {
         console.log('app.component.ts error', error)
@@ -351,6 +349,7 @@ export class AppComponent implements OnInit {
     }
     // The user has logged in with Supabase login
     else{
+      // Sign out of Supabase
       const { error } = await this.supabase.signOut();
 
       if (error) {
@@ -364,6 +363,7 @@ export class AppComponent implements OnInit {
         return;
       }
 
+      // Sign out of local session
       await this.userData.logout().then(async () => {
         await this.router.navigateByUrl('/login');
         return window.location.reload();

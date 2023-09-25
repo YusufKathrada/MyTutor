@@ -1,12 +1,14 @@
 <ion-app [class.dark-theme]="dark">
   <ion-split-pane contentId="main-content">
 
+    <!-- set the menu that displays on the left side of screen -->
     <ion-menu contentId="main-content" [disabled]="!loggedIn">
       <ion-content>
         <ion-list lines="none">
           <ion-list-header>
             Menu
           </ion-list-header>
+          <!-- set app pages which depend on role -->
           <ion-menu-toggle autoHide="false" *ngFor="let p of appPages; let i = index">
             <ion-item [routerLink]="p.url" routerLinkActive="selected" routerDirection="root" detail="false">
               <ion-icon slot="start" [name]="p.icon + '-outline'"></ion-icon>
@@ -18,6 +20,7 @@
           </ion-menu-toggle>
         </ion-list>
 
+        <!-- show menu that all users should have -->
         <ion-list *ngIf="loggedIn" lines="none">
           <ion-list-header>
             Account

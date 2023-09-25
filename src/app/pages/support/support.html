@@ -8,8 +8,9 @@
 
 </ion-header>
 
+<!-- User manual for different users -->
 <ion-content *ngIf="userRole === 'admin' ">
-  <iframe src="https://scribehow.com/embed/Admin_User_Manual__0pGIjdiUSTO0HAbUJBe_2g" width="100%" height="640" allowfullscreen frameborder="0"></iframe>  
+  <iframe src="https://scribehow.com/embed/Admin_User_Manual__0pGIjdiUSTO0HAbUJBe_2g" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
 </ion-content>
 
 <ion-content *ngIf="userRole === 'courseConvener' ">
@@ -19,7 +20,7 @@
 <ion-content *ngIf="userRole === 'taAdmin' ">
   <iframe src="https://scribehow.com/embed/TA_with_Convener_Rights_User_Manual___Agz9aLoSF-Ub-E_GKQWtg" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
 </ion-content>
-  
+
 <ion-content *ngIf="userRole === 'ta' ">
   <iframe src="https://scribehow.com/embed/TA_User_Manual__pdkmmi2ZRYC_4thd19IMZA" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
 </ion-content>

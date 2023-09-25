@@ -6,6 +6,7 @@
 
 <ion-content class="ion-padding">
 
+  <!-- Post an Announcement -->
   <ion-grid>
     <ion-row>
       <ion-col style="padding-left: 8px; font-weight: bold">
@@ -17,13 +18,14 @@
   <ion-card mode="ios">
     <ion-card-content>
 
+      <!-- If important is checkced, it will be displayed as red -->
       <ion-checkbox [(ngModel)]="isImportant" color="primary" slot="start" mode="md">Important</ion-checkbox>
 
       <ion-item>
-        <ion-input 
-        label="Title" 
-        label-placement="floating" 
-        type="text" 
+        <ion-input
+        label="Title"
+        label-placement="floating"
+        type="text"
         [clearInput]="true"
         [(ngModel)]="announcementHeading">
       </ion-input>
@@ -31,9 +33,9 @@
 
       <ion-item>
         <ion-textarea
-        fill="solid" 
-        label="Description" 
-        label-placement="floating" 
+        fill="solid"
+        label="Description"
+        label-placement="floating"
         [autoGrow]="true"
         [(ngModel)]="announcementBody">
       </ion-textarea>
@@ -64,16 +66,17 @@
     </ion-card-header>
   </ion-card>
 
+  <!-- Show announcements -->
   <ion-card *ngFor="let announcement of formattedAnnouncements" mode="ios" [color]="announcement.color">
 
     <ion-card-header>
       <ion-card-title> {{announcement.heading}} </ion-card-title>
       <ion-card-subtitle>{{announcement.date}} {{announcement.time}}</ion-card-subtitle>
     </ion-card-header>
-  
+
     <ion-card-content>
-     {{announcement.body}} 
+     {{announcement.body}}
     </ion-card-content>
   </ion-card>
-  
+
 </ion-content>
