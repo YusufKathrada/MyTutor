@@ -8,12 +8,26 @@
 
 </ion-header>
 
-<ion-content *ngIf="userRole === 'admin'">
-
-  <iframe src="https://scribehow.com/embed/Admin_User_Manual__0pGIjdiUSTO0HAbUJBe_2g" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
-  
-  <!-- <iframe src="https://scribehow.com/embed/Getting_Started_Guide__FKzEwZnpTpOPNjmg2dwNHg" width="100%" height="640" allowfullscreen frameborder="0"></iframe> -->
-
-  <!-- Add url for studnet, tutor and TA -->
+<ion-content *ngIf="userRole === 'admin' ">
+  <iframe src="https://scribehow.com/embed/Admin_User_Manual__0pGIjdiUSTO0HAbUJBe_2g" width="100%" height="640" allowfullscreen frameborder="0"></iframe>  
 </ion-content>
 
+<ion-content *ngIf="userRole === 'courseConvener' ">
+  <iframe src="https://scribehow.com/embed/Course_Convener_User_Manual__c2FEnihoQtOBS1B-WefBEA" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
+</ion-content>
+
+<ion-content *ngIf="userRole === 'taAdmin' ">
+  <iframe src="https://scribehow.com/embed/TA_with_Convener_Rights_User_Manual___Agz9aLoSF-Ub-E_GKQWtg" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
+</ion-content>
+  
+<ion-content *ngIf="userRole === 'ta' ">
+  <iframe src="https://scribehow.com/embed/TA_User_Manual__pdkmmi2ZRYC_4thd19IMZA" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
+</ion-content>
+
+<ion-content *ngIf="userRole === 'tutor' ">
+  <iframe src="https://scribehow.com/embed/Tutor_User_Manual__hw26Ak9EQh2ng0tLdYk3sw" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
+</ion-content>
+
+<ion-content *ngIf="userRole === 'student' ">
+  <iframe src="https://scribehow.com/embed/Student_User_Manual__5wB8UzL7S1uozw18StESdQ" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
+</ion-content>
