@@ -3,7 +3,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'my.tutor.app',
   appName: 'my-tutor',
-  webDir: 'www',
+  webDir: 'dist',
   bundledWebRuntime: false,
   plugins: {
     SplashScreen: {

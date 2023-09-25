@@ -29,10 +29,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tabs-page/tabs-page.module').then(m => m.TabsModule)
   },
   {
-    path: 'schedule',
-    loadChildren: () => import('./pages/schedule/schedule.module').then(m => m.ScheduleModule)
-  },
-  {
     path: 'upload-times',
     loadChildren: () => import('./pages/upload-times/upload-times.module').then(m => m.UploadTimesPageModule)
   },
