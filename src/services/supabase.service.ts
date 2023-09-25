@@ -1379,4 +1379,29 @@ export class SupabaseService {
     }
   }
 
+  async setInitialAttendance(eventId: any, userId){
+    try {
+      //Set the date to 5 days ago in timestamptz format
+      const date = new Date();
+      date.setDate(date.getDate() - 7);
+      console.log('date', date)
+      let { status, error } = await this.supabase
+        .from('Attendance Records')
+        .upsert({
+          eventId: eventId,
+          userId: userId,
+          updated_at: date,
+          attendancecount: 0
+        })
+
+      if (error) throw error
+
+      return status
+
+    } catch (error) {
+      console.log('error', error)
+      await this.presentError();
+    }
+  }
+
 }

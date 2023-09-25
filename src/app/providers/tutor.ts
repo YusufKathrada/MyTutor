@@ -57,6 +57,7 @@ export class Tutor extends UserData {
   async joinEvent(eventId: string, userId: string) {
     let status = await this.updateTutorsToEvent(eventId, userId);
     if (status == 201) {
+      await this.supabase.setInitialAttendance(eventId, userId);
       return await this.supabase.updateEventTutorCount(eventId, -1);
     }
     else {
