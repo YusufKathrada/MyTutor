@@ -2,11 +2,10 @@
 
 A Tutor Management Application build using the Ionic Framework and Angular.
 
-## Getting Started With Git
-* Make sure you are in the correct directory
-* Run `git init`
-* Run `git remote add origin https://gitlab.cs.uct.ac.za/vscjae001/mytutor.git`
-* Run `git pull origin main`
+# Live Website
+
+https://my-tutor-lime.vercel.app/
+
 
 ## Getting Started With The Application
 
@@ -17,7 +16,7 @@ A Tutor Management Application build using the Ionic Framework and Angular.
 
 ## Notes for versions control
 * On vscode, after you have pulled from main, you should create your own branch and work on that branch.
-* Name the branch as follows: `stage<2,3,4>/yourname`, e.g `stage2/Jaedon`. You can create this using the following command in your terminal: `git checkout -b stage<2,3,4>/yourname`.
+* Name the branch as follows: `stage<2,3,4>/yourname`, e.g `stage2/Yusuf`. You can create this using the following command in your terminal: `git checkout -b stage<2,3,4>/yourname`.
 * Do all your work on this branch
 * When you are ready to push your changes, make sure you are on your branch and run the following commands:
     * `git add <files>`
